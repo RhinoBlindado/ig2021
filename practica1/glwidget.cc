@@ -144,6 +144,7 @@ void _gl_widget::draw_objects()
     glColor3fv((GLfloat *) &BLUE);
     switch (Object){
     case OBJECT_TETRAHEDRON:Tetrahedron.draw_fill();break;
+    case OBJECT_CUBE:Cube.draw_fill();break;
     default:break;
     }
   }
@@ -151,6 +152,7 @@ void _gl_widget::draw_objects()
   if (Draw_chess){
     switch (Object){
     case OBJECT_TETRAHEDRON:Tetrahedron.draw_chess();break;
+    case OBJECT_CUBE:Cube.draw_chess();break;
     default:break;
     }
   }
