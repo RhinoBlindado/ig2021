@@ -1,2 +1,12 @@
-# ig2021
-Prácticas realizadas en la asignatura Informática Gráfica, curso 2020-2021 para el Grado de Ingeniería Informática en la Universidad de Granada. 
+Language: [Español](#informatica-grafica) | [English](#computer-graphics)
+
+---
+
+# Informática Gráfica #
+## Curso 2020-2021, Grado en Ingeniería Informática, ETSIIT UGR.
+
+### Introducción
+
+### Compilación
+
+### Contenido
