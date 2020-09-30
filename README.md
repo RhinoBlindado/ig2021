@@ -11,11 +11,10 @@ Language: [Español](#informática-gráfica) | [English](#computer-graphics)
 ### Contenido
 ---
 # Computer Graphics #
-## 2019-2020 Course, Computer Science Engineering Degree, ETSIIT UGR.
+## 2020-2021 Course, Computer Science Engineering Degree, ETSIIT UGR.
 ### Introduction
 
 
 ### Compilation
 
 ### Contents
-#### Practical Session 1: Algorithm Efficiency Analysis
