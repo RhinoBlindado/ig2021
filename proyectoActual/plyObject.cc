@@ -7,7 +7,7 @@ _ply::_ply(float size)
     //Seleccionar fichero
     cout<<"SELECCIONAR FICHERO PLY: "<<endl;
     //cin>>file;
-    string file="./ply_models/big_dodge.ply";
+    string file="./ply_models/ant.ply";
 
     // Declaracion variables para cargar PLY
     vector<float> plyObjVerts;
@@ -17,7 +17,6 @@ _ply::_ply(float size)
     // Abrir el archivo contenido en 'file'
     plyObj.open(file);
     plyObj.read(plyObjVerts,plyObjTrigs);
-
 
     // Cargando los vectices
     int plySizeVert = plyObjVerts.size() / 3;

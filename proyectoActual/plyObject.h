@@ -6,7 +6,7 @@
 class _ply:public _object3D
 {
 public:
-    _ply(float size = 0.1);
+    _ply(float size = 1);
 };
 
 #endif // PLYOBJECT_H

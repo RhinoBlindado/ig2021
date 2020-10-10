@@ -20,7 +20,7 @@
 #include "tetrahedron.h"
 #include "cube.h"
 #include "plyObject.h"
-
+#include "plyRevolution.h"
 
 namespace _gl_widget_ne {
 
@@ -34,7 +34,7 @@ namespace _gl_widget_ne {
   const float ANGLE_STEP=1;
 
   typedef enum {MODE_DRAW_POINT,MODE_DRAW_LINE,MODE_DRAW_FILL,MODE_DRAW_CHESS} _mode_draw;
-  typedef enum {OBJECT_TETRAHEDRON,OBJECT_CUBE,OBJECT_PLY} _object;
+  typedef enum {OBJECT_TETRAHEDRON,OBJECT_CUBE,OBJECT_PLY,OBJECT_REV} _object;
 }
 
 class _window;
@@ -74,6 +74,7 @@ private:
   _tetrahedron Tetrahedron;
   _cube Cube;
   _ply Ply;
+  _plyRev Rev;
 
   _gl_widget_ne::_object Object;
 

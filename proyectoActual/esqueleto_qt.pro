@@ -6,6 +6,7 @@ HEADERS += \
   object3d.h \
   axis.h \
   plyObject.h \
+  plyRevolution.h \
   tetrahedron.h \
   glwidget.h \
   window.h
@@ -17,6 +18,7 @@ SOURCES += \
   object3d.cc \
   axis.cc \
   plyObject.cc \
+  plyRevolution.cc \
   tetrahedron.cc \
   main.cc \
   glwidget.cc \

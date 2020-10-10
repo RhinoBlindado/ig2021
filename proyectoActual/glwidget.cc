@@ -43,8 +43,9 @@ void _gl_widget::keyPressEvent(QKeyEvent *Keyevent)
   //Practice 1: Added Cube Key
   case Qt::Key_2:Object=OBJECT_CUBE;break;
 
-  //Practice 2: Added PLY Object Key
-  case Qt::Key_6:Object=OBJECT_PLY;break;
+  //Practice 2: Added PLY Object and Revolution Key
+  case Qt::Key_3:Object=OBJECT_PLY;break;
+  case Qt::Key_4:Object=OBJECT_REV;break;
 
   case Qt::Key_P:Draw_point=!Draw_point;break;
   case Qt::Key_L:Draw_line=!Draw_line;break;
@@ -132,6 +133,7 @@ void _gl_widget::draw_objects()
     case OBJECT_TETRAHEDRON:Tetrahedron.draw_point();break;
     case OBJECT_CUBE:Cube.draw_point();break;
     case OBJECT_PLY:Ply.draw_point();break;
+    case OBJECT_REV:Rev.draw_point();break;
     default:break;
     }
   }
@@ -143,6 +145,7 @@ void _gl_widget::draw_objects()
     case OBJECT_TETRAHEDRON:Tetrahedron.draw_line();break;
     case OBJECT_CUBE:Cube.draw_line();break;
     case OBJECT_PLY:Ply.draw_line();break;
+    case OBJECT_REV:Rev.draw_line();break;
     default:break;
     }
   }
@@ -153,6 +156,7 @@ void _gl_widget::draw_objects()
     case OBJECT_TETRAHEDRON:Tetrahedron.draw_fill();break;
     case OBJECT_CUBE:Cube.draw_fill();break;
     case OBJECT_PLY:Ply.draw_fill();break;
+    case OBJECT_REV:Rev.draw_fill();break;
     default:break;
     }
   }
@@ -162,6 +166,7 @@ void _gl_widget::draw_objects()
     case OBJECT_TETRAHEDRON:Tetrahedron.draw_chess();break;
     case OBJECT_CUBE:Cube.draw_chess();break;
     case OBJECT_PLY:Ply.draw_chess();break;
+    case OBJECT_REV:Rev.draw_chess();break;
     default:break;
     }
   }

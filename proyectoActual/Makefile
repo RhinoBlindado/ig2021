@@ -58,6 +58,7 @@ SOURCES       = basic_object3d.cc \
 		object3d.cc \
 		axis.cc \
 		plyObject.cc \
+		plyRevolution.cc \
 		tetrahedron.cc \
 		main.cc \
 		glwidget.cc \
@@ -69,6 +70,7 @@ OBJECTS       = basic_object3d.o \
 		object3d.o \
 		axis.o \
 		plyObject.o \
+		plyRevolution.o \
 		tetrahedron.o \
 		main.o \
 		glwidget.o \
@@ -265,6 +267,7 @@ DIST          = ../../../../Qt/5.15.1/gcc_64/mkspecs/features/spec_pre.prf \
 		../../../../Qt/5.15.1/gcc_64/mkspecs/features/qt_config.prf \
 		../../../../Qt/5.15.1/gcc_64/mkspecs/linux-g++/qmake.conf \
 		../../../../Qt/5.15.1/gcc_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		../../../../Qt/5.15.1/gcc_64/mkspecs/features/exclusive_builds.prf \
 		../../../../Qt/5.15.1/gcc_64/mkspecs/features/toolchain.prf \
 		../../../../Qt/5.15.1/gcc_64/mkspecs/features/default_pre.prf \
@@ -295,6 +298,7 @@ DIST          = ../../../../Qt/5.15.1/gcc_64/mkspecs/features/spec_pre.prf \
 		object3d.h \
 		axis.h \
 		plyObject.h \
+		plyRevolution.h \
 		tetrahedron.h \
 		glwidget.h \
 		window.h basic_object3d.cc \
@@ -303,6 +307,7 @@ DIST          = ../../../../Qt/5.15.1/gcc_64/mkspecs/features/spec_pre.prf \
 		object3d.cc \
 		axis.cc \
 		plyObject.cc \
+		plyRevolution.cc \
 		tetrahedron.cc \
 		main.cc \
 		glwidget.cc \
@@ -509,6 +514,7 @@ Makefile: esqueleto_qt.pro ../../../../Qt/5.15.1/gcc_64/mkspecs/linux-g++/qmake.
 		../../../../Qt/5.15.1/gcc_64/mkspecs/features/qt_config.prf \
 		../../../../Qt/5.15.1/gcc_64/mkspecs/linux-g++/qmake.conf \
 		../../../../Qt/5.15.1/gcc_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		../../../../Qt/5.15.1/gcc_64/mkspecs/features/exclusive_builds.prf \
 		../../../../Qt/5.15.1/gcc_64/mkspecs/features/toolchain.prf \
 		../../../../Qt/5.15.1/gcc_64/mkspecs/features/default_pre.prf \
@@ -724,6 +730,7 @@ Makefile: esqueleto_qt.pro ../../../../Qt/5.15.1/gcc_64/mkspecs/linux-g++/qmake.
 ../../../../Qt/5.15.1/gcc_64/mkspecs/features/qt_config.prf:
 ../../../../Qt/5.15.1/gcc_64/mkspecs/linux-g++/qmake.conf:
 ../../../../Qt/5.15.1/gcc_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 ../../../../Qt/5.15.1/gcc_64/mkspecs/features/exclusive_builds.prf:
 ../../../../Qt/5.15.1/gcc_64/mkspecs/features/toolchain.prf:
 ../../../../Qt/5.15.1/gcc_64/mkspecs/features/default_pre.prf:
@@ -763,8 +770,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../../../../Qt/5.15.1/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents colors.h basic_object3d.h cube.h file_ply_stl.h object3d.h axis.h plyObject.h tetrahedron.h glwidget.h window.h $(DISTDIR)/
-	$(COPY_FILE) --parents basic_object3d.cc cube.cc file_ply_stl.cc object3d.cc axis.cc plyObject.cc tetrahedron.cc main.cc glwidget.cc window.cc $(DISTDIR)/
+	$(COPY_FILE) --parents colors.h basic_object3d.h cube.h file_ply_stl.h object3d.h axis.h plyObject.h plyRevolution.h tetrahedron.h glwidget.h window.h $(DISTDIR)/
+	$(COPY_FILE) --parents basic_object3d.cc cube.cc file_ply_stl.cc object3d.cc axis.cc plyObject.cc plyRevolution.cc tetrahedron.cc main.cc glwidget.cc window.cc $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -1124,6 +1131,17 @@ plyObject.o: plyObject.cc plyObject.h \
 		vertex.h \
 		file_ply_stl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o plyObject.o plyObject.cc
+
+plyRevolution.o: plyRevolution.cc plyRevolution.h \
+		object3d.h \
+		basic_object3d.h \
+		GL/gl.h \
+		GL/gl_mangle.h \
+		GL/glext.h \
+		colors.h \
+		vertex.h \
+		file_ply_stl.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o plyRevolution.o plyRevolution.cc
 
 tetrahedron.o: tetrahedron.cc tetrahedron.h \
 		object3d.h \
