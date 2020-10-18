@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.13.1, 2020-10-05T17:34:49. -->
+<!-- Written by QtCreator 4.13.1, 2020-10-18T17:06:13. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -196,10 +196,10 @@
     <value type="int" key="SeparateDebugInfo">2</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.2">
-    <value type="bool">false</value>
+    <value type="bool">true</value>
     <value type="int" key="EnableQmlDebugging">0</value>
-    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">/home/valentino/Documents/Git/ig2021/proyectoActual</value>
-    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory.shadowDir">/home/valentino/Desktop</value>
+    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">/home/valentino/Desktop/Git/ig2021/proyectoActual/build</value>
+    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory.shadowDir">/home/valentino/Desktop/Git/ig2021/proyectoActual/build</value>
     <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
      <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
       <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
@@ -336,7 +336,7 @@
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
     <value type="QString" key="RunConfiguration.WorkingDirectory"></value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/home/valentino/Documents/Git/ig2021/proyectoActual</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/home/valentino/Desktop/Git/ig2021/proyectoActual/build</value>
    </valuemap>
    <value type="int" key="ProjectExplorer.Target.RunConfigurationCount">1</value>
   </valuemap>

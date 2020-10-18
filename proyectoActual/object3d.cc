@@ -60,14 +60,14 @@ void _object3D::draw_fill()
 
 void _object3D::draw_chess()
 {
-    glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+    glPolygonMode(GL_FRONT,GL_FILL);
     glBegin(GL_TRIANGLES);
         for(unsigned int i=0; i<Triangles.size();i++)
         {
             if(i%2 == 0)
-                 glColor3fv((GLfloat *) &YEllOW);
+                 glColor3f(1,0.4451,0.8078);
             else
-                 glColor3fv((GLfloat *) &BLACK);
+                 glColor3f(0.0039,0.8039,0.9961);
             glVertex3fv((GLfloat *) &Vertices[Triangles[i]._0]);
             glVertex3fv((GLfloat *) &Vertices[Triangles[i]._1]);
             glVertex3fv((GLfloat *) &Vertices[Triangles[i]._2]);

@@ -5,9 +5,9 @@
 _ply::_ply(float size)
 {
     //Seleccionar fichero
-    cout<<"SELECCIONAR FICHERO PLY: "<<endl;
+    //cout<<"SELECCIONAR FICHERO PLY: "<<endl;
     //cin>>file;
-    string file="./ply_models/ant.ply";
+    string file="../ply_models/cosa.ply";
 
     // Declaracion variables para cargar PLY
     vector<float> plyObjVerts;

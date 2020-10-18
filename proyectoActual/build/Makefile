@@ -37,7 +37,7 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = esqueleto_qt1.0.0
-DISTDIR = /home/valentino/Documents/Dropbox/UGR/3.1-INFORMATICA_GRAFICA/practica/proyectoActual/build/.tmp/esqueleto_qt1.0.0
+DISTDIR = /home/valentino/Documents/Git/ig2021/proyectoActual/build/.tmp/esqueleto_qt1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-rpath,/home/valentino/Qt/5.15.1/gcc_64/lib
 LIBS          = $(SUBLIBS) -L/usr/X11R6/lib64 /home/valentino/Qt/5.15.1/gcc_64/lib/libQt5Widgets.so /home/valentino/Qt/5.15.1/gcc_64/lib/libQt5Gui.so /home/valentino/Qt/5.15.1/gcc_64/lib/libQt5Core.so -lGL -lpthread   
@@ -58,6 +58,7 @@ SOURCES       = ../basic_object3d.cc \
 		../object3d.cc \
 		../axis.cc \
 		../plyObject.cc \
+		../plyRevolution.cc \
 		../tetrahedron.cc \
 		../main.cc \
 		../glwidget.cc \
@@ -69,6 +70,7 @@ OBJECTS       = basic_object3d.o \
 		object3d.o \
 		axis.o \
 		plyObject.o \
+		plyRevolution.o \
 		tetrahedron.o \
 		main.o \
 		glwidget.o \
@@ -265,6 +267,7 @@ DIST          = /home/valentino/Qt/5.15.1/gcc_64/mkspecs/features/spec_pre.prf \
 		/home/valentino/Qt/5.15.1/gcc_64/mkspecs/features/qt_config.prf \
 		/home/valentino/Qt/5.15.1/gcc_64/mkspecs/linux-g++/qmake.conf \
 		/home/valentino/Qt/5.15.1/gcc_64/mkspecs/features/spec_post.prf \
+		../.qmake.stash \
 		/home/valentino/Qt/5.15.1/gcc_64/mkspecs/features/exclusive_builds.prf \
 		/home/valentino/Qt/5.15.1/gcc_64/mkspecs/features/toolchain.prf \
 		/home/valentino/Qt/5.15.1/gcc_64/mkspecs/features/default_pre.prf \
@@ -295,6 +298,7 @@ DIST          = /home/valentino/Qt/5.15.1/gcc_64/mkspecs/features/spec_pre.prf \
 		../object3d.h \
 		../axis.h \
 		../plyObject.h \
+		../plyRevolution.h \
 		../tetrahedron.h \
 		../glwidget.h \
 		../window.h ../basic_object3d.cc \
@@ -303,6 +307,7 @@ DIST          = /home/valentino/Qt/5.15.1/gcc_64/mkspecs/features/spec_pre.prf \
 		../object3d.cc \
 		../axis.cc \
 		../plyObject.cc \
+		../plyRevolution.cc \
 		../tetrahedron.cc \
 		../main.cc \
 		../glwidget.cc \
@@ -509,6 +514,7 @@ Makefile: ../esqueleto_qt.pro /home/valentino/Qt/5.15.1/gcc_64/mkspecs/linux-g++
 		/home/valentino/Qt/5.15.1/gcc_64/mkspecs/features/qt_config.prf \
 		/home/valentino/Qt/5.15.1/gcc_64/mkspecs/linux-g++/qmake.conf \
 		/home/valentino/Qt/5.15.1/gcc_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/home/valentino/Qt/5.15.1/gcc_64/mkspecs/features/exclusive_builds.prf \
 		/home/valentino/Qt/5.15.1/gcc_64/mkspecs/features/toolchain.prf \
 		/home/valentino/Qt/5.15.1/gcc_64/mkspecs/features/default_pre.prf \
@@ -724,6 +730,7 @@ Makefile: ../esqueleto_qt.pro /home/valentino/Qt/5.15.1/gcc_64/mkspecs/linux-g++
 /home/valentino/Qt/5.15.1/gcc_64/mkspecs/features/qt_config.prf:
 /home/valentino/Qt/5.15.1/gcc_64/mkspecs/linux-g++/qmake.conf:
 /home/valentino/Qt/5.15.1/gcc_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 /home/valentino/Qt/5.15.1/gcc_64/mkspecs/features/exclusive_builds.prf:
 /home/valentino/Qt/5.15.1/gcc_64/mkspecs/features/toolchain.prf:
 /home/valentino/Qt/5.15.1/gcc_64/mkspecs/features/default_pre.prf:
@@ -763,8 +770,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /home/valentino/Qt/5.15.1/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../colors.h ../basic_object3d.h ../cube.h ../file_ply_stl.h ../object3d.h ../axis.h ../plyObject.h ../tetrahedron.h ../glwidget.h ../window.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../basic_object3d.cc ../cube.cc ../file_ply_stl.cc ../object3d.cc ../axis.cc ../plyObject.cc ../tetrahedron.cc ../main.cc ../glwidget.cc ../window.cc $(DISTDIR)/
+	$(COPY_FILE) --parents ../colors.h ../basic_object3d.h ../cube.h ../file_ply_stl.h ../object3d.h ../axis.h ../plyObject.h ../plyRevolution.h ../tetrahedron.h ../glwidget.h ../window.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../basic_object3d.cc ../cube.cc ../file_ply_stl.cc ../object3d.cc ../axis.cc ../plyObject.cc ../plyRevolution.cc ../tetrahedron.cc ../main.cc ../glwidget.cc ../window.cc $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -774,7 +781,7 @@ clean: compiler_clean
 
 distclean: clean 
 	-$(DEL_FILE) $(TARGET) 
-	-$(DEL_FILE) /home/valentino/Documents/Dropbox/UGR/3.1-INFORMATICA_GRAFICA/practica/proyectoActual/build/esqueleto_qt.debug .qmake.stash
+	-$(DEL_FILE) /home/valentino/Documents/Git/ig2021/proyectoActual/build/esqueleto_qt.debug .qmake.stash
 	-$(DEL_FILE) Makefile
 
 
@@ -923,9 +930,10 @@ moc_glwidget.cpp: ../glwidget.h \
 		../object3d.h \
 		../cube.h \
 		../plyObject.h \
+		../plyRevolution.h \
 		moc_predefs.h \
 		/home/valentino/Qt/5.15.1/gcc_64/bin/moc
-	/home/valentino/Qt/5.15.1/gcc_64/bin/moc $(DEFINES) --include /home/valentino/Documents/Dropbox/UGR/3.1-INFORMATICA_GRAFICA/practica/proyectoActual/build/moc_predefs.h -I/home/valentino/Qt/5.15.1/gcc_64/mkspecs/linux-g++ -I/home/valentino/Documents/Dropbox/UGR/3.1-INFORMATICA_GRAFICA/practica/proyectoActual -I/home/valentino/Qt/5.15.1/gcc_64/include -I/home/valentino/Qt/5.15.1/gcc_64/include/QtWidgets -I/home/valentino/Qt/5.15.1/gcc_64/include/QtGui -I/home/valentino/Qt/5.15.1/gcc_64/include/QtCore -I. -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../glwidget.h -o moc_glwidget.cpp
+	/home/valentino/Qt/5.15.1/gcc_64/bin/moc $(DEFINES) --include /home/valentino/Documents/Git/ig2021/proyectoActual/build/moc_predefs.h -I/home/valentino/Qt/5.15.1/gcc_64/mkspecs/linux-g++ -I/home/valentino/Documents/Git/ig2021/proyectoActual -I/home/valentino/Qt/5.15.1/gcc_64/include -I/home/valentino/Qt/5.15.1/gcc_64/include/QtWidgets -I/home/valentino/Qt/5.15.1/gcc_64/include/QtGui -I/home/valentino/Qt/5.15.1/gcc_64/include/QtCore -I. -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../glwidget.h -o moc_glwidget.cpp
 
 moc_window.cpp: ../window.h \
 		/home/valentino/Qt/5.15.1/gcc_64/include/QtWidgets/QMainWindow \
@@ -1056,7 +1064,7 @@ moc_window.cpp: ../window.h \
 		/home/valentino/Qt/5.15.1/gcc_64/include/QtGui/qinputmethod.h \
 		moc_predefs.h \
 		/home/valentino/Qt/5.15.1/gcc_64/bin/moc
-	/home/valentino/Qt/5.15.1/gcc_64/bin/moc $(DEFINES) --include /home/valentino/Documents/Dropbox/UGR/3.1-INFORMATICA_GRAFICA/practica/proyectoActual/build/moc_predefs.h -I/home/valentino/Qt/5.15.1/gcc_64/mkspecs/linux-g++ -I/home/valentino/Documents/Dropbox/UGR/3.1-INFORMATICA_GRAFICA/practica/proyectoActual -I/home/valentino/Qt/5.15.1/gcc_64/include -I/home/valentino/Qt/5.15.1/gcc_64/include/QtWidgets -I/home/valentino/Qt/5.15.1/gcc_64/include/QtGui -I/home/valentino/Qt/5.15.1/gcc_64/include/QtCore -I. -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../window.h -o moc_window.cpp
+	/home/valentino/Qt/5.15.1/gcc_64/bin/moc $(DEFINES) --include /home/valentino/Documents/Git/ig2021/proyectoActual/build/moc_predefs.h -I/home/valentino/Qt/5.15.1/gcc_64/mkspecs/linux-g++ -I/home/valentino/Documents/Git/ig2021/proyectoActual -I/home/valentino/Qt/5.15.1/gcc_64/include -I/home/valentino/Qt/5.15.1/gcc_64/include/QtWidgets -I/home/valentino/Qt/5.15.1/gcc_64/include/QtGui -I/home/valentino/Qt/5.15.1/gcc_64/include/QtCore -I. -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../window.h -o moc_window.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -1124,6 +1132,17 @@ plyObject.o: ../plyObject.cc ../plyObject.h \
 		../vertex.h \
 		../file_ply_stl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o plyObject.o ../plyObject.cc
+
+plyRevolution.o: ../plyRevolution.cc ../plyRevolution.h \
+		../object3d.h \
+		../basic_object3d.h \
+		../GL/gl.h \
+		../GL/gl_mangle.h \
+		../GL/glext.h \
+		../colors.h \
+		../vertex.h \
+		../file_ply_stl.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o plyRevolution.o ../plyRevolution.cc
 
 tetrahedron.o: ../tetrahedron.cc ../tetrahedron.h \
 		../object3d.h \
@@ -1393,6 +1412,7 @@ glwidget.o: ../glwidget.cc ../glwidget.h \
 		../object3d.h \
 		../cube.h \
 		../plyObject.h \
+		../plyRevolution.h \
 		../window.h \
 		/home/valentino/Qt/5.15.1/gcc_64/include/QtWidgets/QMainWindow \
 		/home/valentino/Qt/5.15.1/gcc_64/include/QtWidgets/qmainwindow.h \
@@ -1579,7 +1599,8 @@ window.o: ../window.cc /home/valentino/Qt/5.15.1/gcc_64/include/QtWidgets/QAppli
 		../tetrahedron.h \
 		../object3d.h \
 		../cube.h \
-		../plyObject.h
+		../plyObject.h \
+		../plyRevolution.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o window.o ../window.cc
 
 moc_glwidget.o: moc_glwidget.cpp 

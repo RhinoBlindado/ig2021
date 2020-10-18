@@ -1,2 +1,4 @@
  # Ignore C++ build files
 *.o
+proyectoActual/.qmake.stash
+proyectoActual/build/*
