@@ -23,11 +23,11 @@ int main( int argc, char ** argv )
 {
   QApplication Application( argc, argv );
 
-  QSurfaceFormat Format;
+/*  QSurfaceFormat Format;
   Format.setDepthBufferSize(24);
   Format.setStencilBufferSize(8);
   QSurfaceFormat::setDefaultFormat(Format);
-
+*/
   _window Window;
   Window.show();
   return Application.exec();

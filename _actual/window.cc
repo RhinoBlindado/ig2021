@@ -11,6 +11,8 @@
 #include <QAction>
 #include <QMenuBar>
 #include <QFrame>
+#include <QCheckBox>
+#include <QLabel>
 
 #include "window.h"
 #include "glwidget.h"
@@ -24,8 +26,56 @@
 
 _window::_window()
 {
+ QSizePolicy Q(QSizePolicy::Expanding,QSizePolicy::Expanding);
+ QWidget *Central_widget = new QWidget(this);
+ setCentralWidget(Central_widget);
+ setWindowTitle(tr("Prueba"));
+ resize(800,600);
 
-  QSizePolicy Q(QSizePolicy::Expanding,QSizePolicy::Expanding);
+ GL_widget = new _gl_widget(this);
+ GL_widget->setSizePolicy(Q);
+ QWidget *derechaWidget = new QWidget;
+ QTabWidget *tab = new QTabWidget;
+
+
+ QPalette pal2 = palette();
+ pal2.setColor(QPalette::Background,Qt::red);
+ derechaWidget->setAutoFillBackground(true);
+ derechaWidget->setPalette(pal2);
+
+ QHBoxLayout *horizontal_layout = new QHBoxLayout;
+
+ horizontal_layout->addWidget(GL_widget);
+ horizontal_layout->addWidget(tab);
+ tab->setMaximumWidth(200);
+
+ QWidget *modoWidget = new QWidget;
+ QWidget *objWidget = new QWidget;
+
+ tab->addTab(modoWidget,"Modos");
+ tab->addTab(objWidget,"Objetos");
+
+ QVBoxLayout *modeLayout = new QVBoxLayout;
+ modoWidget->setLayout(modeLayout);
+
+ QCheckBox *lineaRender = new QCheckBox;
+ QCheckBox *puntoRender = new QCheckBox;
+ QLabel *labelLinea = new QLabel("Lineas");
+ QLabel *labelPunto = new QLabel("Puntos");
+
+ modeLayout->addWidget(lineaRender);
+ modeLayout->addWidget(labelLinea);
+ modeLayout->addWidget(puntoRender);
+ modeLayout->addWidget(labelPunto);
+ modeLayout->addStretch();
+
+ Central_widget->setLayout(horizontal_layout);
+
+
+ Central_widget->setMinimumWidth(400);
+ Central_widget->setMinimumHeight(400);
+
+/*  QSizePolicy Q(QSizePolicy::Expanding,QSizePolicy::Expanding);
 
   QWidget *Central_widget = new QWidget(this);
 
@@ -62,7 +112,8 @@ _window::_window()
   File_menu->addAction(Exit);
   File_menu->setAttribute(Qt::WA_AlwaysShowToolTips);
 
-  setWindowTitle(tr("Práctica 1"));
+  setWindowTitle(tr("Práctica de Informática Gráfica - Valentino Lugli"));
 
   resize(800,800);
+  */
 }
