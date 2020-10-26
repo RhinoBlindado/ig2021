@@ -5,9 +5,9 @@
 _sphere::_sphere(float radius, int vCuts, int rCuts)
 {
     // START: Debug profile
-    radius = 0.5;
-    vCuts = 10;
-    rCuts = 10;
+    radius = 1;
+    vCuts = 20;
+    rCuts = 20;
     // END
 
     // Check for correct inputs
@@ -46,6 +46,6 @@ _sphere::_sphere(float radius, int vCuts, int rCuts)
     this->rotation(rCuts);
 
     // Generating triangles.
-    this->genTriangles(rCuts, 2, auxVer);
+    this->genTriangles(rCuts, true, true, auxVer);
 }
 

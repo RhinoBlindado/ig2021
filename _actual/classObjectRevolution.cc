@@ -21,10 +21,12 @@ void _objRev::rotation(int rCuts)
     }
 }
 
-void _objRev::genTriangles(int rCuts, int caps, vector<_vertex3f> aux)
-{
 
-    int plySizeVert = Vertices.size() / rCuts;
+void _objRev::genTriangles(int rCuts, bool bottomCap, bool topCap, vector<_vertex3f> caps)
+{
+    int vertSize = Vertices.size();
+    int plySizeVert = vertSize / rCuts;
+
     for(int j = 0; j < rCuts - 1; j++)
     {
         for(int i = 0; i < plySizeVert - 1; i++)
@@ -36,27 +38,25 @@ void _objRev::genTriangles(int rCuts, int caps, vector<_vertex3f> aux)
 
     for(int i = 0; i < plySizeVert - 1; i++)
     {
-        Triangles.push_back(_vertex3ui(i + (rCuts-1)  * plySizeVert, i, i+1));
+        Triangles.push_back(_vertex3ui(i + (rCuts-1) * plySizeVert, i, i+1));
         Triangles.push_back(_vertex3ui(i + (rCuts-1) * plySizeVert, i+1, (i+1) + (rCuts-1) * plySizeVert));
     }
 
-    switch (caps)
+    if(bottomCap)
     {
-        case 1:
-
-        break;
-
-        case 2:
-            Vertices.push_back(aux[0]);
-            Vertices.push_back(aux[1]);
-            int l_aux = Vertices.size();
-            for(int i = 0; i < rCuts; i++)
-            {
-                Triangles.push_back(_vertex3ui(i * plySizeVert, l_aux-2, ((i+1) * plySizeVert) % (l_aux-2)));
-                Triangles.push_back(_vertex3ui(l_aux-1, (plySizeVert-1)+ i * plySizeVert, ((plySizeVert-1) + (i+1) * plySizeVert) % (l_aux-2)));
-            }
-        break;
-
+        Vertices.push_back(caps[0]);
+        for(int i = 0; i < rCuts; i++)
+        {
+            Triangles.push_back(_vertex3ui(i * plySizeVert, vertSize, ((i+1) * plySizeVert) % (vertSize)));
+        }
     }
 
+    if(topCap)
+    {
+        Vertices.push_back(caps[1]);
+        for(int i = 0; i < rCuts; i++)
+        {
+            Triangles.push_back(_vertex3ui(Vertices.size()-1, (plySizeVert-1)+ i * plySizeVert, ((plySizeVert-1) + (i+1) * plySizeVert) % (vertSize)));
+        }
+    }
 }

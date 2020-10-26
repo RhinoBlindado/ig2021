@@ -49,5 +49,5 @@ _cone::_cone(float height, float radius, int vCuts, int hCuts, int rCuts)
     this->rotation(rCuts);
 
     // Generating triangles.
-    this->genTriangles(rCuts, 2, auxVer);
+    this->genTriangles(rCuts, true, true, auxVer);
 }

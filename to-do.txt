@@ -1,5 +1,1 @@
 - Implementar la entrada al derecho y reves de los datos .ply
-- Implementar cilindro por datos
-- Implementar cono por datos
-- Implementar esfera por datos
-- Reestructurar las clases del proyecto

@@ -8,7 +8,7 @@ class _objRev:public _object3D
     public:
         _objRev(){};
         void rotation(int rCuts);
-        void genTriangles(int rCuts, int caps, vector<_vertex3f> aux);
+        void genTriangles(int rCuts, bool topCap, bool bottomCap, vector<_vertex3f> caps);
 };
 
 #endif // OBJREV_H

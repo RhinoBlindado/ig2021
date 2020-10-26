@@ -2,3 +2,4 @@
 *.o
 _actual/.qmake.stash
 _actual/build/*
+to-do.txt
