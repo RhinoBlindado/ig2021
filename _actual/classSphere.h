@@ -5,7 +5,7 @@
 class _sphere:public _objRev
 {
     public:
-      _sphere(float radius = 0.5, int vCuts = 1, int rCuts = 3);
+      _sphere(float radius = 0.5, int vCuts = 2, int rCuts = 3);
 };
 #endif
 

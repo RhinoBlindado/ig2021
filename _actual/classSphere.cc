@@ -5,19 +5,19 @@
 _sphere::_sphere(float radius, int vCuts, int rCuts)
 {
     // START: Debug profile
-    radius = 1;
-    vCuts = 20;
-    rCuts = 20;
+//    radius = 1;
+//    vCuts = 2;
+//    rCuts = 20;
     // END
 
     // Check for correct inputs
     if( radius <= 0 )
     {
-        cout<<"Sphuere: Radius can't be zero or negative."<<endl;
+        cout<<"Sphere: Radius can't be zero or negative."<<endl;
         exit(1);
     }
 
-    if( vCuts < 1 || rCuts < 3)
+    if( vCuts < 2 || rCuts < 3)
     {
         cout<<"Sphere: Erroneous number of cuts"<<endl;
         exit(1);

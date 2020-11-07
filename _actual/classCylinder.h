@@ -5,7 +5,7 @@
 class _cylinder:public _objRev
 {
     public:
-      _cylinder(float height = 1, float radius = 0.5, int hCuts = 1, int vCuts = 1, int rCuts = 3);
+      _cylinder(float height = 1, float radius = 0.5, int hCuts = 1, int vCuts = 1, int rCuts = 3, bool bottom = true, bool top = true);
 };
 #endif
 

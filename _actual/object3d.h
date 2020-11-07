@@ -26,8 +26,7 @@ class _object3D:public _basic_object3D
 
   void draw_line();
   void draw_fill();
-  void draw_chess() ;
-
+  void draw_chess(vector<float> color1 = {1,0.4451,0.8078}, vector<float> color2 = {0.0039,0.8039,0.9961});
 };
 
 #endif // OBJECT3D_H

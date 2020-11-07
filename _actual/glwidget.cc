@@ -49,6 +49,8 @@ void _gl_widget::keyPressEvent(QKeyEvent *Keyevent)
   case Qt::Key_5:Object=OBJECT_SPHERE;break;
   case Qt::Key_6:Object=OBJECT_PLY;break;
 
+  //Practice 3: Added Hierarchical Model Key
+  case Qt::Key_7:Object=OBJECT_HIER;break;
   case Qt::Key_P:Draw_point=!Draw_point;break;
   case Qt::Key_L:Draw_line=!Draw_line;break;
   case Qt::Key_F:Draw_fill=!Draw_fill;break;
@@ -128,6 +130,32 @@ void _gl_widget::draw_objects()
 {
   Axis.draw_line();
 
+//  _cylinder base(1,0.5,20,2,10);
+//  _cylinder arm(1,0.5,20,2,10);
+
+//  glPushMatrix();
+//    glTranslatef(0,-0.5,0);
+//    glScalef(5,1,1);
+//    glRotatef(90,0,0,1);
+//    base.draw_chess();
+//  glPopMatrix();
+
+//  glPushMatrix();
+//    glColor3f(1,0,0);
+//    glTranslatef(0,0.5,0);
+//    glScalef(5,1,1);
+//    glRotatef(90,0,0,1);
+//    arm.draw_fill();
+//  glPopMatrix();
+
+//  _cube Cubitos;
+
+//  glPushMatrix();
+//    glTranslatef(1.5,2.5,1.5);
+//    glScalef(1,5,1);
+//    Cubitos.draw_chess();
+//  glPopMatrix();
+
   if (Draw_point){
     glPointSize(5);
     glColor3fv((GLfloat *) &BLACK);
@@ -160,11 +188,18 @@ void _gl_widget::draw_objects()
     glColor3fv((GLfloat *) &BLUE);
     switch (Object){
     case OBJECT_TETRAHEDRON:Tetrahedron.draw_fill();break;
+
+    // Added in Practice 1
     case OBJECT_CUBE:Cube.draw_fill();break;
+
+    // Added in Practice 2
     case OBJECT_CONE:Cone.draw_fill();break;
     case OBJECT_CYLINDER:Cylinder.draw_fill();break;
     case OBJECT_SPHERE:Sphere.draw_fill();break;
     case OBJECT_PLY:Ply.draw_fill();break;
+
+    // Added in Practice 3
+    case OBJECT_HIER:Hier.draw_fill();break;
     default:break;
     }
   }

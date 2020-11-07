@@ -1,13 +1,13 @@
 #include "classCylinder.h"
 
-_cylinder::_cylinder(float height, float radius, int vCuts, int hCuts, int rCuts)
+_cylinder::_cylinder(float height, float radius, int vCuts, int hCuts, int rCuts, bool bottom, bool top)
 {
     // START: Debug profile
-    height = 1;
-    radius = 0.5;
-    hCuts = 1;
-    vCuts = 1;
-    rCuts = 10;
+//    height = 1;
+//    radius = 0.5;
+//    hCuts = 1;
+//    vCuts = 1;
+//    rCuts = 10;
     // END
 
     // Check for correct inputs
@@ -64,6 +64,6 @@ _cylinder::_cylinder(float height, float radius, int vCuts, int hCuts, int rCuts
     this->rotation(rCuts);
 
     // Generating triangles.
-    this->genTriangles(rCuts, true, true, auxVer);
+    this->genTriangles(rCuts, bottom, top, auxVer);
 
 }

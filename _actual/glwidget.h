@@ -26,6 +26,9 @@
 #include "classCylinder.h"
 #include "classSphere.h"
 
+// Practice 3
+#include "classTelescope.h"
+
 namespace _gl_widget_ne {
 
   const float X_MIN=-.1;
@@ -38,7 +41,7 @@ namespace _gl_widget_ne {
   const float ANGLE_STEP=1;
 
   typedef enum {MODE_DRAW_POINT,MODE_DRAW_LINE,MODE_DRAW_FILL,MODE_DRAW_CHESS} _mode_draw;
-  typedef enum {OBJECT_TETRAHEDRON,OBJECT_CUBE,OBJECT_CONE,OBJECT_CYLINDER,OBJECT_SPHERE,OBJECT_PLY} _object;
+  typedef enum {OBJECT_TETRAHEDRON,OBJECT_CUBE,OBJECT_CONE,OBJECT_CYLINDER,OBJECT_SPHERE,OBJECT_PLY,OBJECT_HIER} _object;
 }
 
 class _window;
@@ -73,15 +76,20 @@ protected:
 
 private:
   _window *Window;
-
   _axis Axis;
   _tetrahedron Tetrahedron;
+
+  // Practice 1
   _cube Cube;
+
+  // Practice 2
   _cone Cone;
   _cylinder Cylinder;
   _sphere Sphere;
   _ply Ply;
 
+  // Practice 3
+  _telescope Hier;
   _gl_widget_ne::_object Object;
 
   bool Draw_point;

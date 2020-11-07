@@ -8,7 +8,7 @@ _ply::_ply(float size, string path)
 {
     vector<float> plyObjVerts;
     vector<unsigned int> plyObjTrigs;
-    path="../ply_models/rev_cylinderInverse.ply";
+    path="../ply_models/rev_cylinder.ply";
 
     this->readFile(plyObjVerts, plyObjTrigs, path);
     if(plyObjTrigs.size() / 3 > 1)

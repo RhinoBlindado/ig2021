@@ -4,6 +4,7 @@ HEADERS += \
   classObjectPly.h \
   classObjectRevolution.h \
   classSphere.h \
+  classTelescope.h \
   colors.h \
   basic_object3d.h \
   cube.h \
@@ -21,6 +22,7 @@ SOURCES += \
   classObjectPly.cc \
   classObjectRevolution.cc \
   classSphere.cc \
+  classTelescope.cc \
   cube.cc \
   file_ply_stl.cc \
   object3d.cc \

@@ -15,30 +15,30 @@ _cube::_cube(float size)
     Vertices[7] = _vertex3f(-size/2,-size/2,size/2);
 
 
-    // Definiendo las caras del cubo como triangulos
+    // Defining the triangles of the cube.
     Triangles.resize(12);
 
-    //      Cara frontal
+    //      Front face.
     Triangles[0]=_vertex3ui(0,2,3);
     Triangles[1]=_vertex3ui(0,3,1);
 
-    //      Lateral izquierdo
+    //      Left face.
     Triangles[2]=_vertex3ui(1,7,5);
     Triangles[3]=_vertex3ui(1,3,7);
 
-    //      Cara trasera
+    //      Back face.
     Triangles[4]=_vertex3ui(5,6,4);
     Triangles[5]=_vertex3ui(5,7,6);
 
-    //      Lateral derecho
+    //      Right side.
     Triangles[6]=_vertex3ui(4,6,2);
     Triangles[7]=_vertex3ui(4,2,0);
 
-    //      Cara inferior
+    //      Bottom side.
     Triangles[8]=_vertex3ui(2,7,3);
     Triangles[9]=_vertex3ui(2,6,7);
 
-    //      Cara superior
+    //      Top side.
     Triangles[10]=_vertex3ui(0,1,5);
     Triangles[11]=_vertex3ui(0,5,4);
 }
