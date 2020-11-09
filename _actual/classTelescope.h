@@ -7,7 +7,7 @@ class _telescope:public _object3D
 {
     public:
     _telescope(){};
-    void draw_fill();
+    void draw(int style = 1);
 };
 
 #endif // TELESCOPE_H

@@ -166,6 +166,8 @@ void _gl_widget::draw_objects()
     case OBJECT_CYLINDER:Cylinder.draw_point();break;
     case OBJECT_SPHERE:Sphere.draw_point();break;
     case OBJECT_PLY:Ply.draw_point();break;
+    // Added in Practice 3
+    case OBJECT_HIER:Hier.draw(0);break;
     default:break;
     }
   }
@@ -180,6 +182,8 @@ void _gl_widget::draw_objects()
     case OBJECT_CYLINDER:Cylinder.draw_line();break;
     case OBJECT_SPHERE:Sphere.draw_line();break;
     case OBJECT_PLY:Ply.draw_line();break;
+    // Added in Practice 3
+    case OBJECT_HIER:Hier.draw(1);break;
     default:break;
     }
   }
@@ -199,7 +203,7 @@ void _gl_widget::draw_objects()
     case OBJECT_PLY:Ply.draw_fill();break;
 
     // Added in Practice 3
-    case OBJECT_HIER:Hier.draw_fill();break;
+    case OBJECT_HIER:Hier.draw(2);break;
     default:break;
     }
   }
@@ -212,6 +216,8 @@ void _gl_widget::draw_objects()
     case OBJECT_CYLINDER:Cylinder.draw_chess();break;
     case OBJECT_SPHERE:Sphere.draw_chess();break;
     case OBJECT_PLY:Ply.draw_chess();break;
+    // Added in Practice 3
+    case OBJECT_HIER:Hier.draw(3);break;
     default:break;
     }
   }
