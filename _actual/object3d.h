@@ -24,6 +24,7 @@ class _object3D:public _basic_object3D
   public:
   vector<_vertex3ui> Triangles;
 
+  void draw(int style = 0);
   void draw_line();
   void draw_fill();
   void draw_chess(vector<float> color1 = {1,0.4451,0.8078}, vector<float> color2 = {0.0039,0.8039,0.9961});

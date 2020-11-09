@@ -12,6 +12,35 @@
 using namespace _colors_ne;
 
 
+
+void _object3D::draw(int style)
+{
+    switch(style)
+    {
+        case 0:
+            this->draw_point();
+        break;
+
+        case 1:
+            this->draw_line();
+        break;
+
+        case 2:
+            this->draw_fill();
+        break;
+
+        case 3:
+            this->draw_chess();
+        break;
+
+        default:
+            cout<<"Object 3D: Out of range type of draw style"<<endl;
+            exit(1);
+    }
+}
+
+
+
 /*****************************************************************************//**
  *
  *
