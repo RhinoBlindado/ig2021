@@ -37,7 +37,7 @@ class _teleLens:public _object3D
             glMatrixMode(GL_MODELVIEW);
 
             glPushMatrix();
-                glTranslatef(3,0,0);
+                glTranslatef(3.25,0,0);
                 glScaled(0.25,0.85,0.85);
                 this->lens.draw(style);
             glPopMatrix();
@@ -53,15 +53,17 @@ class _teleFocusTube:public _object3D
    public:
         _teleFocusTube(){};
 
-        void draw(int style)
+        void draw(int style, float gamma)
         {
             glMatrixMode(GL_MODELVIEW);
 
             glPushMatrix();
+                glRotated(gamma*10,1,0,0);
+                glTranslated(gamma/10,0,0);
                 this->lens.draw(style);
                 glTranslated(2,0,0);
                 glRotated(90,0,0,1);
-                glScaled(1,2,1);
+                glScaled(1,2.5,1);
 
                 glColor3f(1,0,0);
                 this->focusTube.draw(style);
@@ -82,7 +84,7 @@ class _teleEyePiece:public _object3D
             glMatrixMode(GL_MODELVIEW);
 
             glPushMatrix();
-                glTranslated(-4.5,0,0);
+                glTranslated(-3.75,0,0);
                 glRotated(90,0,0,1);
                 glScaled(0.75,1,0.75);
 
@@ -103,18 +105,18 @@ class _teleTube:public _object3D
     public:
         _teleTube(){};
 
-        void draw(int style)
+        void draw(int style, float beta, float gamma)
         {
             glMatrixMode(GL_MODELVIEW);
 
             glPushMatrix();
+                glRotatef(beta,0,0,1);
                 // Draw the next figure in hierarchy.
-                glTranslated(0.75,0,0);
-                this->focusTube.draw(style);
+                this->focusTube.draw(style, gamma);
                 this->eyePiece.draw(style);
 
                 // Apply transformations, bottom first.
-                glTranslated(-1.5,0,0);
+                glTranslated(-0.75,0,0);
                 glRotated(90,0,0,1);
                 glScaled(1.15,5,1.15);
 
@@ -134,20 +136,25 @@ class _teleMount:public _object3D
 
     public:
         _teleMount(){};
-        void draw(int style)
+        void draw(int style,  float alpha, float beta, float gamma)
         {
             glMatrixMode(GL_MODELVIEW);
 
             glPushMatrix();
-                this->__tube.draw(style);
-                glTranslated(0,-1,0);
+
+                glTranslated(0,1,0);
+                glRotatef(alpha,0,1,0);
+                this->__tube.draw(style, beta, gamma);
+            glPopMatrix();
+
+            glPushMatrix();
                 glScaled(1.5,1.5,1.5);
                 glColor3f(0.5,0,0.5);
                 this->mount1.draw(style);
             glPopMatrix();
 
             glPushMatrix();
-                glTranslated(0,-1.75,0);
+                glTranslated(0,-0.85,0);
                 glScaled(2,0.25,2);
                 glColor3f(0.75,0,0.75);
                 this->mount2.draw(style);
@@ -163,13 +170,13 @@ class _teleTripod:public _telescope
 
     public:
         _teleTripod(){};
-        void draw(int style)
+        void draw(int style, float alpha, float beta, float gamma)
         {
             glMatrixMode(GL_MODELVIEW);
 
             glPushMatrix();
-                glTranslated(0,1.75,0);
-                this->__mount.draw(style);
+                glTranslated(0,0.9,0);
+                this->__mount.draw(style, alpha, beta, gamma);
             glPopMatrix();
 
             glPushMatrix();
@@ -200,8 +207,8 @@ class _teleTripod:public _telescope
         }
 };
 
-void _telescope::draw(int style)
+void _telescope::draw(int style, float alpha, float beta, float gamma)
 {
     _teleTripod __tripod;
-    __tripod.draw(style);
+    __tripod.draw(style, alpha, beta, gamma);
 }

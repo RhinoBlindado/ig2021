@@ -13,9 +13,22 @@
 #include <QFrame>
 #include <QCheckBox>
 #include <QLabel>
-
+#include <QTimer>
+#include <QComboBox>
+#include <QGroupBox>
 #include "window.h"
 #include "glwidget.h"
+
+
+//
+
+void _window::change_checkbox_point(bool Checked)
+{
+  point->blockSignals(true);
+  if(Checked==true) point->setCheckState(Qt::Checked);
+  else point->setCheckState(Qt::Unchecked);
+  point->blockSignals(false);
+}
 
 
 /*****************************************************************************//**
@@ -23,57 +36,136 @@
  *
  *
  *****************************************************************************/
-
 _window::_window()
 {
- QSizePolicy Q(QSizePolicy::Expanding,QSizePolicy::Expanding);
- QWidget *Central_widget = new QWidget(this);
- setCentralWidget(Central_widget);
- setWindowTitle(tr("Prueba"));
+ //Practice 3:
+ // Initializing the Main Widget
+ QWidget *mainWidget = new QWidget(this);
+ setCentralWidget(mainWidget);
+ setWindowTitle(tr("[IG] Práctica de Valentino Lugli"));
  resize(800,600);
+ mainWidget->setMinimumWidth(400);
+ mainWidget->setMinimumHeight(400);
 
+ // Initizaling the Main Layout
+ QHBoxLayout *mainLayout = new QHBoxLayout;
+
+ // Initializing the sidebar
+ QTabWidget *sideBar = new QTabWidget;
+ sideBar->setMaximumWidth(200);
+
+ // Initializing the OpenGL Widget
  GL_widget = new _gl_widget(this);
+ QSizePolicy Q(QSizePolicy::Expanding,QSizePolicy::Expanding);
  GL_widget->setSizePolicy(Q);
- QWidget *derechaWidget = new QWidget;
- QTabWidget *tab = new QTabWidget;
+
+ // Adding the Main Layout to the Main Widget
+ mainWidget->setLayout(mainLayout);
+ // Adding the GL_Widget and Sidebar to Main Layout
+ mainLayout->addWidget(GL_widget);
+ mainLayout->addWidget(sideBar);
 
 
- QPalette pal2 = palette();
- pal2.setColor(QPalette::Background,Qt::red);
- derechaWidget->setAutoFillBackground(true);
- derechaWidget->setPalette(pal2);
+ //     SIDEBAR
+ QWidget *generalWidget = new QWidget;
+ sideBar->addTab(generalWidget,"General");
 
- QHBoxLayout *horizontal_layout = new QHBoxLayout;
+ //     GENERAL TAB
+ // Connecting it to the general widget
+ QVBoxLayout *generalLayout = new QVBoxLayout;
+ generalWidget->setLayout(generalLayout);
 
- horizontal_layout->addWidget(GL_widget);
- horizontal_layout->addWidget(tab);
- tab->setMaximumWidth(200);
+ // Model Selector
+ QGroupBox *modelBox = new QGroupBox("Modelo");
+ generalLayout->addWidget(modelBox);
 
- QWidget *modoWidget = new QWidget;
- QWidget *objWidget = new QWidget;
+ QVBoxLayout *modelLayout = new QVBoxLayout;
+ modelBox->setLayout(modelLayout);
 
- tab->addTab(modoWidget,"Modos");
- tab->addTab(objWidget,"Objetos");
+ QComboBox *modelSelector = new QComboBox;
+ modelSelector->addItem("Tetrahedro");
+ modelSelector->addItem("Cubo");
+ modelSelector->addItem("Cono");
+ modelSelector->addItem("Cilindro");
+ modelSelector->addItem("Esfera");
+ modelSelector->addItem("Objeto PLY");
+ modelSelector->addItem("Objeto Jerárquico");
 
- QVBoxLayout *modeLayout = new QVBoxLayout;
- modoWidget->setLayout(modeLayout);
-
- QCheckBox *lineaRender = new QCheckBox;
- QCheckBox *puntoRender = new QCheckBox;
- QLabel *labelLinea = new QLabel("Lineas");
- QLabel *labelPunto = new QLabel("Puntos");
-
- modeLayout->addWidget(lineaRender);
- modeLayout->addWidget(labelLinea);
- modeLayout->addWidget(puntoRender);
- modeLayout->addWidget(labelPunto);
- modeLayout->addStretch();
-
- Central_widget->setLayout(horizontal_layout);
+ modelLayout->addWidget(modelSelector);
+ connect(modelSelector, SIGNAL(activated(int)), GL_widget, SLOT(slotModel(int)));
 
 
- Central_widget->setMinimumWidth(400);
- Central_widget->setMinimumHeight(400);
+ // Modes
+ QGroupBox *modesBox = new QGroupBox("Modos de Dibujado");
+ generalLayout->addWidget(modesBox);
+
+ QGridLayout *modeLayout = new QGridLayout;
+ modesBox->setLayout(modeLayout);
+ //     Points
+ point = new QCheckBox;
+ QLabel *pointsLabel = new QLabel("Puntos");
+ modeLayout->addWidget(point,0,0);
+ modeLayout->addWidget(pointsLabel,0,1);
+
+ connect(point, SIGNAL(stateChanged(int)), GL_widget, SLOT(slotPoint(int)));
+
+ //     Lines
+ QCheckBox *lineCheckBox = new QCheckBox;
+ QLabel *lineLabel = new QLabel("Líneas");
+ modeLayout->addWidget(lineCheckBox,1,0);
+ modeLayout->addWidget(lineLabel,1,1);
+
+ lineCheckBox->setCheckState(Qt::Checked);
+ connect(lineCheckBox, SIGNAL(stateChanged(int)), GL_widget, SLOT(slotLine(int)));
+
+//      Fill
+ QCheckBox *fillCheckBox = new QCheckBox;
+ QLabel *fillLabel = new QLabel("Relleno");
+ modeLayout->addWidget(fillCheckBox,2,0);
+ modeLayout->addWidget(fillLabel,2,1);
+
+ connect(fillCheckBox, SIGNAL(stateChanged(int)), GL_widget, SLOT(slotFill(int)));
+
+//      Chess
+ QCheckBox *chessCheckBox = new QCheckBox;
+ QLabel *chessLabel = new QLabel("Ajedrez");
+ modeLayout->addWidget(chessCheckBox,3,0);
+ modeLayout->addWidget(chessLabel,3,1);
+
+ connect(chessCheckBox, SIGNAL(stateChanged(int)), GL_widget, SLOT(slotChess(int)));
+
+
+ // Camera
+ QGroupBox *cameraBox = new QGroupBox("Cámara");
+ generalLayout->addWidget(cameraBox);
+
+ QGridLayout *cameraLayout = new QGridLayout;
+ cameraBox->setLayout(cameraLayout);
+
+ QLabel *cameraXLabel = new QLabel("Ángulo X");
+ QLabel *cameraXAngle = new QLabel("0");
+ cameraLayout->addWidget(cameraXLabel,0,0);
+ cameraLayout->addWidget(cameraXAngle,0,1);
+ generalLayout->addStretch();
+
+ QSlider *mySlider = new QSlider(Qt::Horizontal);
+ generalLayout->addWidget(mySlider);
+
+ // ADVANCED TAB
+ QWidget *advancedWidget = new QWidget;
+ sideBar->addTab(advancedWidget,"Avanzado");
+
+ // PLY settings
+
+
+
+
+
+
+ // TIMER FOR ANIMATION
+ QTimer *mainTimer = new QTimer;
+ mainTimer->start(1000);
+ connect(mainTimer, SIGNAL(timeout()), GL_widget, SLOT(slotAnimationToggle()));
 
 /*  QSizePolicy Q(QSizePolicy::Expanding,QSizePolicy::Expanding);
 
@@ -112,8 +204,15 @@ _window::_window()
   File_menu->addAction(Exit);
   File_menu->setAttribute(Qt::WA_AlwaysShowToolTips);
 
-  setWindowTitle(tr("Práctica de Informática Gráfica - Valentino Lugli"));
 
   resize(800,800);
   */
 }
+
+//void _window::change_checkbox_point(bool Checked)
+//{
+//  Checkbox_layout1->blockSignals(true);
+//  if(Checked==true) Checkbox_layout1->setCheckState(Qt::Checked);
+//  else Checkbox_layout1->setCheckState(Qt::Unchecked);
+//  Checkbox_layout1->blockSignals(false);
+//}

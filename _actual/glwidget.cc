@@ -9,6 +9,7 @@
 
 #include "glwidget.h"
 #include "window.h"
+#include <cmath>
 
 using namespace std;
 using namespace _gl_widget_ne;
@@ -25,6 +26,7 @@ _gl_widget::_gl_widget(_window *Window1):Window(Window1)
 {
   setMinimumSize(300, 300);
   setFocusPolicy(Qt::StrongFocus);
+  Object = _gl_widget_ne::OBJECT_TETRAHEDRON;
 }
 
 
@@ -49,8 +51,31 @@ void _gl_widget::keyPressEvent(QKeyEvent *Keyevent)
   case Qt::Key_5:Object=OBJECT_SPHERE;break;
   case Qt::Key_6:Object=OBJECT_PLY;break;
 
-  //Practice 3: Added Hierarchical Model Key
+  //Practice 3:
+  //    - Added Hierarchical Model Key
   case Qt::Key_7:Object=OBJECT_HIER;break;
+
+  //    - First degree of freedom keys and rate of modification
+  case Qt::Key_Q:alpha+=ANGLE_STEP*modAlpha;break;
+  case Qt::Key_W:alpha-=ANGLE_STEP*modAlpha;break;
+  case Qt::Key_E:modAlpha+=0.5;break;
+  case Qt::Key_R:modAlpha-=0.5;break;
+
+  //    - Second degree of freedom keys and rate of modification
+  case Qt::Key_S:beta+=ANGLE_STEP*modBeta;break;
+  case Qt::Key_D:beta-=ANGLE_STEP*modBeta;break;
+  case Qt::Key_T:modBeta+=0.5;break;
+  case Qt::Key_Y:modBeta-=0.5;break;
+
+  //    - Third degree of freedom keys and rate of modification
+  case Qt::Key_Z:gamma+=ANGLE_STEP*modGamma;break;
+  case Qt::Key_X:gamma-=ANGLE_STEP*modGamma;break;
+  case Qt::Key_U:modGamma+=0.01;break;
+  case Qt::Key_I:modGamma-=0.01;break;
+
+  //    - Animation key
+  case Qt::Key_A:animation=!animation;break;
+
   case Qt::Key_P:Draw_point=!Draw_point;break;
   case Qt::Key_L:Draw_line=!Draw_line;break;
   case Qt::Key_F:Draw_fill=!Draw_fill;break;
@@ -64,6 +89,8 @@ void _gl_widget::keyPressEvent(QKeyEvent *Keyevent)
   case Qt::Key_Plus:Observer_distance/=1.2;break;
   }
 
+  this->constrainAngles();
+  cout<<"ALPHA  :"<<alpha<<" ("<<modAlpha<<") BETA: "<<beta<<" ("<<modBeta<<")    GAMMA: "<<gamma<<" ("<<modGamma<<")"<<endl;
   update();
 }
 
@@ -161,13 +188,18 @@ void _gl_widget::draw_objects()
     glColor3fv((GLfloat *) &BLACK);
     switch (Object){
     case OBJECT_TETRAHEDRON:Tetrahedron.draw_point();break;
+
+    // Added in Practice 1
     case OBJECT_CUBE:Cube.draw_point();break;
+
+    // Added in Practice 2
     case OBJECT_CONE:Cone.draw_point();break;
     case OBJECT_CYLINDER:Cylinder.draw_point();break;
     case OBJECT_SPHERE:Sphere.draw_point();break;
     case OBJECT_PLY:Ply.draw_point();break;
+
     // Added in Practice 3
-    case OBJECT_HIER:Hier.draw(0);break;
+    case OBJECT_HIER:Hier.draw(0, alpha, beta, gamma);break;
     default:break;
     }
   }
@@ -177,13 +209,18 @@ void _gl_widget::draw_objects()
     glColor3fv((GLfloat *) &MAGENTA);
     switch (Object){
     case OBJECT_TETRAHEDRON:Tetrahedron.draw_line();break;
+
+    // Added in Practice 1
     case OBJECT_CUBE:Cube.draw_line();break;
+
+    // Added in Practice 2
     case OBJECT_CONE:Cone.draw_line();break;
     case OBJECT_CYLINDER:Cylinder.draw_line();break;
     case OBJECT_SPHERE:Sphere.draw_line();break;
     case OBJECT_PLY:Ply.draw_line();break;
+
     // Added in Practice 3
-    case OBJECT_HIER:Hier.draw(1);break;
+    case OBJECT_HIER:Hier.draw(1, alpha, beta, gamma);break;
     default:break;
     }
   }
@@ -203,7 +240,7 @@ void _gl_widget::draw_objects()
     case OBJECT_PLY:Ply.draw_fill();break;
 
     // Added in Practice 3
-    case OBJECT_HIER:Hier.draw(2);break;
+    case OBJECT_HIER:Hier.draw(2, alpha, beta, gamma);break;
     default:break;
     }
   }
@@ -211,13 +248,18 @@ void _gl_widget::draw_objects()
   if (Draw_chess){
     switch (Object){
     case OBJECT_TETRAHEDRON:Tetrahedron.draw_chess();break;
+
+    // Added in Practice 1
     case OBJECT_CUBE:Cube.draw_chess();break;
+
+    // Added in Practice 2
     case OBJECT_CONE:Cone.draw_chess();break;
     case OBJECT_CYLINDER:Cylinder.draw_chess();break;
     case OBJECT_SPHERE:Sphere.draw_chess();break;
     case OBJECT_PLY:Ply.draw_chess();break;
+
     // Added in Practice 3
-    case OBJECT_HIER:Hier.draw(3);break;
+    case OBJECT_HIER:Hier.draw(3, alpha, beta, gamma);break;
     default:break;
     }
   }
@@ -291,8 +333,117 @@ void _gl_widget::initializeGL()
   Observer_angle_y=0;
   Observer_distance=DEFAULT_DISTANCE;
 
+  //Practice 3: Initializing variables
+  alpha = 0;
+  beta  = 0;
+  gamma = 0;
+  modAlpha = 1;
+  modBeta  = 1;
+  modGamma = 1;
+  animation = false;
+
   Draw_point=false;
   Draw_line=true;
   Draw_fill=false;
   Draw_chess=false;
+}
+
+
+void _gl_widget::slotPoint(int state)
+{
+    if(state == Qt::Checked)
+    {
+        Draw_point = true;
+    }
+    else
+    {
+        Draw_point = false;
+    }
+    update();
+
+}
+void _gl_widget::slotLine(int state)
+{
+
+    if(state == Qt::Checked)
+    {
+        Draw_line = true;
+    }
+    else
+    {
+        Draw_line = false;
+    }
+
+    update();
+
+}
+void _gl_widget::slotFill(int state)
+{
+    if(state == Qt::Checked)
+    {
+        Draw_fill= true;
+    }
+    else
+    {
+        Draw_fill = false;
+    }
+    update();
+
+}
+void _gl_widget::slotChess(int state)
+{
+    if(state == Qt::Checked)
+    {
+        Draw_chess = true;
+    }
+    else
+    {
+        Draw_chess = false;
+    }
+    update();
+
+}
+
+void _gl_widget::slotModel(int index)
+{
+    switch(index)
+    {
+        case 0:Object=OBJECT_TETRAHEDRON;break;
+        case 1:Object=OBJECT_CUBE;break;
+        case 2:Object=OBJECT_CONE;break;
+        case 3:Object=OBJECT_CYLINDER;break;
+        case 4:Object=OBJECT_SPHERE;break;
+        case 5:Object=OBJECT_PLY;break;
+        case 6:Object=OBJECT_HIER;break;
+    }
+    update();
+}
+
+void _gl_widget::constrainAngles()
+{
+  if(beta > 42)
+      beta = 42;
+
+  if(beta < -42)
+      beta = -42;
+
+  if(gamma > 10)
+      gamma = 10;
+
+  if(gamma < -10)
+      gamma = -10;
+
+   alpha = fmod(alpha,360);
+}
+
+
+void _gl_widget::slotAnimationToggle()
+{
+    if(animation)
+    {
+        alpha += ANGLE_STEP*modAlpha;
+        beta  += ANGLE_STEP*modBeta;
+        gamma += ANGLE_STEP*modGamma;
+        update();
+    }
 }

@@ -34,8 +34,10 @@ class _window : public QMainWindow
 
 public:
     _window();
-
+    void change_checkbox_point(bool Checked);
 private:
+
+  QCheckBox *point;
   _gl_widget *GL_widget;
 };
 

@@ -63,9 +63,19 @@ public:
   void change_projection();
   void change_observer();
 
+  // Practice 3
   void draw_axis();
   void draw_objects();
+  void constrainAngles();
 
+public slots:
+  void slotPoint(int state);
+  void slotLine(int state);
+  void slotFill(int state);
+  void slotChess(int state);
+  void slotModel(int index);
+
+  void slotAnimationToggle();
 
 protected:
   void resizeGL(int Width1, int Height1) Q_DECL_OVERRIDE;
@@ -91,6 +101,9 @@ private:
   // Practice 3
   _telescope Hier;
   _gl_widget_ne::_object Object;
+  float alpha, beta, gamma, modAlpha, modBeta, modGamma;
+  bool animation;
+
 
   bool Draw_point;
   bool Draw_line;
@@ -100,6 +113,8 @@ private:
   float Observer_angle_x;
   float Observer_angle_y;
   float Observer_distance;
+
+
 };
 
 #endif
