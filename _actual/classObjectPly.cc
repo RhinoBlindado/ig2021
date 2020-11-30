@@ -146,4 +146,8 @@ void _ply::profilePly(float size, vector<float> plyVert, vector<unsigned int> pl
             }
         break;
     }
+
+    // Calculating the normals.
+    this->calculateNormals();
+
 }

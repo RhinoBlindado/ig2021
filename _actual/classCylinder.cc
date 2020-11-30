@@ -66,4 +66,8 @@ _cylinder::_cylinder(float height, float radius, int vCuts, int hCuts, int rCuts
     // Generating triangles.
     this->genTriangles(rCuts, bottom, top, auxVer);
 
+    // Calculating the normals.
+    this->calculateNormals();
+
+
 }

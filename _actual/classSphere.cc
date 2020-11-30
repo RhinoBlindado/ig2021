@@ -47,5 +47,9 @@ _sphere::_sphere(float radius, int vCuts, int rCuts)
 
     // Generating triangles.
     this->genTriangles(rCuts, true, true, auxVer);
+
+    // Calculate the normals.
+    this->calculateNormals();
+
 }
 

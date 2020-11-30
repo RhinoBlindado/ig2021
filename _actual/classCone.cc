@@ -50,4 +50,8 @@ _cone::_cone(float height, float radius, int vCuts, int hCuts, int rCuts)
 
     // Generating triangles.
     this->genTriangles(rCuts, true, true, auxVer);
+
+    // Calculating normals.
+    this->calculateNormals();
+
 }

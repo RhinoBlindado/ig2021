@@ -41,4 +41,8 @@ _cube::_cube(float size)
     //      Top side.
     Triangles[10]=_vertex3ui(0,1,5);
     Triangles[11]=_vertex3ui(0,5,4);
+
+
+    // Calculate the normals
+    this->calculateNormals();
 }
