@@ -87,24 +87,24 @@ protected:
 private:
   _window *Window;
   _axis Axis;
+
+  // Models
   _tetrahedron Tetrahedron;
-
-  // Practice 1
   _cube Cube;
-
-  // Practice 2
-  _cone Cone;
   _cylinder Cylinder;
   _sphere Sphere;
   _ply Ply;
-
-  // Practice 3
   _telescope Hier;
   _gl_widget_ne::_object Object;
+
+  // Animation
+  //    Degrees of freedom and modifiers
   float alpha, beta, gamma, modAlpha, modBeta, modGamma;
+  //    Toggle ON/OFF the animation
   bool animation;
 
-  // Practice 4
+  // Lighting and Textures
+  //    Toggle ON/OFF lighting
   bool lighting;
 
 

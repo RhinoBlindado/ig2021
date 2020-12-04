@@ -40,26 +40,32 @@ _gl_widget::_gl_widget(_window *Window1):Window(Window1)
 void _gl_widget::keyPressEvent(QKeyEvent *Keyevent)
 {
   switch(Keyevent->key()){
+  // Models Keys
+  //    Tetrahedron
   case Qt::Key_1:
         Object=OBJECT_TETRAHEDRON;
         Window->modelSelectorInteraction(0);
   break;
 
-  //Practice 1: Added Cube Key
+  //    Cube
   case Qt::Key_2:
         Object=OBJECT_CUBE;
         Window->modelSelectorInteraction(1);
   break;
 
-  //Practice 2: Added PLY Object and Revolution Key
+  //    Cone
   case Qt::Key_3:
         Object=OBJECT_CONE;
         Window->modelSelectorInteraction(2);
   break;
+
+  //    Cylinder
   case Qt::Key_4:
         Object=OBJECT_CYLINDER;
         Window->modelSelectorInteraction(3);
   break;
+
+  //    Sphere
   case Qt::Key_5:
         Object=OBJECT_SPHERE;
         Window->modelSelectorInteraction(4);
@@ -69,34 +75,34 @@ void _gl_widget::keyPressEvent(QKeyEvent *Keyevent)
         Window->modelSelectorInteraction(5);
   break;
 
-  //Practice 3:
-  //    - Added Hierarchical Model Key
+  //    - Hierarchical Model Key
   case Qt::Key_7:
         Object=OBJECT_HIER;
         Window->modelSelectorInteraction(6);
   break;
 
-  //    - First degree of freedom keys and rate of modification
+  //    First degree of freedom keys and rate of modification
   case Qt::Key_Q:alpha+=ANGLE_STEP*modAlpha;break;
   case Qt::Key_W:alpha-=ANGLE_STEP*modAlpha;break;
   case Qt::Key_E:modAlpha+=0.5;break;
   case Qt::Key_R:modAlpha-=0.5;break;
 
-  //    - Second degree of freedom keys and rate of modification
+  //    Second degree of freedom keys and rate of modification
   case Qt::Key_S:beta+=ANGLE_STEP*modBeta;break;
   case Qt::Key_D:beta-=ANGLE_STEP*modBeta;break;
   case Qt::Key_T:modBeta+=0.5;break;
   case Qt::Key_Y:modBeta-=0.5;break;
 
-  //    - Third degree of freedom keys and rate of modification
+  //    Third degree of freedom keys and rate of modification
   case Qt::Key_Z:gamma+=ANGLE_STEP*modGamma;break;
   case Qt::Key_X:gamma-=ANGLE_STEP*modGamma;break;
   case Qt::Key_U:modGamma+=0.01;break;
   case Qt::Key_I:modGamma-=0.01;break;
 
-  //    - Animation key
+  //    Animation key
   case Qt::Key_A:animation=!animation;break;
 
+  //    Render mode keys
   case Qt::Key_P:
         Draw_point=!Draw_point;
         Window->pointCheckBoxInteraction(Draw_point);
@@ -114,6 +120,8 @@ void _gl_widget::keyPressEvent(QKeyEvent *Keyevent)
         Window->chessCheckBoxInteraction(Draw_chess);
   break;
 
+
+  //    Camera Movement Keys
   case Qt::Key_Left:Observer_angle_y-=ANGLE_STEP;break;
   case Qt::Key_Right:Observer_angle_y+=ANGLE_STEP;break;
   case Qt::Key_Up:
@@ -126,6 +134,30 @@ void _gl_widget::keyPressEvent(QKeyEvent *Keyevent)
   break;
   case Qt::Key_Minus:Observer_distance*=1.2;break;
   case Qt::Key_Plus:Observer_distance/=1.2;break;
+
+
+  // Lighting Keys
+  //    Solid Mode
+  case Qt::Key_F1: ;break;
+  //    Chess Mode
+  case Qt::Key_F2: ;break;
+  //    Flat Shaded Light Mode
+  case Qt::Key_F3: ;break;
+  //    Goraund Shaded Light Mode
+  case Qt::Key_F4: ;break;
+  //    Unlit Texture Mode
+  case Qt::Key_F5: ;break;
+  //    Flat Shaded Light Texture Mode
+  case Qt::Key_F6: ;break;
+  //    Goraund Shaded Light Texture Mode
+  case Qt::Key_F7: ;break;
+
+  //    Toggle ON/OFF First Light
+  case Qt::Key_J: ;break;
+  //    Toggle ON/OFF Second Light
+  case Qt::Key_K: ;break;
+  //    Toggle between 3 materials
+  case Qt::Key_M: ;break;
   }
 
   this->constrainAngles();
