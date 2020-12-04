@@ -1,15 +1,7 @@
 #include "classCylinder.h"
 
-_cylinder::_cylinder(float height, float radius, int vCuts, int hCuts, int rCuts, bool bottom, bool top)
+void _cylinder::initialize(float height, float radius, int hCuts, int vCuts, int rCuts, bool bottom, bool top)
 {
-    // START: Debug profile
-//    height = 1;
-//    radius = 0.5;
-//    hCuts = 1;
-//    vCuts = 1;
-//    rCuts = 10;
-    // END
-
     // Check for correct inputs
     if( height <= 0 )
     {
@@ -68,6 +60,5 @@ _cylinder::_cylinder(float height, float radius, int vCuts, int hCuts, int rCuts
 
     // Calculating the normals.
     this->calculateNormals();
-
 
 }

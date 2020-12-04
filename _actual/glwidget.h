@@ -104,6 +104,9 @@ private:
   float alpha, beta, gamma, modAlpha, modBeta, modGamma;
   bool animation;
 
+  // Practice 4
+  bool lighting;
+
 
   bool Draw_point;
   bool Draw_line;

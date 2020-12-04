@@ -1,15 +1,7 @@
 #include "classCone.h"
 
-_cone::_cone(float height, float radius, int vCuts, int hCuts, int rCuts)
+void _cone::initialize(float height, float radius, int vCuts, int hCuts, int rCuts)
 {
-    // START: Debug profile
-    height = 1;
-    radius = 0.5;
-    hCuts = 1;
-    vCuts = 1;
-    rCuts = 10;
-    // END
-
     // Check for correct inputs
     if( height <= 0 )
     {
@@ -42,6 +34,12 @@ _cone::_cone(float height, float radius, int vCuts, int hCuts, int rCuts)
     // Botton of profile, right-most point.
     Vertices.push_back(_vertex3f(radius, -height/2, 0));
 
+    // Top length of cone.
+    for(int i=1; i < vCuts; i++)
+    {
+        Vertices.push_back(_vertex3f(radius - ((radius/vCuts) * i), -(height/2) + ((height/vCuts) * i), 0));
+    }
+
     // Top of profile, left-most point.
     auxVer.push_back(_vertex3f(0, height/2, 0));
 
@@ -51,7 +49,7 @@ _cone::_cone(float height, float radius, int vCuts, int hCuts, int rCuts)
     // Generating triangles.
     this->genTriangles(rCuts, true, true, auxVer);
 
-    // Calculating normals.
+    // [P4] Calculating normals.
     this->calculateNormals();
 
 }

@@ -40,20 +40,41 @@ _gl_widget::_gl_widget(_window *Window1):Window(Window1)
 void _gl_widget::keyPressEvent(QKeyEvent *Keyevent)
 {
   switch(Keyevent->key()){
-  case Qt::Key_1:Object=OBJECT_TETRAHEDRON;break;
+  case Qt::Key_1:
+        Object=OBJECT_TETRAHEDRON;
+        Window->modelSelectorInteraction(0);
+  break;
 
   //Practice 1: Added Cube Key
-  case Qt::Key_2:Object=OBJECT_CUBE;break;
+  case Qt::Key_2:
+        Object=OBJECT_CUBE;
+        Window->modelSelectorInteraction(1);
+  break;
 
   //Practice 2: Added PLY Object and Revolution Key
-  case Qt::Key_3:Object=OBJECT_CONE;break;
-  case Qt::Key_4:Object=OBJECT_CYLINDER;break;
-  case Qt::Key_5:Object=OBJECT_SPHERE;break;
-  case Qt::Key_6:Object=OBJECT_PLY;break;
+  case Qt::Key_3:
+        Object=OBJECT_CONE;
+        Window->modelSelectorInteraction(2);
+  break;
+  case Qt::Key_4:
+        Object=OBJECT_CYLINDER;
+        Window->modelSelectorInteraction(3);
+  break;
+  case Qt::Key_5:
+        Object=OBJECT_SPHERE;
+        Window->modelSelectorInteraction(4);
+  break;
+  case Qt::Key_6:
+        Object=OBJECT_PLY;
+        Window->modelSelectorInteraction(5);
+  break;
 
   //Practice 3:
   //    - Added Hierarchical Model Key
-  case Qt::Key_7:Object=OBJECT_HIER;break;
+  case Qt::Key_7:
+        Object=OBJECT_HIER;
+        Window->modelSelectorInteraction(6);
+  break;
 
   //    - First degree of freedom keys and rate of modification
   case Qt::Key_Q:alpha+=ANGLE_STEP*modAlpha;break;
@@ -76,21 +97,39 @@ void _gl_widget::keyPressEvent(QKeyEvent *Keyevent)
   //    - Animation key
   case Qt::Key_A:animation=!animation;break;
 
-  case Qt::Key_P:Draw_point=!Draw_point;break;
-  case Qt::Key_L:Draw_line=!Draw_line;break;
-  case Qt::Key_F:Draw_fill=!Draw_fill;break;
-  case Qt::Key_C:Draw_chess=!Draw_chess;break;
+  case Qt::Key_P:
+        Draw_point=!Draw_point;
+        Window->pointCheckBoxInteraction(Draw_point);
+  break;
+  case Qt::Key_L:
+        Draw_line=!Draw_line;
+        Window->lineCheckBoxInteraction(Draw_line);
+  break;
+  case Qt::Key_F:
+        Draw_fill=!Draw_fill;
+        Window->fillCheckBoxInteraction(Draw_fill);
+  break;
+  case Qt::Key_C:
+        Draw_chess=!Draw_chess;
+        Window->chessCheckBoxInteraction(Draw_chess);
+  break;
 
   case Qt::Key_Left:Observer_angle_y-=ANGLE_STEP;break;
   case Qt::Key_Right:Observer_angle_y+=ANGLE_STEP;break;
-  case Qt::Key_Up:Observer_angle_x-=ANGLE_STEP;break;
-  case Qt::Key_Down:Observer_angle_x+=ANGLE_STEP;break;
+  case Qt::Key_Up:
+        Observer_angle_x-=ANGLE_STEP;
+        Window->text(std::to_string(Observer_angle_x));
+  break;
+  case Qt::Key_Down:
+        Observer_angle_x+=ANGLE_STEP;
+        Window->text(std::to_string(Observer_angle_x));
+  break;
   case Qt::Key_Minus:Observer_distance*=1.2;break;
   case Qt::Key_Plus:Observer_distance/=1.2;break;
   }
 
   this->constrainAngles();
-  cout<<"ALPHA  :"<<alpha<<" ("<<modAlpha<<") BETA: "<<beta<<" ("<<modBeta<<")    GAMMA: "<<gamma<<" ("<<modGamma<<")"<<endl;
+ // cout<<"ALPHA  :"<<alpha<<" ("<<modAlpha<<") BETA: "<<beta<<" ("<<modBeta<<")    GAMMA: "<<gamma<<" ("<<modGamma<<")"<<endl;
   update();
 }
 
@@ -155,33 +194,12 @@ void _gl_widget::change_observer()
 
 void _gl_widget::draw_objects()
 {
+
+  // MODELS
+ // glDisable(GL_LIGHTING);
   Axis.draw_line();
+//  glEnable(GL_LIGHTING);
 
-//  _cylinder base(1,0.5,20,2,10);
-//  _cylinder arm(1,0.5,20,2,10);
-
-//  glPushMatrix();
-//    glTranslatef(0,-0.5,0);
-//    glScalef(5,1,1);
-//    glRotatef(90,0,0,1);
-//    base.draw_chess();
-//  glPopMatrix();
-
-//  glPushMatrix();
-//    glColor3f(1,0,0);
-//    glTranslatef(0,0.5,0);
-//    glScalef(5,1,1);
-//    glRotatef(90,0,0,1);
-//    arm.draw_fill();
-//  glPopMatrix();
-
-//  _cube Cubitos;
-
-//  glPushMatrix();
-//    glTranslatef(1.5,2.5,1.5);
-//    glScalef(1,5,1);
-//    Cubitos.draw_chess();
-//  glPopMatrix();
 
   if (Draw_point){
     glPointSize(5);
@@ -263,6 +281,15 @@ void _gl_widget::draw_objects()
     default:break;
     }
   }
+
+  // LIGHTNING
+
+  if(lighting)
+  {
+
+  }
+ // glEnable(GL_LIGHT0);
+
 }
 
 
@@ -303,6 +330,10 @@ void _gl_widget::resizeGL(int Width1, int Height1)
  *
  *****************************************************************************/
 
+/*  Changes Made:
+ * [P3] Initializing the angles, angle modifiers, and animation.
+ *      Added initializing routines for the objects.
+*/
 void _gl_widget::initializeGL()
 {
   const GLubyte* strm;
@@ -333,7 +364,7 @@ void _gl_widget::initializeGL()
   Observer_angle_y=0;
   Observer_distance=DEFAULT_DISTANCE;
 
-  //Practice 3: Initializing variables
+  // Angle variables and animations
   alpha = 0;
   beta  = 0;
   gamma = 0;
@@ -346,6 +377,14 @@ void _gl_widget::initializeGL()
   Draw_line=true;
   Draw_fill=false;
   Draw_chess=false;
+
+
+  // Objects
+  Cylinder.initialize();
+  Sphere.initialize();
+  Cone.initialize();
+  Ply.initialize();
+//  Hier.initizalice();
 }
 
 

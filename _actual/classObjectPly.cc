@@ -4,11 +4,10 @@
 
 #define PI 3.14159265
 
-_ply::_ply(float size, string path)
+void _ply::initialize(float size, string path)
 {
     vector<float> plyObjVerts;
     vector<unsigned int> plyObjTrigs;
-    path="../ply_models/rev_cylinder.ply";
 
     this->readFile(plyObjVerts, plyObjTrigs, path);
     if(plyObjTrigs.size() / 3 > 1)
@@ -17,8 +16,8 @@ _ply::_ply(float size, string path)
     {
         this->profilePly(size, plyObjVerts, plyObjTrigs);
     }
-
 }
+
 
 void _ply::readFile(vector<float> &plyObjVerts, vector<unsigned int> &plyObjTrigs, string path)
 {

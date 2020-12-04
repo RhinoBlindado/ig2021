@@ -5,6 +5,8 @@
 class _cone:public _objRev
 {
     public:
-      _cone(float height = 1, float radius = 0.5, int vCuts = 1, int hCuts = 1, int rCuts = 3);
+      _cone(){};
+      void initialize(float height = 1, float radius = 0.5, int vCuts = 20, int hCuts = 10, int rCuts = 30);
+
 };
 #endif

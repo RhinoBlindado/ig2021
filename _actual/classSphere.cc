@@ -2,14 +2,8 @@
 
 #define PI 3.14159265
 
-_sphere::_sphere(float radius, int vCuts, int rCuts)
+void _sphere::initialize(float radius, int vCuts, int rCuts)
 {
-    // START: Debug profile
-//    radius = 1;
-//    vCuts = 2;
-//    rCuts = 20;
-    // END
-
     // Check for correct inputs
     if( radius <= 0 )
     {

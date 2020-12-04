@@ -20,16 +20,89 @@
 #include "glwidget.h"
 
 
-//
+//      OpenGL Interaction with Qt
 
-void _window::change_checkbox_point(bool Checked)
+// Checkboxes that react to changes
+void _window::pointCheckBoxInteraction(bool checked)
 {
-  point->blockSignals(true);
-  if(Checked==true) point->setCheckState(Qt::Checked);
-  else point->setCheckState(Qt::Unchecked);
-  point->blockSignals(false);
+  pointCheckBox->blockSignals(true);
+
+  if(checked)
+  {
+      pointCheckBox->setCheckState(Qt::Checked);
+  }
+  else
+  {
+      pointCheckBox->setCheckState(Qt::Unchecked);
+  }
+
+  pointCheckBox->blockSignals(false);
 }
 
+void _window::lineCheckBoxInteraction(bool checked)
+{
+  lineCheckBox->blockSignals(true);
+
+  if(checked)
+  {
+      lineCheckBox->setCheckState(Qt::Checked);
+  }
+  else
+  {
+      lineCheckBox->setCheckState(Qt::Unchecked);
+  }
+
+  lineCheckBox->blockSignals(false);
+}
+
+void _window::fillCheckBoxInteraction(bool checked)
+{
+  fillCheckBox->blockSignals(true);
+
+  if(checked)
+  {
+      fillCheckBox->setCheckState(Qt::Checked);
+  }
+  else
+  {
+      fillCheckBox->setCheckState(Qt::Unchecked);
+  }
+
+  fillCheckBox->blockSignals(false);
+}
+
+void _window::chessCheckBoxInteraction(bool checked)
+{
+  chessCheckBox->blockSignals(true);
+
+  if(checked)
+  {
+      chessCheckBox->setCheckState(Qt::Checked);
+  }
+  else
+  {
+      chessCheckBox->setCheckState(Qt::Unchecked);
+  }
+
+  chessCheckBox->blockSignals(false);
+}
+
+// Combo box
+void _window::modelSelectorInteraction(int item)
+{
+    modelSelector->blockSignals(true);
+
+    modelSelector->setCurrentIndex(item);
+
+    modelSelector->blockSignals(false);
+}
+
+
+// Text
+void _window::text(string foo)
+{
+    cameraXAngle->setText(QString::fromStdString(foo));
+}
 
 /*****************************************************************************//**
  *
@@ -82,7 +155,7 @@ _window::_window()
  QVBoxLayout *modelLayout = new QVBoxLayout;
  modelBox->setLayout(modelLayout);
 
- QComboBox *modelSelector = new QComboBox;
+ modelSelector = new QComboBox;
  modelSelector->addItem("Tetrahedro");
  modelSelector->addItem("Cubo");
  modelSelector->addItem("Cono");
@@ -102,15 +175,15 @@ _window::_window()
  QGridLayout *modeLayout = new QGridLayout;
  modesBox->setLayout(modeLayout);
  //     Points
- point = new QCheckBox;
+ pointCheckBox = new QCheckBox;
  QLabel *pointsLabel = new QLabel("Puntos");
- modeLayout->addWidget(point,0,0);
+ modeLayout->addWidget(pointCheckBox,0,0);
  modeLayout->addWidget(pointsLabel,0,1);
 
- connect(point, SIGNAL(stateChanged(int)), GL_widget, SLOT(slotPoint(int)));
+ connect(pointCheckBox, SIGNAL(stateChanged(int)), GL_widget, SLOT(slotPoint(int)));
 
  //     Lines
- QCheckBox *lineCheckBox = new QCheckBox;
+ lineCheckBox = new QCheckBox;
  QLabel *lineLabel = new QLabel("Líneas");
  modeLayout->addWidget(lineCheckBox,1,0);
  modeLayout->addWidget(lineLabel,1,1);
@@ -119,7 +192,7 @@ _window::_window()
  connect(lineCheckBox, SIGNAL(stateChanged(int)), GL_widget, SLOT(slotLine(int)));
 
 //      Fill
- QCheckBox *fillCheckBox = new QCheckBox;
+ fillCheckBox = new QCheckBox;
  QLabel *fillLabel = new QLabel("Relleno");
  modeLayout->addWidget(fillCheckBox,2,0);
  modeLayout->addWidget(fillLabel,2,1);
@@ -127,7 +200,7 @@ _window::_window()
  connect(fillCheckBox, SIGNAL(stateChanged(int)), GL_widget, SLOT(slotFill(int)));
 
 //      Chess
- QCheckBox *chessCheckBox = new QCheckBox;
+ chessCheckBox = new QCheckBox;
  QLabel *chessLabel = new QLabel("Ajedrez");
  modeLayout->addWidget(chessCheckBox,3,0);
  modeLayout->addWidget(chessLabel,3,1);
@@ -143,7 +216,7 @@ _window::_window()
  cameraBox->setLayout(cameraLayout);
 
  QLabel *cameraXLabel = new QLabel("Ángulo X");
- QLabel *cameraXAngle = new QLabel("0");
+ cameraXAngle = new QLabel("0");
  cameraLayout->addWidget(cameraXLabel,0,0);
  cameraLayout->addWidget(cameraXAngle,0,1);
  generalLayout->addStretch();

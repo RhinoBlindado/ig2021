@@ -5,6 +5,12 @@ HEADERS += \
   classObjectRevolution.h \
   classSphere.h \
   classTelescope.h \
+  classTelescope_part_eyepiece.h \
+  classTelescope_part_focusTube.h \
+  classTelescope_part_lens.h \
+  classTelescope_part_mount.h \
+  classTelescope_part_tripod.h \
+  classTelescope_part_tube.h \
   colors.h \
   basic_object3d.h \
   cube.h \
@@ -23,6 +29,12 @@ SOURCES += \
   classObjectRevolution.cc \
   classSphere.cc \
   classTelescope.cc \
+  classTelescope_part_eyepiece.cc \
+  classTelescope_part_focusTube.cc \
+  classTelescope_part_lens.cc \
+  classTelescope_part_mount.cc \
+  classTelescope_part_tripod.cc \
+  classTelescope_part_tube.cc \
   cube.cc \
   file_ply_stl.cc \
   object3d.cc \

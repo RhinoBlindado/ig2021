@@ -80,7 +80,7 @@ void _object3D::draw_chess(vector<float> color1, vector<float> color2)
     glEnd();
 }
 
-// Practice 3
+// [P3]
 void _object3D::draw(int style)
 {
     switch(style)
@@ -134,14 +134,18 @@ void _object3D::calculateNormals()
         Normals[i].y = (vectorA.z * vectorB.x) - (vectorA.x * vectorB.z);
         Normals[i].z = (vectorA.x * vectorB.y) - (vectorA.y * vectorB.x);
 
-        // Normalization
-        // Making the denominator, that is, square root of the Vector Product
+        //  Normalization
+        // Making the denominator, that is, square root of the vector product.
         denominator =  sqrt((pow(Normals[i].x, 2)) + (pow(Normals[i].y, 2)) + (pow(Normals[i].z, 2)));
 
-        // Properly normalizing
-        Normals[i].x /= denominator;
-        Normals[i].y /= denominator;
-        Normals[i].z /= denominator;
+        // Properly normalizing, do not divide if denominator = 0.
+        if(denominator != 0)
+        {
+            Normals[i].x /= denominator;
+            Normals[i].y /= denominator;
+            Normals[i].z /= denominator;
+        }
+        cout<<"NORMALES ["<<i<<"] : "<< Normals[i].x<<" "<<Normals[i].y<<" "<<Normals[i].z<<endl;
     }
 
 }
