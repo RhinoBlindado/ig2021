@@ -43,7 +43,9 @@ void _sphere::initialize(float radius, int vCuts, int rCuts)
     this->genTriangles(rCuts, true, true, auxVer);
 
     // Calculate the normals.
-    this->calculateNormals();
+    this->calculateTrigNormals();
+    this->calculateVertNormals();
+
 
 }
 

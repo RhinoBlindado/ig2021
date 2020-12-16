@@ -55,7 +55,12 @@ private:
   QCheckBox *pointCheckBox,
             *lineCheckBox,
             *fillCheckBox,
-            *chessCheckBox;
+            *chessCheckBox,
+            *flatLCheckBox,
+            *smoothLCheckBox,
+            *unlitTCheckBox,
+            *flatTextCheckBox,
+            *smoothTextCheckBox;
 
   // Combo Box
   QComboBox *modelSelector;

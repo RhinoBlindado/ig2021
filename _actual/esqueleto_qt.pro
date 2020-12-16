@@ -1,4 +1,5 @@
 HEADERS += \
+  classChessboard.h \
   classCone.h \
   classCylinder.h \
   classObjectPly.h \
@@ -23,6 +24,7 @@ HEADERS += \
 
 SOURCES += \
   basic_object3d.cc \
+  classChessboard.cpp \
   classCone.cc \
   classCylinder.cc \
   classObjectPly.cc \

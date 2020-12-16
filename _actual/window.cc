@@ -18,6 +18,7 @@
 #include <QGroupBox>
 #include "window.h"
 #include "glwidget.h"
+#include <QImageReader>
 
 
 //      OpenGL Interaction with Qt
@@ -163,6 +164,7 @@ _window::_window()
  modelSelector->addItem("Esfera");
  modelSelector->addItem("Objeto PLY");
  modelSelector->addItem("Objeto Jerárquico");
+ modelSelector->addItem("Tablero de Ajedrez");
 
  modelLayout->addWidget(modelSelector);
  connect(modelSelector, SIGNAL(activated(int)), GL_widget, SLOT(slotModel(int)));
@@ -204,8 +206,43 @@ _window::_window()
  QLabel *chessLabel = new QLabel("Ajedrez");
  modeLayout->addWidget(chessCheckBox,3,0);
  modeLayout->addWidget(chessLabel,3,1);
-
  connect(chessCheckBox, SIGNAL(stateChanged(int)), GL_widget, SLOT(slotChess(int)));
+
+
+//      Flat Light
+ flatLCheckBox = new QCheckBox;
+ QLabel *flatLLabel = new QLabel("Iluminación Plana");
+ modeLayout->addWidget(flatLCheckBox,4,0);
+ modeLayout->addWidget(flatLLabel,4,1);
+ connect(flatLCheckBox, SIGNAL(stateChanged(int)), GL_widget, SLOT(slotFlat(int)));
+
+//      Smooth Light
+ smoothLCheckBox = new QCheckBox;
+ QLabel *smoothLLabel = new QLabel("Iluminación Goraund");
+ modeLayout->addWidget(smoothLCheckBox,5,0);
+ modeLayout->addWidget(smoothLLabel,5,1);
+ connect(smoothLCheckBox, SIGNAL(stateChanged(int)), GL_widget, SLOT(slotSmooth(int)));
+
+//      Unlit Texture
+ unlitTCheckBox = new QCheckBox;
+ QLabel *unlitLabel = new QLabel("Textura No Iluminada");
+ modeLayout->addWidget(unlitTCheckBox,6,0);
+ modeLayout->addWidget(unlitLabel,6,1);
+ connect(unlitTCheckBox, SIGNAL(stateChanged(int)), GL_widget, SLOT(slotUnlitText(int)));
+
+//      Flat Lit Texture
+ flatTextCheckBox = new QCheckBox;
+ QLabel *flatTextLabel = new QLabel("Textura Ilum. Plana");
+ modeLayout->addWidget(flatTextCheckBox,7,0);
+ modeLayout->addWidget(flatTextLabel,7,1);
+ connect(flatTextCheckBox, SIGNAL(stateChanged(int)), GL_widget, SLOT(slotFlatText(int)));
+
+//      Smooth Lit Texture
+ smoothTextCheckBox = new QCheckBox;
+ QLabel *smoothTextLabel = new QLabel("Textura Ilum. Goraund");
+ modeLayout->addWidget(smoothTextCheckBox,8,0);
+ modeLayout->addWidget(smoothTextLabel,8,1);
+ connect(smoothTextCheckBox, SIGNAL(stateChanged(int)), GL_widget, SLOT(slotSmoothText(int)));
 
 
  // Camera
@@ -237,8 +274,27 @@ _window::_window()
 
  // TIMER FOR ANIMATION
  QTimer *mainTimer = new QTimer;
- mainTimer->start(1000);
+ mainTimer->start(10);
  connect(mainTimer, SIGNAL(timeout()), GL_widget, SLOT(slotAnimationToggle()));
+
+
+ // TEXTURES
+ //     Loading the image
+ QString File_name("../textures/dia_8192.jpg");
+ QImage Image;
+ QImageReader Reader(File_name);
+ Reader.setAutoTransform(true);
+ Image = Reader.read();
+ if (Image.isNull()) {
+   QMessageBox::information(this, QGuiApplication::applicationDisplayName(),
+                            tr("Cannot load %1.").arg(QDir::toNativeSeparators(File_name)));
+   exit(-1);
+ }
+ Image=Image.mirrored();
+ Image=Image.convertToFormat(QImage::Format_RGB888);
+
+ //     Sending the texture to GL Widget
+ GL_widget->getTexture(Image);
 
 /*  QSizePolicy Q(QSizePolicy::Expanding,QSizePolicy::Expanding);
 

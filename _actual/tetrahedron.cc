@@ -33,7 +33,8 @@ _tetrahedron::_tetrahedron(float Size)
   Triangles[2]=_vertex3ui(2,0,3);
   Triangles[3]=_vertex3ui(0,2,1);
 
-  this->calculateNormals();
+  this->calculateTrigNormals();
+  this->calculateVertNormals();
 }
 
 

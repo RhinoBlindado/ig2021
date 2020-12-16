@@ -50,6 +50,10 @@ void _ply::objectPly(float size, vector<float> plyVert, vector<unsigned int> ply
     {
         Triangles[i] = _vertex3ui(plyTrig[3*i], plyTrig[3*i+1], plyTrig[3*i+2]);
     }
+
+    // Calculating the normals.
+    this->calculateTrigNormals();
+    this->calculateVertNormals();
 }
 
 void _ply::profilePly(float size, vector<float> plyVert, vector<unsigned int> plyTrig)
@@ -147,6 +151,7 @@ void _ply::profilePly(float size, vector<float> plyVert, vector<unsigned int> pl
     }
 
     // Calculating the normals.
-    this->calculateNormals();
+    this->calculateTrigNormals();
+    this->calculateVertNormals();
 
 }

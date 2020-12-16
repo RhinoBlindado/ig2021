@@ -59,6 +59,8 @@ void _cylinder::initialize(float height, float radius, int hCuts, int vCuts, int
     this->genTriangles(rCuts, bottom, top, auxVer);
 
     // Calculating the normals.
-    this->calculateNormals();
+    this->calculateTrigNormals();
+    this->calculateVertNormals();
+
 
 }

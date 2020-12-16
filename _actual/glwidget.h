@@ -26,8 +26,8 @@
 #include "classCylinder.h"
 #include "classSphere.h"
 
-// Practice 3
 #include "classTelescope.h"
+#include "classChessboard.h"
 
 namespace _gl_widget_ne {
 
@@ -41,7 +41,7 @@ namespace _gl_widget_ne {
   const float ANGLE_STEP=1;
 
   typedef enum {MODE_DRAW_POINT,MODE_DRAW_LINE,MODE_DRAW_FILL,MODE_DRAW_CHESS} _mode_draw;
-  typedef enum {OBJECT_TETRAHEDRON,OBJECT_CUBE,OBJECT_CONE,OBJECT_CYLINDER,OBJECT_SPHERE,OBJECT_PLY,OBJECT_HIER} _object;
+  typedef enum {OBJECT_TETRAHEDRON,OBJECT_CUBE,OBJECT_CONE,OBJECT_CYLINDER,OBJECT_SPHERE,OBJECT_PLY,OBJECT_HIER,OBJECT_CHESS} _object;
 }
 
 class _window;
@@ -63,16 +63,24 @@ public:
   void change_projection();
   void change_observer();
 
-  // Practice 3
   void draw_axis();
   void draw_objects();
   void constrainAngles();
+
+  void lights();
+  void getTexture(QImage _texture);
 
 public slots:
   void slotPoint(int state);
   void slotLine(int state);
   void slotFill(int state);
   void slotChess(int state);
+  void slotFlat(int state);
+  void slotSmooth(int state);
+  void slotUnlitText(int state);
+  void slotFlatText(int state);
+  void slotSmoothText(int state);
+
   void slotModel(int index);
 
   void slotAnimationToggle();
@@ -88,26 +96,48 @@ private:
   _window *Window;
   _axis Axis;
 
-  // Models
+  // MODELS
   _tetrahedron Tetrahedron;
   _cube Cube;
+  _cone Cone;
   _cylinder Cylinder;
   _sphere Sphere;
   _ply Ply;
   _telescope Hier;
+  _chessBoard Chess;
   _gl_widget_ne::_object Object;
 
-  // Animation
+  // ANIMATION
   //    Degrees of freedom and modifiers
   float alpha, beta, gamma, modAlpha, modBeta, modGamma;
   //    Toggle ON/OFF the animation
   bool animation;
+  bool foward1;
+  bool foward2;
 
-  // Lighting and Textures
-  //    Toggle ON/OFF lighting
-  bool lighting;
+  // LIGHTING
+  //    Toggle Flat Ligting
+  bool flatLit;
+  //    Toggle Goraund Shading
+  bool smoothLit;
 
+  //    Toggle ON/OFF First Light
+  bool firstLight;
+  //    Toggle ON/OFF Second Light
+  bool secondLight;
 
+  // TEXTURES
+  //    Load the texture
+  QImage texture;
+
+  //    Toggle Unlit Texture Mode
+  bool unLitTextured;
+  //    Toggle Flat Lit Texture Mode
+  bool litFlatTextured;
+  //    Toggle Smooth Lit Texture Mode
+  bool litSmoothTextured;
+
+  // RENDER MODES
   bool Draw_point;
   bool Draw_line;
   bool Draw_fill;
