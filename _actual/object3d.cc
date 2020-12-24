@@ -17,6 +17,46 @@ using namespace _colors_ne;
  *
  *****************************************************************************/
 
+// [P3]
+void _object3D::draw(int style)
+{
+    switch(style)
+    {
+        case 0:
+            this->draw_point();
+        break;
+
+        case 1:
+            this->draw_line();
+        break;
+
+        case 2:
+            this->draw_fill();
+        break;
+
+        case 3:
+            this->draw_chess();
+        break;
+
+        case 4:
+            this->drawIlum();
+        break;
+
+        case 5:
+            this->drawTex();
+        break;
+
+        case 6:
+            this->drawSelection();
+        break;
+
+        default:
+            cout<<"Object 3D: Out of range type of draw style"<<endl;
+            exit(1);
+    }
+}
+
+
 void _object3D::draw_line()
 {
     glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
@@ -42,18 +82,17 @@ void _object3D::draw_fill()
     glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
     glBegin(GL_TRIANGLES);
 
-    //glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS,1);
-    //glShadeModel(GL_SMOOTH);
-
         for(unsigned int i=0; i<Triangles.size();i++)
         {
+            if(this->trigSelectedNumber == (int)i)
+                    glColor3fv((GLfloat *) &YEllOW);
 
-            //glNormal3f(NormalsV...)
             glVertex3fv((GLfloat *) &Vertices[Triangles[i]._0]);
-            //
             glVertex3fv((GLfloat *) &Vertices[Triangles[i]._1]);
-            //
             glVertex3fv((GLfloat *) &Vertices[Triangles[i]._2]);
+
+            if(this->trigSelectedNumber == (int)i)
+                    glColor3fv((GLfloat *) &BLUE);
         }
     glEnd();
 }
@@ -83,36 +122,122 @@ void _object3D::draw_chess(vector<float> color1, vector<float> color2)
     glEnd();
 }
 
-// [P3]
-void _object3D::draw(int style)
+void _object3D::drawIlum()
 {
-    switch(style)
-    {
-        case 0:
-            this->draw_point();
-        break;
+    glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+    glEnable(GL_LIGHTING);
+    glBegin(GL_TRIANGLES);
 
-        case 1:
-            this->draw_line();
-        break;
+        if(flatLight)
+            glShadeModel(GL_FLAT);
 
-        case 2:
-            this->draw_fill();
-        break;
+        if(smoothLight)
+            glShadeModel(GL_SMOOTH);
 
-        case 3:
-            this->draw_chess();
-        break;
+        for(unsigned int i=0; i<Triangles.size();i++)
+        {
+            if(flatLight)
+                glNormal3f(trigNormals[i].x, trigNormals[i].y, trigNormals[i].z);
 
-        case 4:
-            this->drawIlum();
-        break;
-        default:
-            cout<<"Object 3D: Out of range type of draw style"<<endl;
-            exit(1);
-    }
+            if(smoothLight)
+                glNormal3f(vectNormals[Triangles[i]._0].x, vectNormals[Triangles[i]._0].y, vectNormals[Triangles[i]._0].z);
+            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._0]);
+
+            if(smoothLight)
+                glNormal3f(vectNormals[Triangles[i]._1].x, vectNormals[Triangles[i]._1].y, vectNormals[Triangles[i]._1].z);
+            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._1]);
+
+            if(smoothLight)
+                glNormal3f(vectNormals[Triangles[i]._2].x, vectNormals[Triangles[i]._2].y, vectNormals[Triangles[i]._2].z);
+            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._2]);
+
+
+        }
+    glEnd();
+    glDisable(GL_LIGHTING);
 }
 
+void _object3D::drawTex()
+{
+
+    if(!flatLight && !smoothLight)
+        glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+    else
+        glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+
+    glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+
+    if(flatLight || smoothLight)
+        glEnable(GL_LIGHTING);
+
+    glEnable(GL_TEXTURE_2D);
+    glBegin(GL_TRIANGLES);
+
+    if(flatLight)
+        glShadeModel(GL_FLAT);
+
+    if(smoothLight)
+        glShadeModel(GL_SMOOTH);
+
+    float MAX_X = (Vertices[Vertices.size()-1].x) * 2;
+    float MAX_Y = (Vertices[Vertices.size()-1].y) * 2;
+
+        for(unsigned int i=0; i<Triangles.size();i++)
+        {
+            if(flatLight)
+                glNormal3f(trigNormals[i].x, trigNormals[i].y, trigNormals[i].z);
+
+            if(smoothLight)
+                glNormal3f(vectNormals[Triangles[i]._0].x, vectNormals[Triangles[i]._0].y, vectNormals[Triangles[i]._0].z);
+
+            glTexCoord2f( 0.5 + (Vertices[Triangles[i]._0].x) / MAX_X,  0.5 + (Vertices[Triangles[i]._0].y) / MAX_Y);
+            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._0]);
+
+            if(smoothLight)
+                glNormal3f(vectNormals[Triangles[i]._1].x, vectNormals[Triangles[i]._1].y, vectNormals[Triangles[i]._1].z);
+
+            glTexCoord2f( 0.5 + (Vertices[Triangles[i]._1].x) / MAX_X,  0.5 + (Vertices[Triangles[i]._1].y) / MAX_Y);
+            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._1]);
+
+            if(smoothLight)
+                glNormal3f(vectNormals[Triangles[i]._2].x, vectNormals[Triangles[i]._2].y, vectNormals[Triangles[i]._2].z);
+
+            glTexCoord2f( 0.5 + (Vertices[Triangles[i]._2].x) / MAX_X,  0.5 + (Vertices[Triangles[i]._2].y) / MAX_Y);
+            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._2]);
+        }
+    glEnd();
+    glDisable(GL_TEXTURE_2D);
+
+    if(flatLight || smoothLight)
+        glDisable(GL_LIGHTING);
+}
+
+void _object3D::drawSelection()
+{
+    float R, G, B;
+
+    glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+    glBegin(GL_TRIANGLES);
+    cout<<"DIBUJADO SELECCION:"<<endl;
+        for(unsigned int i=0; i<Triangles.size();i++)
+        {
+            R = (i & 0x00FF0000) >> 16;
+            G = (i & 0x0000FF00) >> 8;
+            B = (i & 0x000000FF);
+
+            cout<<"COLOR: "<<R/255.0<<G/255.0<<B/255.0<<endl;
+            glColor3f(R/255.0, G/255.0, B/255.0);
+            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._0]);
+            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._1]);
+            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._2]);
+        }
+    glEnd();
+}
+
+void _object3D::setTrigSelected(int trig)
+{
+    this->trigSelectedNumber = trig;
+}
 
 // Practice 4
 void _object3D::calculateTrigNormals()
@@ -196,73 +321,6 @@ void _object3D::calculateVertNormals()
 
         vectNormals[i] = summation;
     }
-
-    for(auto i = 0; i < vectSize; i++)
-    {
-    //    cout<<"VECT "<<i<<"NORMAL: X"<<vectNormals[i].x<<" Y "<<vectNormals[i].y<<" Z "<<vectNormals[i].z<<endl;
-    }
-}
-
-
-void _object3D::drawIlum()
-{
-    glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
-    glEnable(GL_LIGHTING);
-    glBegin(GL_TRIANGLES);
-
-        if(flatLight)
-            glShadeModel(GL_FLAT);
-
-        if(smoothLight)
-            glShadeModel(GL_SMOOTH);
-
-        for(unsigned int i=0; i<Triangles.size();i++)
-        {
-            if(flatLight)
-                glNormal3f(trigNormals[i].x, trigNormals[i].y, trigNormals[i].z);
-
-            if(smoothLight)
-                glNormal3f(vectNormals[Triangles[i]._0].x, vectNormals[Triangles[i]._0].y, vectNormals[Triangles[i]._0].z);
-            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._0]);
-
-            if(smoothLight)
-                glNormal3f(vectNormals[Triangles[i]._1].x, vectNormals[Triangles[i]._1].y, vectNormals[Triangles[i]._1].z);
-            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._1]);
-
-            if(smoothLight)
-                glNormal3f(vectNormals[Triangles[i]._2].x, vectNormals[Triangles[i]._2].y, vectNormals[Triangles[i]._2].z);
-            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._2]);
-
-
-        }
-    glEnd();
-    glDisable(GL_LIGHTING);
-}
-
-void _object3D::drawUnLitTex()
-{
-    glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
-    glEnable(GL_TEXTURE_2D);
-    glBegin(GL_TRIANGLES);
-
-
-    float MAX_X = (Vertices[Vertices.size()-1].x) * 2;
-    float MAX_Y = (Vertices[Vertices.size()-1].y) * 2;
-        for(unsigned int i=0; i<Triangles.size();i++)
-        {
-
-
-            glTexCoord2f( 0.5 + (Vertices[Triangles[i]._0].x) / MAX_X,  0.5 + (Vertices[Triangles[i]._0].y) / MAX_Y);
-            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._0]);
-
-            glTexCoord2f( 0.5 + (Vertices[Triangles[i]._1].x) / MAX_X,  0.5 + (Vertices[Triangles[i]._1].y) / MAX_Y);
-            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._1]);
-
-            glTexCoord2f( 0.5 + (Vertices[Triangles[i]._2].x) / MAX_X,  0.5 + (Vertices[Triangles[i]._2].y) / MAX_Y);
-            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._2]);
-        }
-    glEnd();
-    glDisable(GL_TEXTURE_2D);
 }
 
 
@@ -332,5 +390,6 @@ void _object3D::setTexture(QImage Image)
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
     glTexImage2D(GL_TEXTURE_2D,0,3,Image.width(),Image.height(),0,GL_RGB,GL_UNSIGNED_BYTE,Image.bits());
+
 }
 // http://www.it.hiof.no/~borres/j3d/explain/light/p-materials.html

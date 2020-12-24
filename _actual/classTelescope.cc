@@ -17,12 +17,27 @@
 
 //  Libraries
 #include "classTelescope.h"
-#include "classTelescope_part_tripod.h"
-
 
 _telescope::_telescope(){}
 
-void _telescope::draw(int style, float alpha, float beta, float gamma)
+void _telescope::draw(int style)
 {
-    __tripod.draw(style, alpha, beta, gamma);
+    __tripod.draw(style);
+    __mount.draw(style);
+    __tube.draw(style);
+}
+
+void _telescope::rotateFirstDegree(float nAlpha)
+{
+    __tube.setAlpha(nAlpha);
+}
+
+void _telescope::rotateSecondDegree(float nBeta)
+{
+    __tube.setBeta(nBeta);
+}
+
+void _telescope::rotateThirdDegree(float nGamma)
+{
+    __tube.setGamma(nGamma);
 }

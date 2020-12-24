@@ -11,11 +11,10 @@ class _teleTripod: public _object3D
 {
     private:
         _cube feet;
-        _teleMount __mount;
 
     public:
         _teleTripod(){};
-        void draw(int style, float alpha, float beta, float gamma);
+        void draw(int style);
 };
 #endif // TELE_TRIPOD_H
 

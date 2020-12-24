@@ -2,8 +2,8 @@
 
 void _chessBoard::initialize(int row, int col)
 {
-    row = 3;
-    col = 3;
+    row = 2;
+    col = 2;
     //  Row Generation
     //      Bottom-Most Point
     Vertices.push_back(_vertex3f(-0.5*row,-0.5*col,0));

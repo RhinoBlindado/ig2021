@@ -12,9 +12,12 @@ class _teleMount: public _object3D
         _cone mount1;
         _cylinder mount2;
 
+        float alpha;
+
     public:
         _teleMount();
-        void draw(int style,  float alpha, float beta, float gamma);
+        void draw(int style);
+        void setAlpha(float nAlpha);
 };
 
 #endif // TELE_MOUNT_H

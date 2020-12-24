@@ -47,7 +47,7 @@ SOURCES += \
   window.cc
 
 
-LIBS += -L/usr/X11R6/lib64 -lGL
+LIBS += -L/usr/X11R6/lib64 -lGL -lGLEW
 
 
 CONFIG += c++11

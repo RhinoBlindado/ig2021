@@ -11,9 +11,12 @@ class _teleFocusTube: public _object3D
         _teleLens lens;
         _cylinder  focusTube;
 
+        float gamma;
+
    public:
-        _teleFocusTube(){this->focusTube.initialize(1,0.5,12,2,10,false,false);};
-        void draw(int style, float gamma);
+        _teleFocusTube(){this->focusTube.initialize(1,0.5,12,2,10,false,false); gamma = 0;};
+        void draw(int style);
+        void setGamma(float nGamma);
 };
 
 #endif // TELE_FOCUSTUBE_H

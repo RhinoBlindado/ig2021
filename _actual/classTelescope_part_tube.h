@@ -15,9 +15,15 @@ class _teleTube: public _object3D
         _teleEyePiece eyePiece;
         _cylinder tube;
 
+        float alpha;
+        float beta;
+
     public:
-        _teleTube(){this->tube.initialize(1,0.5,12,2,10);};
-        void draw(int style, float beta, float gamma);
+        _teleTube(){this->tube.initialize(1,0.5,12,2,10); alpha = 0; beta = 0;};
+        void draw(int style);
+        void setAlpha(float nAlpha);
+        void setBeta(float nBeta);
+        void setGamma(float nGamma);
 };
 
 #endif // TELE_TUBE_H

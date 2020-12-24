@@ -3,14 +3,9 @@
 
 
 
-void _teleTripod::draw(int style, float alpha, float beta, float gamma)
+void _teleTripod::draw(int style)
 {
     glMatrixMode(GL_MODELVIEW);
-
-    glPushMatrix();
-        glTranslated(0,0.9,0);
-        this->__mount.draw(style, alpha, beta, gamma);
-    glPopMatrix();
 
     glPushMatrix();
         glColor3f(0,0,0.5);

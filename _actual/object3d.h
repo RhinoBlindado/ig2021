@@ -26,19 +26,20 @@ class _object3D:public _basic_object3D
   vector<_vertex3f>  trigNormals;
   vector<_vertex3f>  vectNormals;
 
+  // Lighting Methods
   bool flatLight;
   bool smoothLight;
+  void drawIlum();
+  void drawTex();
+  void calculateTrigNormals();
+  void calculateVertNormals();
 
   // Drawing Methods
   void draw(int style = 0);
   void draw_line();
   void draw_fill();
   void draw_chess(vector<float> color1 = {1,0.4451,0.8078}, vector<float> color2 = {0.0039,0.8039,0.9961});
-
-  void drawIlum();
-  void drawUnLitTex();
-  void calculateTrigNormals();
-  void calculateVertNormals();
+  void drawSelection();
 
   // Setters
   void setLighting(int type);
@@ -50,6 +51,10 @@ class _object3D:public _basic_object3D
   void setMaterialSpecular(_vertex3f color);
   void setMaterialAmbient(_vertex3f color);
   void setMaterialShininess(float color);
+
+  // Interaction
+  int trigSelectedNumber = -1;
+  void setTrigSelected(int trig);
 
 };
 

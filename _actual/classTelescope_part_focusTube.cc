@@ -1,6 +1,6 @@
 #include "classTelescope_part_focusTube.h"
 
-void _teleFocusTube::draw(int style, float gamma)
+void _teleFocusTube::draw(int style)
 {
     glMatrixMode(GL_MODELVIEW);
 
@@ -15,4 +15,9 @@ void _teleFocusTube::draw(int style, float gamma)
         glColor3f(1,0,0);
         this->focusTube.draw(style);
     glPopMatrix();
+}
+
+void _teleFocusTube::setGamma(float nGamma )
+{
+    this->gamma = nGamma;
 }

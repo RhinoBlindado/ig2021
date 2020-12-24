@@ -62,5 +62,4 @@ void _cylinder::initialize(float height, float radius, int hCuts, int vCuts, int
     this->calculateTrigNormals();
     this->calculateVertNormals();
 
-
 }

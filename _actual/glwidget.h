@@ -10,9 +10,13 @@
 #ifndef GLWIDGET_H
 #define GLWIDGET_H
 
-#include <GL/gl.h>
+//#include <GL/gl.h>
+#include <GL/glew.h>
+#include <GL/glut.h>
 #include <QOpenGLWidget>
 #include <QKeyEvent>
+#include <QMouseEvent>
+#include <QWheelEvent>
 #include <iostream>
 #include "vertex.h"
 #include "colors.h"
@@ -29,6 +33,7 @@
 #include "classTelescope.h"
 #include "classChessboard.h"
 
+
 namespace _gl_widget_ne {
 
   const float X_MIN=-.1;
@@ -42,9 +47,18 @@ namespace _gl_widget_ne {
 
   typedef enum {MODE_DRAW_POINT,MODE_DRAW_LINE,MODE_DRAW_FILL,MODE_DRAW_CHESS} _mode_draw;
   typedef enum {OBJECT_TETRAHEDRON,OBJECT_CUBE,OBJECT_CONE,OBJECT_CYLINDER,OBJECT_SPHERE,OBJECT_PLY,OBJECT_HIER,OBJECT_CHESS} _object;
+  typedef enum {MAT_GOLD, MAT_PLASTIC, MAT_RUBBER, MAT_NULL} _material;
+  typedef enum {AMBIENT, DIFFUSE, SPECULAR, SHINE} _matProperty;
 }
-
 class _window;
+
+struct  material
+{
+    _vertex3f diffuse;
+    _vertex3f specular;
+    _vertex3f ambient;
+    float shine;
+};
 
 
 /*****************************************************************************//**
@@ -69,6 +83,8 @@ public:
 
   void lights();
   void getTexture(QImage _texture);
+  void getScreenSize();
+  void pick();
 
 public slots:
   void slotPoint(int state);
@@ -90,7 +106,9 @@ protected:
   void paintGL() Q_DECL_OVERRIDE;
   void initializeGL() Q_DECL_OVERRIDE;
   void keyPressEvent(QKeyEvent *Keyevent) Q_DECL_OVERRIDE;
-
+  void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+  void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+  void wheelEvent(QWheelEvent *event) Q_DECL_OVERRIDE;
 
 private:
   _window *Window;
@@ -126,6 +144,10 @@ private:
   //    Toggle ON/OFF Second Light
   bool secondLight;
 
+  // MATERIALS
+  material __material[4];
+  int actMaterial;
+
   // TEXTURES
   //    Load the texture
   QImage texture;
@@ -143,10 +165,20 @@ private:
   bool Draw_fill;
   bool Draw_chess;
 
+
+  // CAMERA
+  bool perspective;
+  QPoint actualCoords;
+
   float Observer_angle_x;
   float Observer_angle_y;
   float Observer_distance;
 
+  // PICK
+  int Window_width;
+  int Window_height;
+  int Selection_position_x;
+  int Selection_position_y;
 
 };
 
