@@ -543,30 +543,8 @@ void _gl_widget::draw_objects()
       }
   }
 
-  if(firstLight)
-  {
-      GLfloat lightPos[4] = {1,1,1,0.0};
-      glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
-      glEnable(GL_LIGHT0);
-  }
-  else
-  {
-      glDisable(GL_LIGHT0);
-  }
-
-  if(secondLight)
-  {
-      GLfloat lightPos[4] = {0,5,2.5,1};
-      GLfloat lightColor[3] = {1,0,1};
-      glLightfv(GL_LIGHT1, GL_POSITION, lightPos);
-      glLightfv(GL_LIGHT1, GL_DIFFUSE, lightColor);
-      glEnable(GL_LIGHT1);
-
-  }
-  else
-  {
-      glDisable(GL_LIGHT1);
-  }
+  light.toggleFirstLight(firstLight);
+  light.toggleSecondLight(secondLight);
 
   Hier.rotateFirstDegree(alpha);
   Hier.rotateSecondDegree(beta);
@@ -654,6 +632,7 @@ void _gl_widget::initializeGL()
   alpha = 0;
   beta  = 0;
   gamma = 0;
+  delta = 0;
   modAlpha = 1;
   modBeta  = 1;
   modGamma = 1;
@@ -674,6 +653,7 @@ void _gl_widget::initializeGL()
   Chess.initialize(1,2);
 
   // LIGHTING
+  light.initialize();
   flatLit = false;
   smoothLit = false;
   firstLight = false;
@@ -709,8 +689,9 @@ void _gl_widget::initializeGL()
 
   // CAMERA
   perspective = true;
-  actualCoords.setX(0);
-  actualCoords.setY(0);
+  lastClickX = 0;
+  lastClickY = 0;
+  mouseDrag = false;
 
   // PICK
   Window_width = this->size().width();
@@ -856,6 +837,13 @@ void _gl_widget::slotAnimationToggle()
             foward2 = !foward2;
 
         alpha  += ANGLE_STEP*modBeta;
+        alpha = fmod(alpha, 360);
+
+        if(secondLight)
+        {
+            delta = fmod(delta += ANGLE_STEP, 360);
+            light.rotateSecondLight(delta);
+        }
 
         update();
     }
@@ -869,35 +857,18 @@ void _gl_widget::getTexture(QImage _texture)
 
 
 // MOUSE EVENTS
-//     Mouse Left Click
-
-//     Mouse Drag
+//     Drag Event
 void _gl_widget::mouseMoveEvent(QMouseEvent *event)
 {
-//    cout<<"SCRSIZE:"<<this->size().height()<<" "<<this->size().width()<<endl;
-//    cout<<"MOUSE: "<<event->x()<<" "<<event->y()<<endl;
-//    cout<<"MODDED: "<<event->x()-(this->size().height()/2)<<" "<<event->y()-(this->size().width()/2)<<endl;
-//    if(event->y()-(this->size().width()/2) > 0)
-//        Observer_angle_x+=ANGLE_STEP;
-//    else
-//        Observer_angle_x-=ANGLE_STEP;
-
-//    if(event->x()-(this->size().height()/2) > 0)
-//        Observer_angle_y+=ANGLE_STEP;
-//    else
-//        Observer_angle_y-=ANGLE_STEP;
-
-//          Window->text(std::to_string(Observer_angle_x));
-
-//    cout<<"ACT COORDS:"<<actualCoords.x()<<" "<<actualCoords.y()<<endl;
-//    cout<<"INPUT: "<<event->x()<<" "<<event->y()<<endl;
-//    Observer_angle_x += (event->pos().y() - actualCoords.y())*0.2;
-//    Observer_angle_y += (event->pos().x() - actualCoords.x())*0.2;
-//    actualCoords = event->pos();
+    if(mouseDrag)
+    {
+        Observer_angle_x += (event->y() - lastClickY) * 0.05;
+        Observer_angle_y += (event->x() - lastClickX) * 0.05;
+    }
     update();
 }
 
-//      Right Click Selection
+//      Click Event
 void _gl_widget::mousePressEvent(QMouseEvent *event)
 {
     if(event->buttons() & Qt::RightButton)
@@ -912,7 +883,19 @@ void _gl_widget::mousePressEvent(QMouseEvent *event)
 
     if(event->buttons() & Qt::LeftButton)
     {
-        cout<<"COMIENZA EL ARRASTRE MI PANA"<<endl;
+        lastClickX = event->x();
+        lastClickY = event->y();
+        mouseDrag = true;
+    }
+    update();
+}
+
+//      Release Event
+void _gl_widget::mouseReleaseEvent(QMouseEvent *event)
+{
+    if(event->button() == Qt::LeftButton)
+    {
+        mouseDrag = false;
     }
     update();
 }
@@ -986,7 +969,7 @@ void _gl_widget::pick()
   int Color;
   glReadBuffer(GL_FRONT);
   glPixelStorei(GL_PACK_ALIGNMENT,1);
-  glReadPixels(Selection_position_x,Selection_position_y,1,1,GL_RGBA,GL_UNSIGNED_BYTE,&Color);
+  glReadPixels(Selection_position_y,Selection_position_x,1,1,GL_RGBA,GL_UNSIGNED_BYTE,&Color);
   /*************************/
 
   // actualizar el identificador de la parte seleccionada en el objeto

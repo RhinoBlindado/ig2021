@@ -2,6 +2,7 @@ HEADERS += \
   classChessboard.h \
   classCone.h \
   classCylinder.h \
+  classLights.h \
   classObjectPly.h \
   classObjectRevolution.h \
   classSphere.h \
@@ -27,6 +28,7 @@ SOURCES += \
   classChessboard.cpp \
   classCone.cc \
   classCylinder.cc \
+  classLights.cc \
   classObjectPly.cc \
   classObjectRevolution.cc \
   classSphere.cc \

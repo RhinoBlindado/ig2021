@@ -33,6 +33,7 @@
 #include "classTelescope.h"
 #include "classChessboard.h"
 
+#include "classLights.h"
 
 namespace _gl_widget_ne {
 
@@ -108,6 +109,7 @@ protected:
   void keyPressEvent(QKeyEvent *Keyevent) Q_DECL_OVERRIDE;
   void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
   void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+  void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
   void wheelEvent(QWheelEvent *event) Q_DECL_OVERRIDE;
 
 private:
@@ -127,13 +129,14 @@ private:
 
   // ANIMATION
   //    Degrees of freedom and modifiers
-  float alpha, beta, gamma, modAlpha, modBeta, modGamma;
+  float alpha, beta, gamma, delta, modAlpha, modBeta, modGamma;
   //    Toggle ON/OFF the animation
   bool animation;
   bool foward1;
   bool foward2;
 
   // LIGHTING
+  _lights light;
   //    Toggle Flat Ligting
   bool flatLit;
   //    Toggle Goraund Shading
@@ -168,7 +171,9 @@ private:
 
   // CAMERA
   bool perspective;
-  QPoint actualCoords;
+  int lastClickX;
+  int lastClickY;
+  bool mouseDrag;
 
   float Observer_angle_x;
   float Observer_angle_y;

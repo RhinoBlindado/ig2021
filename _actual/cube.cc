@@ -14,7 +14,6 @@ _cube::_cube(float size)
     Vertices[6] = _vertex3f(size/2,-size/2,size/2);
     Vertices[7] = _vertex3f(-size/2,-size/2,size/2);
 
-
     // Defining the triangles of the cube.
     Triangles.resize(12);
 
