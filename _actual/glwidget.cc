@@ -40,152 +40,161 @@ _gl_widget::_gl_widget(_window *Window1):Window(Window1)
 void _gl_widget::keyPressEvent(QKeyEvent *Keyevent)
 {
   switch(Keyevent->key()){
-  // Models Keys
-  //    Tetrahedron
-  case Qt::Key_1:
-        Object=OBJECT_TETRAHEDRON;
-        Window->modelSelectorInteraction(0);
-  break;
+      // OBJECTS
+      //    Tetrahedron
+      case Qt::Key_1:
+            Object=OBJECT_TETRAHEDRON;
+            Window->modelSelectorInteraction(0);
+      break;
 
-  //    Cube
-  case Qt::Key_2:
-        Object=OBJECT_CUBE;
-        Window->modelSelectorInteraction(1);
-  break;
+      //    Cube
+      case Qt::Key_2:
+            Object=OBJECT_CUBE;
+            Window->modelSelectorInteraction(1);
+      break;
 
-  //    Cone
-  case Qt::Key_3:
-        Object=OBJECT_CONE;
-        Window->modelSelectorInteraction(2);
-  break;
+      //    Cone
+      case Qt::Key_3:
+            Object=OBJECT_CONE;
+            Window->modelSelectorInteraction(2);
+      break;
 
-  //    Cylinder
-  case Qt::Key_4:
-        Object=OBJECT_CYLINDER;
-        Window->modelSelectorInteraction(3);
-  break;
+      //    Cylinder
+      case Qt::Key_4:
+            Object=OBJECT_CYLINDER;
+            Window->modelSelectorInteraction(3);
+      break;
 
-  //    Sphere
-  case Qt::Key_5:
-        Object=OBJECT_SPHERE;
-        Window->modelSelectorInteraction(4);
-  break;
+      //    Sphere
+      case Qt::Key_5:
+            Object=OBJECT_SPHERE;
+            Window->modelSelectorInteraction(4);
+      break;
 
-  //    PLY Object
-  case Qt::Key_6:
-        Object=OBJECT_PLY;
-        Window->modelSelectorInteraction(5);
-  break;
+      //    PLY Object
+      case Qt::Key_6:
+            Object=OBJECT_PLY;
+            Window->modelSelectorInteraction(5);
+      break;
 
-  //    Hierarchical Model
-  case Qt::Key_7:
-        Object=OBJECT_HIER;
-        Window->modelSelectorInteraction(6);
-  break;
+      //    Hierarchical Model
+      case Qt::Key_7:
+            Object=OBJECT_HIER;
+            Window->modelSelectorInteraction(6);
+      break;
 
-  //    Chessboard
-  case Qt::Key_8:
-        Object=OBJECT_CHESS;
-        Window->modelSelectorInteraction(7);
-  break;
+      //    Chessboard
+      case Qt::Key_8:
+            Object=OBJECT_CHESS;
+            Window->modelSelectorInteraction(7);
+      break;
 
-  //    First degree of freedom keys and rate of modification
-  case Qt::Key_Q:alpha+=ANGLE_STEP*modAlpha;break;
-  case Qt::Key_W:alpha-=ANGLE_STEP*modAlpha;break;
-  case Qt::Key_E:modAlpha+=0.5;break;
-  case Qt::Key_R:modAlpha-=0.5;break;
+      // ANIMATION
+      //    First degree of freedom keys and rate of modification
+      case Qt::Key_Q:alpha+=ANGLE_STEP*modAlpha;break;
+      case Qt::Key_W:alpha-=ANGLE_STEP*modAlpha;break;
+      case Qt::Key_E:modAlpha+=0.5;break;
+      case Qt::Key_R:modAlpha-=0.5;break;
 
-  //    Second degree of freedom keys and rate of modification
-  case Qt::Key_S:beta+=ANGLE_STEP*modBeta;break;
-  case Qt::Key_D:beta-=ANGLE_STEP*modBeta;break;
-  case Qt::Key_T:modBeta+=0.5;break;
-  case Qt::Key_Y:modBeta-=0.5;break;
+      //    Second degree of freedom keys and rate of modification
+      case Qt::Key_S:beta+=ANGLE_STEP*modBeta;break;
+      case Qt::Key_D:beta-=ANGLE_STEP*modBeta;break;
+      case Qt::Key_T:modBeta+=0.5;break;
+      case Qt::Key_Y:modBeta-=0.5;break;
 
-  //    Third degree of freedom keys and rate of modification
-  case Qt::Key_Z:gamma+=ANGLE_STEP*modGamma;break;
-  case Qt::Key_X:gamma-=ANGLE_STEP*modGamma;break;
-  case Qt::Key_U:modGamma+=0.01;break;
-  case Qt::Key_I:modGamma-=0.01;break;
+      //    Third degree of freedom keys and rate of modification
+      case Qt::Key_Z:gamma+=ANGLE_STEP*modGamma;break;
+      case Qt::Key_X:gamma-=ANGLE_STEP*modGamma;break;
+      case Qt::Key_U:modGamma+=0.01;break;
+      case Qt::Key_I:modGamma-=0.01;break;
 
-  //    Animation key
-  case Qt::Key_A:animation=!animation;break;
+      //    Auto Animation key
+      case Qt::Key_A:animation=!animation;break;
 
-  //    Unlit Render mode keys
-  case Qt::Key_P:
-        Draw_point=!Draw_point;
-        Window->pointCheckBoxInteraction(Draw_point);
-  break;
-  case Qt::Key_L:
-        Draw_line=!Draw_line;
-        Window->lineCheckBoxInteraction(Draw_line);
-  break;
-  case Qt::Key_F1:
-        Draw_fill=!Draw_fill;
-        Window->fillCheckBoxInteraction(Draw_fill);
-  break;
-  case Qt::Key_F2:
-        Draw_chess=!Draw_chess;
-        Window->chessCheckBoxInteraction(Draw_chess);
-  break;
+      // UNLIT DRAWING
+      //    Draw Point
+      case Qt::Key_P:
+            Draw_point=!Draw_point;
+            Window->pointCheckBoxInteraction(Draw_point);
+      break;
+
+      //    Draw Lines
+      case Qt::Key_L:
+            Draw_line=!Draw_line;
+            Window->lineCheckBoxInteraction(Draw_line);
+      break;
+
+      //    Draw Fill
+      case Qt::Key_F1:
+            Draw_fill=!Draw_fill;
+            Window->fillCheckBoxInteraction(Draw_fill);
+      break;
+
+      //    Draw Chess
+      case Qt::Key_F2:
+            Draw_chess=!Draw_chess;
+            Window->chessCheckBoxInteraction(Draw_chess);
+      break;
+
+    // LIGHTING & TEXTURES
+    //    Flat Shaded Light Mode
+    case Qt::Key_F3:
+          flatLit=!flatLit;
+    break;
+    //    Goraund Shaded Light Mode
+    case Qt::Key_F4:
+          smoothLit=!smoothLit;
+    ;break;
+    //    Unlit Texture Mode
+    case Qt::Key_F5:
+          unLitTextured = !unLitTextured;
+    break;
+    //    Flat Shaded Light Texture Mode
+    case Qt::Key_F6:
+          litFlatTextured = !litFlatTextured;
+    break;
+    //    Goraund Shaded Light Texture Mode
+    case Qt::Key_F7:
+          litSmoothTextured = !litSmoothTextured;
+    break;
+
+    //    Toggle ON/OFF First Light
+    case Qt::Key_J:
+          firstLight=!firstLight;
+    break;
+    //    Toggle ON/OFF Second Light
+    case Qt::Key_K:
+          secondLight=!secondLight;
+    break;
+    //    Toggle between materials
+    case Qt::Key_M:
+          actMaterial++;
+          actMaterial = actMaterial % 4;
+    break;
 
 
-  //    Camera Movement Keys
-  case Qt::Key_Left:Observer_angle_y-=ANGLE_STEP;break;
-  case Qt::Key_Right:Observer_angle_y+=ANGLE_STEP;break;
-  case Qt::Key_Up:
+    // CAMERA
+    //      Movement
+    case Qt::Key_Left:Observer_angle_y-=ANGLE_STEP;break;
+    case Qt::Key_Right:Observer_angle_y+=ANGLE_STEP;break;
+    case Qt::Key_Up:
         Observer_angle_x-=ANGLE_STEP;
         Window->text(std::to_string(Observer_angle_x));
-  break;
-  case Qt::Key_Down:
+    break;
+    case Qt::Key_Down:
         Observer_angle_x+=ANGLE_STEP;
         Window->text(std::to_string(Observer_angle_x));
-  break;
-  case Qt::Key_Minus:Observer_distance*=1.2;break;
-  case Qt::Key_Plus:Observer_distance/=1.2;break;
+    break;
+    //      Zoom
+    case Qt::Key_Minus:Observer_distance*=1.2;break;
+    case Qt::Key_Plus:Observer_distance/=1.2;break;
 
-  //    Proyection Keys
-  case Qt::Key_C:perspective = true;break;
-  case Qt::Key_V:perspective = false;break;
-
-  // Lighting Keys
-  //    Flat Shaded Light Mode
-  case Qt::Key_F3:
-        flatLit=!flatLit;
-  break;
-  //    Goraund Shaded Light Mode
-  case Qt::Key_F4:
-        smoothLit=!smoothLit;
-  ;break;
-  //    Unlit Texture Mode
-  case Qt::Key_F5:
-        unLitTextured = !unLitTextured;
-  break;
-  //    Flat Shaded Light Texture Mode
-  case Qt::Key_F6:
-        litFlatTextured = !litFlatTextured;
-  break;
-  //    Goraund Shaded Light Texture Mode
-  case Qt::Key_F7:
-        litSmoothTextured = !litSmoothTextured;
-  break;
-
-  //    Toggle ON/OFF First Light
-  case Qt::Key_J:
-        firstLight=!firstLight;
-  break;
-  //    Toggle ON/OFF Second Light
-  case Qt::Key_K:
-        secondLight=!secondLight;
-  break;
-  //    Toggle between 3 materials
-  case Qt::Key_M:
-        actMaterial++;
-        actMaterial = actMaterial % 4;
-  break;
+    // PROYECTION
+    case Qt::Key_C:perspective = true;break;
+    case Qt::Key_V:perspective = false;break;
   }
 
-  this->constrainAngles();
-  update();
+    update();
 }
 
 
@@ -258,6 +267,33 @@ void _gl_widget::draw_objects()
   // AXIS
   Axis.draw_line();
 
+      _ply a,b,c,d;
+  //a.initialize(1,"../ply_models/airplane_fixed.ply");
+  //b.initialize(1,"../ply_models/ant.ply");
+ // cout<<"BUNNY:"<<endl;
+//  d.initialize(1,"../ply_models/bunny.ply");
+  //c.initialize(4,"../ply_models/sandal.ply");
+
+//  glMatrixMode(GL_MODELVIEW);
+
+//  glPushMatrix();
+//      glPushMatrix();
+//          glTranslated(0, 3, 0);
+//          c.draw_chess();
+//      glPopMatrix();
+
+//      glPushMatrix();
+//          glTranslated(0,0,-4);
+//          b.draw_chess();
+//      glPopMatrix();
+
+//      glPushMatrix();
+//          glTranslated(2,0,0);
+//          a.draw_chess();
+//      glPopMatrix();
+//  glPopMatrix();
+
+
 
   // OBJECTS
   if (Draw_point){
@@ -298,7 +334,7 @@ void _gl_widget::draw_objects()
     case OBJECT_TETRAHEDRON:Tetrahedron.draw_fill();break;
     case OBJECT_CUBE:Cube.draw_fill();break;
     case OBJECT_CONE:Cone.draw_fill();break;
-    case OBJECT_CYLINDER:Cylinder.draw(6);break;
+    case OBJECT_CYLINDER:Cylinder.draw(2);break;
     case OBJECT_SPHERE:Sphere.draw_fill();break;
     case OBJECT_PLY:Ply.draw_fill();break;
     case OBJECT_HIER:Hier.draw(2);break;
@@ -322,6 +358,11 @@ void _gl_widget::draw_objects()
   }
 
   // LIGHTING
+
+  //    Toggle Lights
+  light.toggleFirstLight(firstLight);
+  light.toggleSecondLight(secondLight);
+
   //    Flat Lighting
   if(flatLit)
   {
@@ -496,56 +537,88 @@ void _gl_widget::draw_objects()
       }
   }
 
-
+  // TEXTURES
+  //    Unlit Textured
   if(unLitTextured)
   {
-      switch (Object)
-      {
-           case OBJECT_CHESS:
+    switch (Object)
+    {
+        case OBJECT_CYLINDER:
+            Cylinder.setTexture(texture);
+            Cylinder.setLighting(0);
+            Cylinder.drawTex();
+        break;
 
-            Chess.setMaterialAmbient(__material[3].ambient);
-            Chess.setMaterialSpecular(__material[3].specular);
-            Chess.setMaterialDiffuse(__material[3].diffuse);
-            Chess.setMaterialShininess(__material[3].shine);
+        case OBJECT_SPHERE:
+            Sphere.setTexture(texture);
+            Sphere.setLighting(0);
+            Sphere.drawTex();
+        break;
 
+        case OBJECT_CHESS:
             Chess.setTexture(texture);
             Chess.setLighting(0);
             Chess.drawTex();
-           break;
-           default:break;
-      }
+        break;
+        default:break;
+    }
   }
 
-
+  //    Flat Lit Textured
   if(litFlatTextured)
   {
-      switch (Object)
-      {
-           case OBJECT_CHESS:
-                Chess.setTexture(texture);
-                Chess.setLighting(1);
-                Chess.drawTex();
-           break;
-           default:break;
-      }
+    switch (Object)
+    {
+        case OBJECT_CYLINDER:
+            Cylinder.setTexture(texture);
+            Cylinder.setLighting(1);
+            Cylinder.drawTex();
+        break;
+
+        case OBJECT_SPHERE:
+            Sphere.setTexture(texture);
+            Sphere.setLighting(1);
+            Sphere.drawTex();
+        break;
+
+        case OBJECT_CHESS:
+            Chess.setTexture(texture);
+            Chess.setLighting(1);
+            Chess.drawTex();
+        break;
+        default:break;
+    }
   }
 
+  //    Smooth Lit Textured
   if(litSmoothTextured)
   {
       switch (Object)
       {
-           case OBJECT_CHESS:
-                Chess.setTexture(texture);
-                Chess.setLighting(2);
-                Chess.drawTex();
-           break;
-           default:break;
+        case OBJECT_CYLINDER:
+          Cylinder.setTexture(texture);
+          Cylinder.setLighting(2);
+          Cylinder.drawTex();
+        break;
+
+        case OBJECT_SPHERE:
+          Sphere.setTexture(texture);
+          Sphere.setLighting(2);
+          Sphere.drawTex();
+        break;
+
+        case OBJECT_CHESS:
+            Chess.setTexture(texture);
+            Chess.setLighting(2);
+            Chess.drawTex();
+        break;
+        default:break;
       }
   }
 
-  light.toggleFirstLight(firstLight);
-  light.toggleSecondLight(secondLight);
-
+  // ANIMATION
+  //    Set the degrees of rotation of each degree of freedom.
+  this->constrainAngles();
   Hier.rotateFirstDegree(alpha);
   Hier.rotateSecondDegree(beta);
   Hier.rotateThirdDegree(gamma);
@@ -646,11 +719,11 @@ void _gl_widget::initializeGL()
   Draw_chess=false;
 
   // OBJECTS
-  Cylinder.initialize();
-  Sphere.initialize();
+  Cylinder.initialize(1, 0.5, 4, 4, 20, true, true);
+  Sphere.initialize(0.5, 40, 40);
   Cone.initialize();
   Ply.initialize(1,"../ply_models/beethoven.ply");
-  Chess.initialize(1,2);
+  Chess.initialize(1,1);
 
   // LIGHTING
   light.initialize();
@@ -694,8 +767,8 @@ void _gl_widget::initializeGL()
   mouseDrag = false;
 
   // PICK
-  Window_width = this->size().width();
-  Window_height = this->size().height();
+  Window_width = 0;
+  Window_height = 0;
 }
 
 // ANIMATION CONTRAINTS
@@ -873,11 +946,11 @@ void _gl_widget::mousePressEvent(QMouseEvent *event)
 {
     if(event->buttons() & Qt::RightButton)
     {
-        Selection_position_x = event->x();
-        Selection_position_y = event->y();
         Window_width = this->size().width();
-        Window_height = this->size().height();
-        cout<<"PRE-PICK: X "<<Selection_position_x<<" "<<Selection_position_y<<endl;
+        Window_height =this->size().height();
+
+        Selection_position_x = (event->x());
+        Selection_position_y = (Window_height - event->y());
         this->pick();
     }
 
@@ -903,7 +976,7 @@ void _gl_widget::mouseReleaseEvent(QMouseEvent *event)
 //      Scroll Wheel Zoom
 void _gl_widget::wheelEvent(QWheelEvent *scrollWheel)
 {
-    Observer_distance += (-(float)(scrollWheel->angleDelta().y()))/240;
+    Observer_distance += (-(float)(scrollWheel->angleDelta().y()))/360;
     update();
 }
 
@@ -952,6 +1025,9 @@ void _gl_widget::pick()
 
   /*************************/
   // dibujar escena para seleccion
+  clear_window();
+  change_projection();
+  change_observer();
   switch (Object)
   {
       case OBJECT_TETRAHEDRON:Tetrahedron.drawSelection();break;
@@ -969,21 +1045,24 @@ void _gl_widget::pick()
   int Color;
   glReadBuffer(GL_FRONT);
   glPixelStorei(GL_PACK_ALIGNMENT,1);
-  glReadPixels(Selection_position_y,Selection_position_x,1,1,GL_RGBA,GL_UNSIGNED_BYTE,&Color);
+  glReadPixels(Selection_position_x,Selection_position_y,1,1,GL_RGBA,GL_UNSIGNED_BYTE,&Color);
   /*************************/
 
   // actualizar el identificador de la parte seleccionada en el objeto
   int selTriangle;
-  uint R = (uint)((Color & 0x00FF0000) >> 16);
+  uint B = (uint)((Color & 0x00FF0000) >> 16);
   uint G = (uint)((Color & 0x0000FF00) >> 8);
-  uint B = (uint)(Color & 0x000000FF);
+  uint R = (uint)(Color & 0x000000FF);
 
   selTriangle = (R << 16) + (G << 8) + B;
+  cout<<"WIN X:"<<Window_width<<" Y:"<<Window_height<<endl;
+  cout<<"MOUSE X:"<<Selection_position_x<<" Y: "<<Selection_position_y<<endl;
   cout<<"SEL COLOR: "<<Color<<endl;
   cout<<"SEL TRIANGLE="<<selTriangle<<endl;
   if(selTriangle == 16777215)
       selTriangle = -1;
 
+  cout<<"------"<<endl;
   switch (Object)
   {
       case OBJECT_TETRAHEDRON:Tetrahedron.setTrigSelected(selTriangle);break;

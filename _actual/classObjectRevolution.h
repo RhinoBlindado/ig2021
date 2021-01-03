@@ -2,6 +2,8 @@
 #define OBJREV_H
 #include "object3d.h"
 
+#define PI 3.14159265
+
 
 class _objRev:public _object3D
 {

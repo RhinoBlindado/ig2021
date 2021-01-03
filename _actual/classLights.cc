@@ -6,12 +6,6 @@ using namespace _colors_ne;
 
 void _lights::initialize()
 {
-    // Setting up the first light at infinity.
-    glLightfv(GL_LIGHT0, GL_POSITION, (GLfloat *) &lightPos);
-
-    // Setting up the second light locally.
-    glLightfv(GL_LIGHT1, GL_POSITION, (GLfloat *) &lightPos2);
-
     //      Setting up the color.
     glLightfv(GL_LIGHT1, GL_DIFFUSE, (GLfloat *) &MAGENTA);
 }

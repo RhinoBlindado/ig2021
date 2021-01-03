@@ -1,9 +1,27 @@
 #include "classChessboard.h"
 
-void _chessBoard::initialize(int row, int col)
+void _chessBoard::initialize(float row, float col)
 {
-    row = 2;
-    col = 2;
+  //  xScale = 1.7778;
+  //  yScale = 1;
+    row = 1;
+    col = 1;
+
+//    // Define the points.
+//    Vertices.resize(4);
+
+//    Vertices[0] = _vertex3f(-row/2, -col/2, 0);
+//    Vertices[1] = _vertex3f(-row/2, col/2, 0);
+//    Vertices[2] = _vertex3f(row/2, -col/2, 0);
+//    Vertices[3] = _vertex3f(row/2, col/2, 0);
+
+//    // Defining the triangles of the cube.
+//    Triangles.resize(2);
+
+//    //      Front face.
+//    Triangles[0]=_vertex3ui(0,2,3);
+//    Triangles[1]=_vertex3ui(0,3,1);
+
     //  Row Generation
     //      Bottom-Most Point
     Vertices.push_back(_vertex3f(-0.5*row,-0.5*col,0));
@@ -47,5 +65,21 @@ void _chessBoard::initialize(int row, int col)
     // Calculate Normals
     this->calculateTrigNormals();
     this->calculateVertNormals();
+
+    // Map the texture
+    this->mapTexture();
+}
+
+void _chessBoard::mapTexture()
+{
+    float MAX_X = (Vertices[Vertices.size()-1].x) * 2;
+    float MAX_Y = (Vertices[Vertices.size()-1].y) * 2;
+
+    textCoords.resize(Vertices.size());
+
+    for(unsigned int i=0; i<Vertices.size();i++)
+    {
+        textCoords[i] = _vertex2f( 0.5 + (Vertices[i].x) / MAX_X,  0.5 + (Vertices[i].y) / MAX_Y);
+    }
 
 }

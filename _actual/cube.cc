@@ -44,6 +44,5 @@ _cube::_cube(float size)
 
     // Calculate the normals
     this->calculateTrigNormals();
-
     this->calculateVertNormals();
 }

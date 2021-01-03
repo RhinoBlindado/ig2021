@@ -46,7 +46,7 @@ void _objRev::genTriangles(int rCuts, bool bottomCap, bool topCap, vector<_verte
     {
         Vertices.push_back(caps[0]);
         for(int i = 0; i < rCuts; i++)
-        {
+        {           
             Triangles.push_back(_vertex3ui(i * plySizeVert, vertSize, ((i+1) * plySizeVert) % (vertSize)));
         }
     }

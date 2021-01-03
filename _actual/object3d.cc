@@ -179,32 +179,29 @@ void _object3D::drawTex()
     if(smoothLight)
         glShadeModel(GL_SMOOTH);
 
-    float MAX_X = (Vertices[Vertices.size()-1].x) * 2;
-    float MAX_Y = (Vertices[Vertices.size()-1].y) * 2;
+    for(unsigned int i=0; i<Triangles.size();i++)
+    {
+        if(flatLight)
+            glNormal3f(trigNormals[i].x, trigNormals[i].y, trigNormals[i].z);
 
-        for(unsigned int i=0; i<Triangles.size();i++)
-        {
-            if(flatLight)
-                glNormal3f(trigNormals[i].x, trigNormals[i].y, trigNormals[i].z);
+        if(smoothLight)
+            glNormal3f(vectNormals[Triangles[i]._0].x, vectNormals[Triangles[i]._0].y, vectNormals[Triangles[i]._0].z);
 
-            if(smoothLight)
-                glNormal3f(vectNormals[Triangles[i]._0].x, vectNormals[Triangles[i]._0].y, vectNormals[Triangles[i]._0].z);
+        glTexCoord2f(textCoords[Triangles[i]._0].x, textCoords[Triangles[i]._0].y);
+        glVertex3fv((GLfloat *) &Vertices[Triangles[i]._0]);
 
-            glTexCoord2f( 0.5 + (Vertices[Triangles[i]._0].x) / MAX_X,  0.5 + (Vertices[Triangles[i]._0].y) / MAX_Y);
-            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._0]);
+        if(smoothLight)
+            glNormal3f(vectNormals[Triangles[i]._1].x, vectNormals[Triangles[i]._1].y, vectNormals[Triangles[i]._1].z);
 
-            if(smoothLight)
-                glNormal3f(vectNormals[Triangles[i]._1].x, vectNormals[Triangles[i]._1].y, vectNormals[Triangles[i]._1].z);
+        glTexCoord2f(textCoords[Triangles[i]._1].x, textCoords[Triangles[i]._1].y);
+        glVertex3fv((GLfloat *) &Vertices[Triangles[i]._1]);
 
-            glTexCoord2f( 0.5 + (Vertices[Triangles[i]._1].x) / MAX_X,  0.5 + (Vertices[Triangles[i]._1].y) / MAX_Y);
-            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._1]);
+        if(smoothLight)
+            glNormal3f(vectNormals[Triangles[i]._2].x, vectNormals[Triangles[i]._2].y, vectNormals[Triangles[i]._2].z);
 
-            if(smoothLight)
-                glNormal3f(vectNormals[Triangles[i]._2].x, vectNormals[Triangles[i]._2].y, vectNormals[Triangles[i]._2].z);
-
-            glTexCoord2f( 0.5 + (Vertices[Triangles[i]._2].x) / MAX_X,  0.5 + (Vertices[Triangles[i]._2].y) / MAX_Y);
-            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._2]);
-        }
+        glTexCoord2f(textCoords[Triangles[i]._2].x, textCoords[Triangles[i]._2].y);
+        glVertex3fv((GLfloat *) &Vertices[Triangles[i]._2]);
+    }
     glEnd();
     glDisable(GL_TEXTURE_2D);
 
@@ -218,15 +215,16 @@ void _object3D::drawSelection()
 
     glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
     glBegin(GL_TRIANGLES);
-    cout<<"DIBUJADO SELECCION:"<<endl;
+//    cout<<"DIBUJADO SELECCION:"<<endl;
         for(unsigned int i=0; i<Triangles.size();i++)
         {
             R = (i & 0x00FF0000) >> 16;
             G = (i & 0x0000FF00) >> 8;
             B = (i & 0x000000FF);
 
-            cout<<"COLOR: "<<R/255.0<<G/255.0<<B/255.0<<endl;
+//            cout<<"COLOR: "<<R/255.0<<G/255.0<<B/255.0<<endl;
             glColor3f(R/255.0, G/255.0, B/255.0);
+
             glVertex3fv((GLfloat *) &Vertices[Triangles[i]._0]);
             glVertex3fv((GLfloat *) &Vertices[Triangles[i]._1]);
             glVertex3fv((GLfloat *) &Vertices[Triangles[i]._2]);
@@ -283,11 +281,12 @@ void _object3D::calculateTrigNormals()
 void _object3D::calculateVertNormals()
 {
     int vectSize = Vertices.size();
+    int trigSize = Triangles.size();
     vector<int> pointCount(vectSize,0);
     _vertex3f summation;
     vector<vector<int>> pointFace(vectSize);
 
-    for(auto i = 0; i < (int)Triangles.size(); i++)
+    for(auto i = 0; i < trigSize; i++)
     {
         pointCount[Triangles[i].x]++;
         pointFace[Triangles[i].x].push_back(i);

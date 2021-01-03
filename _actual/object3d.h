@@ -23,6 +23,7 @@ class _object3D:public _basic_object3D
 {
   public:
   vector<_vertex3ui> Triangles;
+  vector<_vertex2f>  textCoords;
   vector<_vertex3f>  trigNormals;
   vector<_vertex3f>  vectNormals;
 

@@ -28,6 +28,9 @@ class _telescope:public _object3D
         void rotateSecondDegree(float nBeta = 0);
         void rotateThirdDegree(float nGamma = 0);
 
+        void setLighting(int style);
+        void setMaterial();
+
 };
 
 #endif // TELESCOPE_H

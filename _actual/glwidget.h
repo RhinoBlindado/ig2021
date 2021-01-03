@@ -34,6 +34,7 @@
 #include "classChessboard.h"
 
 #include "classLights.h"
+#include "classScene.h"
 
 namespace _gl_widget_ne {
 
@@ -47,7 +48,7 @@ namespace _gl_widget_ne {
   const float ANGLE_STEP=1;
 
   typedef enum {MODE_DRAW_POINT,MODE_DRAW_LINE,MODE_DRAW_FILL,MODE_DRAW_CHESS} _mode_draw;
-  typedef enum {OBJECT_TETRAHEDRON,OBJECT_CUBE,OBJECT_CONE,OBJECT_CYLINDER,OBJECT_SPHERE,OBJECT_PLY,OBJECT_HIER,OBJECT_CHESS} _object;
+  typedef enum {OBJECT_TETRAHEDRON,OBJECT_CUBE,OBJECT_CONE,OBJECT_CYLINDER,OBJECT_SPHERE,OBJECT_PLY,OBJECT_HIER,OBJECT_CHESS,OBJECT_SCENE} _object;
   typedef enum {MAT_GOLD, MAT_PLASTIC, MAT_RUBBER, MAT_NULL} _material;
   typedef enum {AMBIENT, DIFFUSE, SPECULAR, SHINE} _matProperty;
 }
@@ -125,6 +126,7 @@ private:
   _ply Ply;
   _telescope Hier;
   _chessBoard Chess;
+  _scene Scene;
   _gl_widget_ne::_object Object;
 
   // ANIMATION

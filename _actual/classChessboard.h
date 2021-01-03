@@ -8,7 +8,8 @@ class _chessBoard:public _object3D
 {
     public:
         _chessBoard(){};
-        void initialize(int row=1, int col=1);
+        void initialize(float row=1, float col=1);
+        void mapTexture();
 };
 
 #endif // CLASSCHESSBOARD_H

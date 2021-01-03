@@ -5,6 +5,7 @@ HEADERS += \
   classLights.h \
   classObjectPly.h \
   classObjectRevolution.h \
+  classScene.h \
   classSphere.h \
   classTelescope.h \
   classTelescope_part_eyepiece.h \
@@ -31,6 +32,7 @@ SOURCES += \
   classLights.cc \
   classObjectPly.cc \
   classObjectRevolution.cc \
+  classScene.cc \
   classSphere.cc \
   classTelescope.cc \
   classTelescope_part_eyepiece.cc \
