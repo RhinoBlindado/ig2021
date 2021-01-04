@@ -23,29 +23,33 @@ class _object3D:public _basic_object3D
 {
   public:
   vector<_vertex3ui> Triangles;
-  vector<_vertex2f>  textCoords;
+  //    [P4]
   vector<_vertex3f>  trigNormals;
   vector<_vertex3f>  vectNormals;
+  vector<_vertex2f>  textCoords;
 
-  // Lighting Methods
-  bool flatLight;
-  bool smoothLight;
-  void drawIlum();
-  void drawTex();
-  void calculateTrigNormals();
-  void calculateVertNormals();
-
-  // Drawing Methods
-  void draw(int style = 0);
+  // [P1] DRAWING
   void draw_line();
   void draw_fill();
   void draw_chess(vector<float> color1 = {1,0.4451,0.8078}, vector<float> color2 = {0.0039,0.8039,0.9961});
+  void draw(int style = 0);
+  //    [P5]
   void drawSelection();
 
-  // Setters
+  // [P4] LIGHTING
+  bool flatLight;
+  bool smoothLight;
+
+  void drawIlum();
+  void drawTex();
+
+  void calculateTrigNormals();
+  void calculateVertNormals();
+
   void setLighting(int type);
   void setFlatLight();
   void setSmoothLight();
+
   void setTexture(QImage texture);
 
   void setMaterialDiffuse(_vertex3f color);
@@ -53,7 +57,7 @@ class _object3D:public _basic_object3D
   void setMaterialAmbient(_vertex3f color);
   void setMaterialShininess(float color);
 
-  // Interaction
+  // [P5] PICK
   int trigSelectedNumber = -1;
   void setTrigSelected(int trig);
 

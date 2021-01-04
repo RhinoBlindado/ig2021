@@ -3,7 +3,10 @@
 
 #include "object3d.h"
 
-
+/**
+ * [Practice 4]
+ * @brief   Chessboard Class for displaying a texture on a flat surface
+ */
 class _chessBoard:public _object3D
 {
     public:

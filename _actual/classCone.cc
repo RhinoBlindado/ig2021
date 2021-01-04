@@ -1,5 +1,14 @@
 #include "classCone.h"
 
+/**
+ * @brief Initialize the Cone Object.
+ * @param height    Total height desired for the Cone. Default is 1.
+ * @param radius    Desired radius for the Cone. Default is 0,5.
+ * @param vCuts     Total number of vertical cuts for the Cone. Default is 20.
+ * @param hCuts     Total number of horizontal cuts for the Cone. Default is 10.
+ * @param rCuts     Total number of slices of the Cone, that is,
+ *                  how many times the radius is cut. Default is 30.
+ */
 void _cone::initialize(float height, float radius, int vCuts, int hCuts, int rCuts)
 {
     // Check for correct inputs
@@ -21,7 +30,7 @@ void _cone::initialize(float height, float radius, int vCuts, int hCuts, int rCu
         exit(1);
     }
 
-    // Bottom of profile, left-most point.
+    // Bottom of profile, left-most point. Added to auxiliar list so that it's easier later to generate triangles correctly.
     vector<_vertex3f> auxVer;
     auxVer.push_back(_vertex3f(0, -height/2, 0));
 

@@ -21,9 +21,8 @@
 #include <QImageReader>
 
 
-//      OpenGL Interaction with Qt
+// EXTRA: COMMUNICATION WITH OPENGL
 
-// Checkboxes that react to changes
 void _window::pointCheckBoxInteraction(bool checked)
 {
   pointCheckBox->blockSignals(true);
@@ -88,7 +87,10 @@ void _window::chessCheckBoxInteraction(bool checked)
   chessCheckBox->blockSignals(false);
 }
 
-// Combo box
+/**
+ * @brief Change the item in the selector box
+ * @param item      Index of the item.
+ */
 void _window::modelSelectorInteraction(int item)
 {
     modelSelector->blockSignals(true);
@@ -98,21 +100,12 @@ void _window::modelSelectorInteraction(int item)
     modelSelector->blockSignals(false);
 }
 
-
-// Text
-void _window::text(string foo)
-{
-    cameraXAngle->setText(QString::fromStdString(foo));
-}
-
 /*****************************************************************************//**
- *
- *
+ * @brief The initialization of the Window class.
  *
  *****************************************************************************/
 _window::_window()
 {
- //Practice 3:
  // Initializing the Main Widget
  QWidget *mainWidget = new QWidget(this);
  setCentralWidget(mainWidget);
@@ -170,25 +163,30 @@ _window::_window()
  connect(modelSelector, SIGNAL(activated(int)), GL_widget, SLOT(slotModel(int)));
 
 
- // Modes
+ // Draw Modes
  QGroupBox *modesBox = new QGroupBox("Modos de Dibujado");
  generalLayout->addWidget(modesBox);
 
  QGridLayout *modeLayout = new QGridLayout;
  modesBox->setLayout(modeLayout);
+
+ QLabel *basicTitle = new QLabel("Básicos");
+ basicTitle->setStyleSheet("border-bottom-width: 1px; border-bottom-style: solid; border-radius: 0px;");
+ modeLayout->addWidget(basicTitle,0,1);
+
  //     Points
  pointCheckBox = new QCheckBox;
  QLabel *pointsLabel = new QLabel("Puntos");
- modeLayout->addWidget(pointCheckBox,0,0);
- modeLayout->addWidget(pointsLabel,0,1);
+ modeLayout->addWidget(pointCheckBox,1,0);
+ modeLayout->addWidget(pointsLabel,1,1);
 
  connect(pointCheckBox, SIGNAL(stateChanged(int)), GL_widget, SLOT(slotPoint(int)));
 
  //     Lines
  lineCheckBox = new QCheckBox;
  QLabel *lineLabel = new QLabel("Líneas");
- modeLayout->addWidget(lineCheckBox,1,0);
- modeLayout->addWidget(lineLabel,1,1);
+ modeLayout->addWidget(lineCheckBox,2,0);
+ modeLayout->addWidget(lineLabel,2,1);
 
  lineCheckBox->setCheckState(Qt::Checked);
  connect(lineCheckBox, SIGNAL(stateChanged(int)), GL_widget, SLOT(slotLine(int)));
@@ -196,89 +194,100 @@ _window::_window()
 //      Fill
  fillCheckBox = new QCheckBox;
  QLabel *fillLabel = new QLabel("Relleno");
- modeLayout->addWidget(fillCheckBox,2,0);
- modeLayout->addWidget(fillLabel,2,1);
+ modeLayout->addWidget(fillCheckBox,3,0);
+ modeLayout->addWidget(fillLabel,3,1);
 
  connect(fillCheckBox, SIGNAL(stateChanged(int)), GL_widget, SLOT(slotFill(int)));
 
 //      Chess
  chessCheckBox = new QCheckBox;
  QLabel *chessLabel = new QLabel("Ajedrez");
- modeLayout->addWidget(chessCheckBox,3,0);
- modeLayout->addWidget(chessLabel,3,1);
+ modeLayout->addWidget(chessCheckBox,4,0);
+ modeLayout->addWidget(chessLabel,4,1);
  connect(chessCheckBox, SIGNAL(stateChanged(int)), GL_widget, SLOT(slotChess(int)));
 
 
-//      Flat Light
- flatLCheckBox = new QCheckBox;
- QLabel *flatLLabel = new QLabel("Iluminación Plana");
- modeLayout->addWidget(flatLCheckBox,4,0);
- modeLayout->addWidget(flatLLabel,4,1);
- connect(flatLCheckBox, SIGNAL(stateChanged(int)), GL_widget, SLOT(slotFlat(int)));
+ QLabel *basicTitle2 = new QLabel("Iluminación");
+ basicTitle2->setStyleSheet("border-bottom-width: 1px; border-bottom-style: solid; border-radius: 0px;");
+ modeLayout->addWidget(basicTitle2,5,1);
+ //          Flat Light
+  flatLCheckBox = new QCheckBox;
+  QLabel *flatLLabel = new QLabel("Plana");
+  modeLayout->addWidget(flatLCheckBox,6,0);
+  modeLayout->addWidget(flatLLabel,6,1);
+  connect(flatLCheckBox, SIGNAL(stateChanged(int)), GL_widget, SLOT(slotFlat(int)));
 
-//      Smooth Light
- smoothLCheckBox = new QCheckBox;
- QLabel *smoothLLabel = new QLabel("Iluminación Goraund");
- modeLayout->addWidget(smoothLCheckBox,5,0);
- modeLayout->addWidget(smoothLLabel,5,1);
- connect(smoothLCheckBox, SIGNAL(stateChanged(int)), GL_widget, SLOT(slotSmooth(int)));
+ //          Smooth Light
+  smoothLCheckBox = new QCheckBox;
+  QLabel *smoothLLabel = new QLabel("Goraund");
+  modeLayout->addWidget(smoothLCheckBox,7,0);
+  modeLayout->addWidget(smoothLLabel,7,1);
+  connect(smoothLCheckBox, SIGNAL(stateChanged(int)), GL_widget, SLOT(slotSmooth(int)));
 
-//      Unlit Texture
- unlitTCheckBox = new QCheckBox;
- QLabel *unlitLabel = new QLabel("Textura No Iluminada");
- modeLayout->addWidget(unlitTCheckBox,6,0);
- modeLayout->addWidget(unlitLabel,6,1);
- connect(unlitTCheckBox, SIGNAL(stateChanged(int)), GL_widget, SLOT(slotUnlitText(int)));
+  QLabel *basicTitle3 = new QLabel("Textura");
+  basicTitle3->setStyleSheet("border-bottom-width: 1px; border-bottom-style: solid; border-radius: 0px;");
+  modeLayout->addWidget(basicTitle3,8,1);
+  //      Unlit Texture
+   unlitTCheckBox = new QCheckBox;
+   QLabel *unlitLabel = new QLabel("Sin Iluminación");
+   modeLayout->addWidget(unlitTCheckBox,9,0);
+   modeLayout->addWidget(unlitLabel,9,1);
+   connect(unlitTCheckBox, SIGNAL(stateChanged(int)), GL_widget, SLOT(slotUnlitText(int)));
 
-//      Flat Lit Texture
- flatTextCheckBox = new QCheckBox;
- QLabel *flatTextLabel = new QLabel("Textura Ilum. Plana");
- modeLayout->addWidget(flatTextCheckBox,7,0);
- modeLayout->addWidget(flatTextLabel,7,1);
- connect(flatTextCheckBox, SIGNAL(stateChanged(int)), GL_widget, SLOT(slotFlatText(int)));
+  //      Flat Lit Texture
+   flatTextCheckBox = new QCheckBox;
+   QLabel *flatTextLabel = new QLabel("Plana");
+   modeLayout->addWidget(flatTextCheckBox,10,0);
+   modeLayout->addWidget(flatTextLabel,10,1);
+   connect(flatTextCheckBox, SIGNAL(stateChanged(int)), GL_widget, SLOT(slotFlatText(int)));
 
-//      Smooth Lit Texture
- smoothTextCheckBox = new QCheckBox;
- QLabel *smoothTextLabel = new QLabel("Textura Ilum. Goraund");
- modeLayout->addWidget(smoothTextCheckBox,8,0);
- modeLayout->addWidget(smoothTextLabel,8,1);
- connect(smoothTextCheckBox, SIGNAL(stateChanged(int)), GL_widget, SLOT(slotSmoothText(int)));
+  //      Smooth Lit Texture
+   smoothTextCheckBox = new QCheckBox;
+   QLabel *smoothTextLabel = new QLabel("Goraund");
+   modeLayout->addWidget(smoothTextCheckBox,11,0);
+   modeLayout->addWidget(smoothTextLabel,11,1);
+   connect(smoothTextCheckBox, SIGNAL(stateChanged(int)), GL_widget, SLOT(slotSmoothText(int)));
 
+// LIGHTING
+ //     Lights
+ QGroupBox *lLightsBox = new QGroupBox("Luces");
+ generalLayout->addWidget(lLightsBox);
 
- // Camera
- QGroupBox *cameraBox = new QGroupBox("Cámara");
- generalLayout->addWidget(cameraBox);
+ QGridLayout *lLBox = new QGridLayout;
+ lLightsBox->setLayout(lLBox);
 
- QGridLayout *cameraLayout = new QGridLayout;
- cameraBox->setLayout(cameraLayout);
+ //         1st Light
+ firstLightBox = new QCheckBox;
+ lLBox->addWidget(firstLightBox,0,0);
+ lLBox->addWidget(new QLabel("Luz Blanca ∞"),0,1);
 
- QLabel *cameraXLabel = new QLabel("Ángulo X");
- cameraXAngle = new QLabel("0");
- cameraLayout->addWidget(cameraXLabel,0,0);
- cameraLayout->addWidget(cameraXAngle,0,1);
- generalLayout->addStretch();
+ //         2nd Light
+ secondLightBox = new QCheckBox;
+ lLBox->addWidget(secondLightBox,1,0);
+ lLBox->addWidget(new QLabel("Luz Magenta"),1,1);
 
- QSlider *mySlider = new QSlider(Qt::Horizontal);
- generalLayout->addWidget(mySlider);
+ //generalLayout->addStretch();
+
+// QSlider *mySlider = new QSlider(Qt::Horizontal);
+// generalLayout->addWidget(mySlider);
 
  // ADVANCED TAB
  QWidget *advancedWidget = new QWidget;
- sideBar->addTab(advancedWidget,"Avanzado");
+ sideBar->addTab(advancedWidget,"Animación");
 
  // PLY settings
 
 
 
 
-
-
- // TIMER FOR ANIMATION
+ // NON UI SETTINGS
+ // [P3] TIMER FOR ANIMATION
  QTimer *mainTimer = new QTimer;
  mainTimer->start(10);
  connect(mainTimer, SIGNAL(timeout()), GL_widget, SLOT(slotAnimationToggle()));
 
 
- // TEXTURES
+ // [P4] TEXTURES
  //     Loading the image
  QString File_name("../textures/dia_8192.jpg");
  QImage Image;
@@ -295,6 +304,19 @@ _window::_window()
 
  //     Sending the texture to GL Widget
  GL_widget->getTexture(Image);
+
+ // MENU BAR
+ //     Actions for the Menus.
+ QAction *Exit = new QAction(QIcon("./icons/exit.png"), tr("&Exit..."), this);
+ Exit->setShortcut(tr("Ctrl+Q"));
+ Exit->setToolTip(tr("Exit the application"));
+ connect(Exit, SIGNAL(triggered()), this, SLOT(close()));
+
+ //     Menus.
+ QMenu *File_menu=menuBar()->addMenu(tr("&File"));
+ File_menu->addAction(Exit);
+ File_menu->setAttribute(Qt::WA_AlwaysShowToolTips);
+
 
 /*  QSizePolicy Q(QSizePolicy::Expanding,QSizePolicy::Expanding);
 
@@ -322,26 +344,6 @@ _window::_window()
   Central_widget->setLayout(Horizontal_main);
   setCentralWidget(Central_widget);
 
-  // actions for file menu
-  QAction *Exit = new QAction(QIcon("./icons/exit.png"), tr("&Exit..."), this);
-  Exit->setShortcut(tr("Ctrl+Q"));
-  Exit->setToolTip(tr("Exit the application"));
-  connect(Exit, SIGNAL(triggered()), this, SLOT(close()));
-
-  // menus
-  QMenu *File_menu=menuBar()->addMenu(tr("&File"));
-  File_menu->addAction(Exit);
-  File_menu->setAttribute(Qt::WA_AlwaysShowToolTips);
-
-
   resize(800,800);
   */
 }
-
-//void _window::change_checkbox_point(bool Checked)
-//{
-//  Checkbox_layout1->blockSignals(true);
-//  if(Checked==true) Checkbox_layout1->setCheckState(Qt::Checked);
-//  else Checkbox_layout1->setCheckState(Qt::Unchecked);
-//  Checkbox_layout1->blockSignals(false);
-//}

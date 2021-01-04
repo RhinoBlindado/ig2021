@@ -46,13 +46,14 @@ void _gl_widget::keyPressEvent(QKeyEvent *Keyevent)
             Object=OBJECT_TETRAHEDRON;
             Window->modelSelectorInteraction(0);
       break;
-
+      //    P1
       //    Cube
       case Qt::Key_2:
             Object=OBJECT_CUBE;
             Window->modelSelectorInteraction(1);
       break;
 
+      //    P2
       //    Cone
       case Qt::Key_3:
             Object=OBJECT_CONE;
@@ -77,19 +78,21 @@ void _gl_widget::keyPressEvent(QKeyEvent *Keyevent)
             Window->modelSelectorInteraction(5);
       break;
 
+      //    P3
       //    Hierarchical Model
       case Qt::Key_7:
             Object=OBJECT_HIER;
             Window->modelSelectorInteraction(6);
       break;
 
+      //    P4
       //    Chessboard
       case Qt::Key_8:
             Object=OBJECT_CHESS;
             Window->modelSelectorInteraction(7);
       break;
 
-      // ANIMATION
+      // [P3] ANIMATION
       //    First degree of freedom keys and rate of modification
       case Qt::Key_Q:alpha+=ANGLE_STEP*modAlpha;break;
       case Qt::Key_W:alpha-=ANGLE_STEP*modAlpha;break;
@@ -111,13 +114,14 @@ void _gl_widget::keyPressEvent(QKeyEvent *Keyevent)
       //    Auto Animation key
       case Qt::Key_A:animation=!animation;break;
 
-      // UNLIT DRAWING
+      // DRAWING
       //    Draw Point
       case Qt::Key_P:
             Draw_point=!Draw_point;
             Window->pointCheckBoxInteraction(Draw_point);
       break;
 
+      //    P1
       //    Draw Lines
       case Qt::Key_L:
             Draw_line=!Draw_line;
@@ -136,7 +140,7 @@ void _gl_widget::keyPressEvent(QKeyEvent *Keyevent)
             Window->chessCheckBoxInteraction(Draw_chess);
       break;
 
-    // LIGHTING & TEXTURES
+    // [P4] LIGHTING & TEXTURES
     //    Flat Shaded Light Mode
     case Qt::Key_F3:
           flatLit=!flatLit;
@@ -177,19 +181,13 @@ void _gl_widget::keyPressEvent(QKeyEvent *Keyevent)
     //      Movement
     case Qt::Key_Left:Observer_angle_y-=ANGLE_STEP;break;
     case Qt::Key_Right:Observer_angle_y+=ANGLE_STEP;break;
-    case Qt::Key_Up:
-        Observer_angle_x-=ANGLE_STEP;
-        Window->text(std::to_string(Observer_angle_x));
-    break;
-    case Qt::Key_Down:
-        Observer_angle_x+=ANGLE_STEP;
-        Window->text(std::to_string(Observer_angle_x));
-    break;
+    case Qt::Key_Up:Observer_angle_x-=ANGLE_STEP;break;
+    case Qt::Key_Down:Observer_angle_x+=ANGLE_STEP;break;
     //      Zoom
     case Qt::Key_Minus:Observer_distance*=1.2;break;
     case Qt::Key_Plus:Observer_distance/=1.2;break;
 
-    // PROYECTION
+    // [P5] PROJECTION
     case Qt::Key_C:perspective = true;break;
     case Qt::Key_V:perspective = false;break;
   }
@@ -226,11 +224,15 @@ void _gl_widget::change_projection()
 
   // formato(x_minimo,x_maximo, y_minimo, y_maximo,Front_plane, plano_traser)
   // Front_plane>0  Back_plane>PlanoDelantero)
+
+  // P5
   if(perspective)
-      glFrustum(X_MIN,X_MAX,Y_MIN,Y_MAX,FRONT_PLANE_PERSPECTIVE,BACK_PLANE_PERSPECTIVE);
+      glFrustum(X_MIN, X_MAX, Y_MIN * ((float)this->height()/(float)this->width()), Y_MAX * ((float)this->height()/(float)this->width()),
+                FRONT_PLANE_PERSPECTIVE, BACK_PLANE_PERSPECTIVE);
     else
       glOrtho(10*X_MIN*Observer_distance, 10*X_MAX*Observer_distance,
-              10*Y_MIN*Observer_distance, 10*Y_MAX*Observer_distance,
+              10*Y_MIN*Observer_distance * ((float)this->height()/(float)this->width()),
+              10*Y_MAX*Observer_distance * ((float)this->height()/(float)this->width()),
               FRONT_PLANE_PERSPECTIVE, BACK_PLANE_PERSPECTIVE);
 }
 
@@ -266,34 +268,6 @@ void _gl_widget::draw_objects()
 
   // AXIS
   Axis.draw_line();
-
-      _ply a,b,c,d;
-  //a.initialize(1,"../ply_models/airplane_fixed.ply");
-  //b.initialize(1,"../ply_models/ant.ply");
- // cout<<"BUNNY:"<<endl;
-//  d.initialize(1,"../ply_models/bunny.ply");
-  //c.initialize(4,"../ply_models/sandal.ply");
-
-//  glMatrixMode(GL_MODELVIEW);
-
-//  glPushMatrix();
-//      glPushMatrix();
-//          glTranslated(0, 3, 0);
-//          c.draw_chess();
-//      glPopMatrix();
-
-//      glPushMatrix();
-//          glTranslated(0,0,-4);
-//          b.draw_chess();
-//      glPopMatrix();
-
-//      glPushMatrix();
-//          glTranslated(2,0,0);
-//          a.draw_chess();
-//      glPopMatrix();
-//  glPopMatrix();
-
-
 
   // OBJECTS
   if (Draw_point){
@@ -357,7 +331,14 @@ void _gl_widget::draw_objects()
     }
   }
 
-  // LIGHTING
+  // [P3] ANIMATION
+  //    Set the degrees of rotation of each degree of freedom.
+  this->constrainAngles();
+  Hier.rotateFirstDegree(alpha);
+  Hier.rotateSecondDegree(beta);
+  Hier.rotateThirdDegree(gamma);
+
+  // [P4] LIGHTING
 
   //    Toggle Lights
   light.toggleFirstLight(firstLight);
@@ -369,81 +350,75 @@ void _gl_widget::draw_objects()
       switch (Object)
       {
           case OBJECT_TETRAHEDRON:
-                Tetrahedron.setFlatLight();
-
                 Tetrahedron.setMaterialAmbient(__material[actMaterial].ambient);
                 Tetrahedron.setMaterialSpecular(__material[actMaterial].specular);
                 Tetrahedron.setMaterialDiffuse(__material[actMaterial].diffuse);
                 Tetrahedron.setMaterialShininess(__material[actMaterial].shine);
 
+                Tetrahedron.setLighting(1);
                 Tetrahedron.drawIlum();
           break;
 
           case OBJECT_CUBE:
-                Cube.setFlatLight();
-
                 Cube.setMaterialAmbient(__material[actMaterial].ambient);
                 Cube.setMaterialSpecular(__material[actMaterial].specular);
                 Cube.setMaterialDiffuse(__material[actMaterial].diffuse);
                 Cube.setMaterialShininess(__material[actMaterial].shine);
 
+                Cube.setLighting(1);
                 Cube.drawIlum();
           break;
 
           case OBJECT_CONE:
-                Cone.setFlatLight();
-
                 Cone.setMaterialAmbient(__material[actMaterial].ambient);
                 Cone.setMaterialSpecular(__material[actMaterial].specular);
                 Cone.setMaterialDiffuse(__material[actMaterial].diffuse);
                 Cone.setMaterialShininess(__material[actMaterial].shine);
 
+                Cone.setLighting(1);
                 Cone.drawIlum();
           break;
 
           case OBJECT_CYLINDER:
-                Cylinder.setFlatLight();
-
                 Cylinder.setMaterialAmbient(__material[actMaterial].ambient);
                 Cylinder.setMaterialSpecular(__material[actMaterial].specular);
                 Cylinder.setMaterialDiffuse(__material[actMaterial].diffuse);
                 Cylinder.setMaterialShininess(__material[actMaterial].shine);
 
+                Cylinder.setLighting(1);
                 Cylinder.drawIlum();
           break;
 
           case OBJECT_SPHERE:
-                Sphere.setFlatLight();
-
                 Sphere.setMaterialAmbient(__material[actMaterial].ambient);
                 Sphere.setMaterialSpecular(__material[actMaterial].specular);
                 Sphere.setMaterialDiffuse(__material[actMaterial].diffuse);
                 Sphere.setMaterialShininess(__material[actMaterial].shine);
 
+                Sphere.setLighting(1);
                 Sphere.drawIlum();
           break;
 
           case OBJECT_PLY:
-                Ply.setFlatLight();
-
                 Ply.setMaterialAmbient(__material[actMaterial].ambient);
                 Ply.setMaterialSpecular(__material[actMaterial].specular);
                 Ply.setMaterialDiffuse(__material[actMaterial].diffuse);
                 Ply.setMaterialShininess(__material[actMaterial].shine);
 
+                Ply.setLighting(1);
                 Ply.drawIlum();
           break;
           case OBJECT_HIER:
+                Hier.setLighting(1);
                 Hier.draw(4);
           break;
           case OBJECT_CHESS:
-                Chess.setFlatLight();
-
                 Chess.setMaterialAmbient(__material[actMaterial].ambient);
                 Chess.setMaterialSpecular(__material[actMaterial].specular);
                 Chess.setMaterialDiffuse(__material[actMaterial].diffuse);
                 Chess.setMaterialShininess(__material[actMaterial].shine);
 
+                Chess.setLighting(1);
                 Chess.drawIlum();
           break;
           default:break;
@@ -456,88 +431,82 @@ void _gl_widget::draw_objects()
       switch (Object)
       {
           case OBJECT_TETRAHEDRON:
-                Tetrahedron.setSmoothLight();
-
                 Tetrahedron.setMaterialAmbient(__material[actMaterial].ambient);
                 Tetrahedron.setMaterialSpecular(__material[actMaterial].specular);
                 Tetrahedron.setMaterialDiffuse(__material[actMaterial].diffuse);
                 Tetrahedron.setMaterialShininess(__material[actMaterial].shine);
 
+                Tetrahedron.setLighting(2);
                 Tetrahedron.drawIlum();
           break;
 
           case OBJECT_CUBE:
-                Cube.setSmoothLight();
-
                 Cube.setMaterialAmbient(__material[actMaterial].ambient);
                 Cube.setMaterialSpecular(__material[actMaterial].specular);
                 Cube.setMaterialDiffuse(__material[actMaterial].diffuse);
                 Cube.setMaterialShininess(__material[actMaterial].shine);
 
+                Cube.setLighting(2);
                 Cube.drawIlum();
           break;
 
           case OBJECT_CONE:
-                Cone.setSmoothLight();
-
                 Cone.setMaterialAmbient(__material[actMaterial].ambient);
                 Cone.setMaterialSpecular(__material[actMaterial].specular);
                 Cone.setMaterialDiffuse(__material[actMaterial].diffuse);
                 Cone.setMaterialShininess(__material[actMaterial].shine);
 
+                Cone.setLighting(2);
                 Cone.drawIlum();
           break;
 
           case OBJECT_CYLINDER:
-                Cylinder.setSmoothLight();
-
                 Cylinder.setMaterialAmbient(__material[actMaterial].ambient);
                 Cylinder.setMaterialSpecular(__material[actMaterial].specular);
                 Cylinder.setMaterialDiffuse(__material[actMaterial].diffuse);
                 Cylinder.setMaterialShininess(__material[actMaterial].shine);
 
+                Cylinder.setLighting(2);
                 Cylinder.drawIlum();
           break;
 
           case OBJECT_SPHERE:
-                Sphere.setSmoothLight();
-
                 Sphere.setMaterialAmbient(__material[actMaterial].ambient);
                 Sphere.setMaterialSpecular(__material[actMaterial].specular);
                 Sphere.setMaterialDiffuse(__material[actMaterial].diffuse);
                 Sphere.setMaterialShininess(__material[actMaterial].shine);
 
+                Sphere.setLighting(2);
                 Sphere.drawIlum();
           break;
 
           case OBJECT_PLY:
-                Ply.setSmoothLight();
-
                 Ply.setMaterialAmbient(__material[actMaterial].ambient);
                 Ply.setMaterialSpecular(__material[actMaterial].specular);
                 Ply.setMaterialDiffuse(__material[actMaterial].diffuse);
                 Ply.setMaterialShininess(__material[actMaterial].shine);
 
+                Ply.setLighting(2);
                 Ply.drawIlum();
           break;
           case OBJECT_HIER:
+                Hier.setLighting(2);
                 Hier.draw(4);
           break;
           case OBJECT_CHESS:
-                Chess.setSmoothLight();
-
                 Chess.setMaterialAmbient(__material[actMaterial].ambient);
                 Chess.setMaterialSpecular(__material[actMaterial].specular);
                 Chess.setMaterialDiffuse(__material[actMaterial].diffuse);
                 Chess.setMaterialShininess(__material[actMaterial].shine);
 
+                Chess.setLighting(2);
                 Chess.drawIlum();
           break;
           default:break;
       }
   }
 
-  // TEXTURES
+  // [P4] TEXTURES
   //    Unlit Textured
   if(unLitTextured)
   {
@@ -570,18 +539,33 @@ void _gl_widget::draw_objects()
     switch (Object)
     {
         case OBJECT_CYLINDER:
+            Cylinder.setMaterialAmbient(__material[actMaterial].ambient);
+            Cylinder.setMaterialSpecular(__material[actMaterial].specular);
+            Cylinder.setMaterialDiffuse(__material[actMaterial].diffuse);
+            Cylinder.setMaterialShininess(__material[actMaterial].shine);
+
             Cylinder.setTexture(texture);
             Cylinder.setLighting(1);
             Cylinder.drawTex();
         break;
 
         case OBJECT_SPHERE:
+            Sphere.setMaterialAmbient(__material[actMaterial].ambient);
+            Sphere.setMaterialSpecular(__material[actMaterial].specular);
+            Sphere.setMaterialDiffuse(__material[actMaterial].diffuse);
+            Sphere.setMaterialShininess(__material[actMaterial].shine);
+
             Sphere.setTexture(texture);
             Sphere.setLighting(1);
             Sphere.drawTex();
         break;
 
         case OBJECT_CHESS:
+            Chess.setMaterialAmbient(__material[actMaterial].ambient);
+            Chess.setMaterialSpecular(__material[actMaterial].specular);
+            Chess.setMaterialDiffuse(__material[actMaterial].diffuse);
+            Chess.setMaterialShininess(__material[actMaterial].shine);
+
             Chess.setTexture(texture);
             Chess.setLighting(1);
             Chess.drawTex();
@@ -596,18 +580,33 @@ void _gl_widget::draw_objects()
       switch (Object)
       {
         case OBJECT_CYLINDER:
-          Cylinder.setTexture(texture);
-          Cylinder.setLighting(2);
-          Cylinder.drawTex();
+            Cylinder.setMaterialAmbient(__material[actMaterial].ambient);
+            Cylinder.setMaterialSpecular(__material[actMaterial].specular);
+            Cylinder.setMaterialDiffuse(__material[actMaterial].diffuse);
+            Cylinder.setMaterialShininess(__material[actMaterial].shine);
+
+            Cylinder.setTexture(texture);
+            Cylinder.setLighting(2);
+            Cylinder.drawTex();
         break;
 
         case OBJECT_SPHERE:
-          Sphere.setTexture(texture);
-          Sphere.setLighting(2);
-          Sphere.drawTex();
+            Sphere.setMaterialAmbient(__material[actMaterial].ambient);
+            Sphere.setMaterialSpecular(__material[actMaterial].specular);
+            Sphere.setMaterialDiffuse(__material[actMaterial].diffuse);
+            Sphere.setMaterialShininess(__material[actMaterial].shine);
+
+            Sphere.setTexture(texture);
+            Sphere.setLighting(2);
+            Sphere.drawTex();
         break;
 
         case OBJECT_CHESS:
+            Chess.setMaterialAmbient(__material[actMaterial].ambient);
+            Chess.setMaterialSpecular(__material[actMaterial].specular);
+            Chess.setMaterialDiffuse(__material[actMaterial].diffuse);
+            Chess.setMaterialShininess(__material[actMaterial].shine);
+
             Chess.setTexture(texture);
             Chess.setLighting(2);
             Chess.drawTex();
@@ -615,13 +614,6 @@ void _gl_widget::draw_objects()
         default:break;
       }
   }
-
-  // ANIMATION
-  //    Set the degrees of rotation of each degree of freedom.
-  this->constrainAngles();
-  Hier.rotateFirstDegree(alpha);
-  Hier.rotateSecondDegree(beta);
-  Hier.rotateThirdDegree(gamma);
 
   update();
 }
@@ -664,10 +656,6 @@ void _gl_widget::resizeGL(int Width1, int Height1)
  *
  *****************************************************************************/
 
-/*  Changes Made:
- * [P3] Initializing the angles, angle modifiers, and animation.
- *      Added initializing routines for the objects.
-*/
 void _gl_widget::initializeGL()
 {
   const GLubyte* strm;
@@ -684,9 +672,6 @@ void _gl_widget::initializeGL()
     exit(-1);
   }
 
-  glewInit();
-
-
   strm = glGetString(GL_SHADING_LANGUAGE_VERSION);
   std::cerr << "GLSL Version: " << strm << "\n";
 
@@ -701,7 +686,25 @@ void _gl_widget::initializeGL()
   Observer_angle_y=0;
   Observer_distance=DEFAULT_DISTANCE;
 
-  // Angle variables and animations
+  // DRAWING
+  Draw_point=false;
+  Draw_line=true;
+  Draw_fill=false;
+  Draw_chess=false;
+
+  // OBJECTS
+  //    Initalizing the objects.
+  //    P2
+  Cylinder.initialize(1, 0.5, 4, 4, 20, true, true);
+  Sphere.initialize(0.5, 40, 40);
+  Cone.initialize();
+  Ply.initialize(1,"../ply_models/rev_pawn.ply");
+
+  //    P4
+  Chess.initialize(1.777,1);
+
+  // [P3] ANIMATION
+  //    Setting initial angle variables and Modifiers.
   alpha = 0;
   beta  = 0;
   gamma = 0;
@@ -709,30 +712,20 @@ void _gl_widget::initializeGL()
   modAlpha = 1;
   modBeta  = 1;
   modGamma = 1;
+
+  //    Auto Animation bools.
   animation = false;
   foward1 = true;
   foward2 = true;
 
-  Draw_point=false;
-  Draw_line=true;
-  Draw_fill=false;
-  Draw_chess=false;
-
-  // OBJECTS
-  Cylinder.initialize(1, 0.5, 4, 4, 20, true, true);
-  Sphere.initialize(0.5, 40, 40);
-  Cone.initialize();
-  Ply.initialize(1,"../ply_models/beethoven.ply");
-  Chess.initialize(1,1);
-
-  // LIGHTING
+  // [P4] LIGHTING
   light.initialize();
   flatLit = false;
   smoothLit = false;
   firstLight = false;
   secondLight = false;
 
-  // MATERIAL
+  // [P4] MATERIALS
   __material[MAT_GOLD].ambient  = _vertex3f(0.24725f, 0.2245f, 0.0645f);
   __material[MAT_GOLD].diffuse  = _vertex3f(0.34615f, 0.3143f, 0.0903f);
   __material[MAT_GOLD].specular = _vertex3f(0.797357f, 0.723991f, 0.208006f);
@@ -750,28 +743,32 @@ void _gl_widget::initializeGL()
 
   __material[MAT_NULL].ambient = _vertex3f(0.2, 0.2, 0.2);
   __material[MAT_NULL].diffuse = _vertex3f(0.8, 0.8, 0.8);
-  __material[MAT_NULL].specular  = _vertex3f(0.0, 0.0, 0.0);
+  __material[MAT_NULL].specular = _vertex3f(0.0, 0.0, 0.0);
   __material[MAT_NULL].shine    = 0.0f;
 
   actMaterial = 3;
 
-  //    Textures
+  // [P4] TEXTURES
   unLitTextured = false;
   litFlatTextured = false;
   litSmoothTextured = false;
 
-  // CAMERA
+  // [P5] CAMERA
   perspective = true;
   lastClickX = 0;
   lastClickY = 0;
   mouseDrag = false;
 
-  // PICK
-  Window_width = 0;
-  Window_height = 0;
+  // [P5] PICK
+  glewInit();
+  Window_width = this->width();
+  Window_height = this->height();
 }
 
-// ANIMATION CONTRAINTS
+/**
+ * [P3]
+ * @brief Constrain the angles of the hierarchical model.
+ */
 void _gl_widget::constrainAngles()
 {
   if(beta > 42)
@@ -789,8 +786,233 @@ void _gl_widget::constrainAngles()
    alpha = fmod(alpha,360);
 }
 
-// COMMUNICATION WITH QT
-//  SLOTS
+/**
+ * [P3][P4]
+ * @brief Toggle the animation of the hierarchical object and 2nd light
+ */
+void _gl_widget::slotAnimationToggle()
+{
+    if(animation)
+    {
+        // This is so that when the telescope reaches its max angle, reverses the movement.
+        if(foward1)
+            beta += ANGLE_STEP*modAlpha;
+        else
+            beta -= ANGLE_STEP*modAlpha;
+
+        if(beta < -42 || beta > 42)
+            foward1 = !foward1;
+
+        if(foward2)
+            gamma += ANGLE_STEP*modGamma;
+        else
+            gamma -= ANGLE_STEP*modGamma;
+
+        if(gamma < -10 || gamma > 10)
+            foward2 = !foward2;
+
+        // This is so that the numbers stay between [0º, 360º]
+        alpha = fmod(alpha  += ANGLE_STEP*modBeta, 360);
+
+        if(secondLight)
+        {
+            // Ditto from Alpha.
+            delta = fmod(delta += ANGLE_STEP, 360);
+            light.rotateSecondLight(delta);
+        }
+
+        update();
+    }
+}
+
+/**
+ * [P4]
+ * @brief Obtain the image for the texture.
+ * @param _texture  A QImage file that will be the texture.
+ */
+void _gl_widget::getTexture(QImage _texture)
+{
+    this->texture = _texture;
+}
+
+/**
+ * [P5]
+ * @brief Capture different parameters when the mouse is right or left clicked.
+ * @param event     The mouse event.
+ */
+void _gl_widget::mousePressEvent(QMouseEvent *event)
+{
+    //  If right-clicked: Select triangles.
+    if(event->buttons() & Qt::RightButton)
+    {
+        Window_width = this->width();
+        Window_height = this->height();
+
+        Selection_position_x = (event->x());
+        Selection_position_y = (Window_height - event->y());
+        this->pick();
+    }
+
+    //  If left-clicked: Move the camera.
+    if(event->buttons() & Qt::LeftButton)
+    {
+        lastClickX = event->x();
+        lastClickY = event->y();
+        mouseDrag = true;
+    }
+    update();
+}
+
+/**
+ * [P5]
+ * @brief Capture the coordinates when the mouse is being dragged and also being left clicked.
+ * @param event     The mouse event.
+ */
+void _gl_widget::mouseMoveEvent(QMouseEvent *event)
+{
+    if(mouseDrag)
+    {
+        Observer_angle_x += (event->y() - lastClickY) * 0.05;
+        Observer_angle_y += (event->x() - lastClickX) * 0.05;
+    }
+    update();
+}
+
+/**
+ * [P5]
+ * @brief Capture when the mouse buttons have been released.
+ * @param event     The mouse event.
+ */
+void _gl_widget::mouseReleaseEvent(QMouseEvent *event)
+{
+    if(event->button() == Qt::LeftButton)
+    {
+        mouseDrag = false;
+    }
+    update();
+}
+
+/**
+ * [P5]
+ * @brief Capture the event when the mouse wheel is spun.
+ * @param scrollWheel   The scrollwheel event.
+ */
+void _gl_widget::wheelEvent(QWheelEvent *scrollWheel)
+{
+    // Given the scrollwheel angle, divide it and negated so it behaves accordinly.
+    Observer_distance += (-(float)(scrollWheel->angleDelta().y()))/360;
+    update();
+}
+
+// [P5]
+// Skeleton for pick fuction using glDeleteFramebuffers
+//
+// Domingo Martín Perandrés
+// GPL
+//
+// Window_width and Window_height are the widht and height of the device window
+// Selection_position_x and Selection_position_y are the coordinates of the mouse
+
+void _gl_widget::pick()
+{
+  makeCurrent();
+
+  // Frame Buffer Object to do the off-screen rendering
+  GLuint FBO;
+  glGenFramebuffers(1,&FBO);
+  glBindFramebuffer(GL_FRAMEBUFFER,FBO);
+
+  // Texture for drawing
+  GLuint Color_texture;
+  glGenTextures(1,&Color_texture);
+  glBindTexture(GL_TEXTURE_2D,Color_texture);
+  // RGBA8
+  glTexStorage2D(GL_TEXTURE_2D,1,GL_RGBA8, Window_width,Window_height);
+  // this implies that there is not mip mapping
+  glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+  glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+
+  // Texure for computing the depth
+  GLuint Depth_texture;
+  glGenTextures(1,&Depth_texture);
+  glBindTexture(GL_TEXTURE_2D,Depth_texture);
+  // Float
+  glTexStorage2D(GL_TEXTURE_2D,1,GL_DEPTH_COMPONENT24, Window_width,Window_height);
+
+  // Attatchment of the textures to the FBO
+  glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,Color_texture,0);
+  glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,Depth_texture,0);
+
+  // OpenGL will draw to these buffers (only one in this case)
+  static const GLenum Draw_buffers[]={GL_COLOR_ATTACHMENT0};
+  glDrawBuffers(1,Draw_buffers);
+
+  /*************************/
+  // dibujar escena para seleccion
+  clear_window();
+  change_projection();
+  change_observer();
+  switch (Object)
+  {
+      case OBJECT_TETRAHEDRON:Tetrahedron.drawSelection();break;
+      case OBJECT_CUBE:Cube.drawSelection();break;
+      case OBJECT_CONE:Cone.drawSelection();break;
+      case OBJECT_CYLINDER:Cylinder.drawSelection();break;
+      case OBJECT_SPHERE:Sphere.drawSelection();break;
+      case OBJECT_PLY:Ply.drawSelection();break;
+      case OBJECT_CHESS:Chess.drawSelection();break;
+      default:break;
+  }
+  /*************************/
+
+  // get the pixel
+  int Color;
+  glReadBuffer(GL_FRONT);
+  glPixelStorei(GL_PACK_ALIGNMENT,1);
+  glReadPixels(Selection_position_x,Selection_position_y,1,1,GL_RGBA,GL_UNSIGNED_BYTE,&Color);
+
+  /*************************/
+  // actualizar el identificador de la parte seleccionada en el objeto
+  int selTriangle;
+  uint B = (uint)((Color & 0x00FF0000) >> 16);
+  uint G = (uint)((Color & 0x0000FF00) >> 8);
+  uint R = (uint)(Color & 0x000000FF);
+
+  selTriangle = (R << 16) + (G << 8) + B;
+  cout<<"WIN X:"<<Window_width<<" Y:"<<Window_height<<endl;
+  cout<<"MOUSE X:"<<Selection_position_x<<" Y: "<<Selection_position_y<<endl;
+  cout<<"SEL COLOR: "<<Color<<endl;
+  cout<<"SEL TRIANGLE="<<selTriangle<<endl;
+  if(selTriangle == 16777215)
+      selTriangle = -1;
+
+  cout<<"------"<<endl;
+  switch (Object)
+  {
+      case OBJECT_TETRAHEDRON:Tetrahedron.setTrigSelected(selTriangle);break;
+      case OBJECT_CUBE:Cube.setTrigSelected(selTriangle);break;
+      case OBJECT_CONE:Cone.setTrigSelected(selTriangle);break;
+      case OBJECT_CYLINDER:Cylinder.setTrigSelected(selTriangle);break;
+      case OBJECT_SPHERE:Sphere.setTrigSelected(selTriangle);break;
+      case OBJECT_PLY:Ply.setTrigSelected(selTriangle);break;
+      case OBJECT_CHESS:Chess.setTrigSelected(selTriangle);break;
+      default:break;
+  }
+  /*************************/
+
+  glDeleteTextures(1,&Color_texture);
+  glDeleteTextures(1,&Depth_texture);
+  glDeleteFramebuffers(1,&FBO);
+  // the normal framebuffer takes the control of drawing
+  glBindFramebuffer(GL_DRAW_FRAMEBUFFER,defaultFramebufferObject());
+
+}
+
+// EXTRA: COMMUNICATION WITH QT
+/**
+ * @brief Chaging the state of the drawing style depending on the checkbox.
+ * @param state     State of the boolean
+ */
 void _gl_widget::slotPoint(int state)
 {
     if(state == Qt::Checked)
@@ -800,6 +1022,7 @@ void _gl_widget::slotPoint(int state)
     update();
 }
 
+// Ditto for each draw style.
 void _gl_widget::slotLine(int state)
 {
     if(state == Qt::Checked)
@@ -886,200 +1109,4 @@ void _gl_widget::slotModel(int index)
         case 7:Object=OBJECT_CHESS;break;
     }
     update();
-}
-
-//  Animation Slot
-void _gl_widget::slotAnimationToggle()
-{
-    if(animation)
-    {
-        if(foward1)
-            beta += ANGLE_STEP*modAlpha;
-        else
-            beta -= ANGLE_STEP*modAlpha;
-
-        if(beta < -42 || beta > 42)
-            foward1 = !foward1;
-
-        if(foward2)
-            gamma += ANGLE_STEP*modGamma;
-        else
-            gamma -= ANGLE_STEP*modGamma;
-
-        if(gamma < -10 || gamma > 10)
-            foward2 = !foward2;
-
-        alpha  += ANGLE_STEP*modBeta;
-        alpha = fmod(alpha, 360);
-
-        if(secondLight)
-        {
-            delta = fmod(delta += ANGLE_STEP, 360);
-            light.rotateSecondLight(delta);
-        }
-
-        update();
-    }
-}
-
-//  Get the texture from Qt
-void _gl_widget::getTexture(QImage _texture)
-{
-    this->texture = _texture;
-}
-
-
-// MOUSE EVENTS
-//     Drag Event
-void _gl_widget::mouseMoveEvent(QMouseEvent *event)
-{
-    if(mouseDrag)
-    {
-        Observer_angle_x += (event->y() - lastClickY) * 0.05;
-        Observer_angle_y += (event->x() - lastClickX) * 0.05;
-    }
-    update();
-}
-
-//      Click Event
-void _gl_widget::mousePressEvent(QMouseEvent *event)
-{
-    if(event->buttons() & Qt::RightButton)
-    {
-        Window_width = this->size().width();
-        Window_height =this->size().height();
-
-        Selection_position_x = (event->x());
-        Selection_position_y = (Window_height - event->y());
-        this->pick();
-    }
-
-    if(event->buttons() & Qt::LeftButton)
-    {
-        lastClickX = event->x();
-        lastClickY = event->y();
-        mouseDrag = true;
-    }
-    update();
-}
-
-//      Release Event
-void _gl_widget::mouseReleaseEvent(QMouseEvent *event)
-{
-    if(event->button() == Qt::LeftButton)
-    {
-        mouseDrag = false;
-    }
-    update();
-}
-
-//      Scroll Wheel Zoom
-void _gl_widget::wheelEvent(QWheelEvent *scrollWheel)
-{
-    Observer_distance += (-(float)(scrollWheel->angleDelta().y()))/360;
-    update();
-}
-
-
-// Skeleton for pick fuction using glDeleteFramebuffers
-//
-// Domingo Martín Perandrés
-// GPL
-//
-// Window_width and Window_height are the widht and height of the device window
-// Selection_position_x and Selection_position_y are the coordinates of the mouse
-
-void _gl_widget::pick()
-{
-  makeCurrent();
-
-  // Frame Buffer Object to do the off-screen rendering
-  GLuint FBO;
-  glGenFramebuffers(1,&FBO);
-  glBindFramebuffer(GL_FRAMEBUFFER,FBO);
-
-  // Texture for drawing
-  GLuint Color_texture;
-  glGenTextures(1,&Color_texture);
-  glBindTexture(GL_TEXTURE_2D,Color_texture);
-  // RGBA8
-  glTexStorage2D(GL_TEXTURE_2D,1,GL_RGBA8, Window_width,Window_height);
-  // this implies that there is not mip mapping
-  glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-  glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-
-  // Texure for computing the depth
-  GLuint Depth_texture;
-  glGenTextures(1,&Depth_texture);
-  glBindTexture(GL_TEXTURE_2D,Depth_texture);
-  // Float
-  glTexStorage2D(GL_TEXTURE_2D,1,GL_DEPTH_COMPONENT24, Window_width,Window_height);
-
-  // Attatchment of the textures to the FBO
-  glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,Color_texture,0);
-  glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,Depth_texture,0);
-
-  // OpenGL will draw to these buffers (only one in this case)
-  static const GLenum Draw_buffers[]={GL_COLOR_ATTACHMENT0};
-  glDrawBuffers(1,Draw_buffers);
-
-  /*************************/
-  // dibujar escena para seleccion
-  clear_window();
-  change_projection();
-  change_observer();
-  switch (Object)
-  {
-      case OBJECT_TETRAHEDRON:Tetrahedron.drawSelection();break;
-      case OBJECT_CUBE:Cube.drawSelection();break;
-      case OBJECT_CONE:Cone.drawSelection();break;
-      case OBJECT_CYLINDER:Cylinder.drawSelection();break;
-      case OBJECT_SPHERE:Sphere.drawSelection();break;
-      case OBJECT_PLY:Ply.drawSelection();break;
-      case OBJECT_CHESS:Chess.drawSelection();break;
-      default:break;
-  }
-  /*************************/
-
-  // get the pixel
-  int Color;
-  glReadBuffer(GL_FRONT);
-  glPixelStorei(GL_PACK_ALIGNMENT,1);
-  glReadPixels(Selection_position_x,Selection_position_y,1,1,GL_RGBA,GL_UNSIGNED_BYTE,&Color);
-  /*************************/
-
-  // actualizar el identificador de la parte seleccionada en el objeto
-  int selTriangle;
-  uint B = (uint)((Color & 0x00FF0000) >> 16);
-  uint G = (uint)((Color & 0x0000FF00) >> 8);
-  uint R = (uint)(Color & 0x000000FF);
-
-  selTriangle = (R << 16) + (G << 8) + B;
-  cout<<"WIN X:"<<Window_width<<" Y:"<<Window_height<<endl;
-  cout<<"MOUSE X:"<<Selection_position_x<<" Y: "<<Selection_position_y<<endl;
-  cout<<"SEL COLOR: "<<Color<<endl;
-  cout<<"SEL TRIANGLE="<<selTriangle<<endl;
-  if(selTriangle == 16777215)
-      selTriangle = -1;
-
-  cout<<"------"<<endl;
-  switch (Object)
-  {
-      case OBJECT_TETRAHEDRON:Tetrahedron.setTrigSelected(selTriangle);break;
-      case OBJECT_CUBE:Cube.setTrigSelected(selTriangle);break;
-      case OBJECT_CONE:Cone.setTrigSelected(selTriangle);break;
-      case OBJECT_CYLINDER:Cylinder.setTrigSelected(selTriangle);break;
-      case OBJECT_SPHERE:Sphere.setTrigSelected(selTriangle);break;
-      case OBJECT_PLY:Ply.setTrigSelected(selTriangle);break;
-      case OBJECT_CHESS:Chess.setTrigSelected(selTriangle);break;
-      default:break;
-  }
-
-  /*************************/
-
-  glDeleteTextures(1,&Color_texture);
-  glDeleteTextures(1,&Depth_texture);
-  glDeleteFramebuffers(1,&FBO);
-  // the normal framebuffer takes the control of drawing
-  glBindFramebuffer(GL_DRAW_FRAMEBUFFER,defaultFramebufferObject());
 }

@@ -45,8 +45,6 @@ public:
 
     // Combo box
     void modelSelectorInteraction(int item);
-    // Text
-    void text(std::string foo);
 private:
   _gl_widget *GL_widget;
 
@@ -60,12 +58,12 @@ private:
             *smoothLCheckBox,
             *unlitTCheckBox,
             *flatTextCheckBox,
-            *smoothTextCheckBox;
+            *smoothTextCheckBox,
+            *firstLightBox,
+            *secondLightBox;
 
   // Combo Box
   QComboBox *modelSelector;
-  // Text
-  QLabel *cameraXAngle;
 };
 
 #endif

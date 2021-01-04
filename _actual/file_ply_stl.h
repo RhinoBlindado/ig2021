@@ -16,6 +16,10 @@
 #include <vector>
 #include "vertex.h"
 
+/**
+ * [Practice 2]
+ * @brief The _file_ply class
+ */
 class _file_ply
 {
 public:

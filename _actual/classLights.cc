@@ -3,13 +3,20 @@
 
 using namespace _colors_ne;
 
-
+/**
+ * [Practice 4]
+ * @brief Initializing the Lights
+ */
 void _lights::initialize()
 {
     //      Setting up the color.
     glLightfv(GL_LIGHT1, GL_DIFFUSE, (GLfloat *) &MAGENTA);
 }
 
+/**
+ * @brief Toggle the 1st light.
+ * @param toggle    Boolean, switch ON or OFF the 1st light.
+ */
 void _lights::toggleFirstLight(bool toggle)
 {
     if(toggle)
@@ -22,6 +29,10 @@ void _lights::toggleFirstLight(bool toggle)
 
 }
 
+/**
+ * @brief Toggle ON/OFF the 2nd light.
+ * @param toggle    Boolean, switch On/OFF the 2nd light.
+ */
 void _lights::toggleSecondLight(bool toggle)
 {
     if(toggle)
@@ -34,6 +45,10 @@ void _lights::toggleSecondLight(bool toggle)
 
 }
 
+/**
+ * @brief Rotate the 2nd light around the X axis.
+ * @param nDelta    Angle of rotation of the light in Degrees.
+ */
 void _lights::rotateSecondLight(float nDelta)
 {
     this->actPos2.y = lightPos2.y * cos((nDelta * PI) / 180) - lightPos2.z * sin((nDelta * PI) / 180);

@@ -2,38 +2,52 @@
 #include "file_ply_stl.h"
 #include <algorithm>    // std::reverse
 
-#define PI 3.14159265
-
+/**
+ * @brief Initialize the PLY Object class
+ * @param size      The scale of the object. Default is 1.
+ * @param path      The filepath of the .ply file. Default is "../ply_models/beethoven.ply"
+ */
 void _ply::initialize(float size, string path)
 {
     vector<float> plyObjVerts;
     vector<unsigned int> plyObjTrigs;
 
+    // Read from the file the Vertices and Triangles
     this->readFile(plyObjVerts, plyObjTrigs, path);
+
+    // If there is more than 1 triangle, then it's a full PLY Object.
     if(plyObjTrigs.size() / 3 > 1)
         this->objectPly(size, plyObjVerts, plyObjTrigs);
+    // Otherwise is assumed that it's a PLY Revolution Object.
     else
     {
         this->profilePly(size, plyObjVerts, plyObjTrigs);
     }
 }
 
-
+/**
+ * @brief Read the contents of a .ply file.
+ * @param plyObjVerts   Vector containing the Vertices from the .ply file.
+ * @param plyObjTrigs   Vector containing the Triangles from the .ply file.
+ * @param path          Path to the .ply file.
+ */
 void _ply::readFile(vector<float> &plyObjVerts, vector<unsigned int> &plyObjTrigs, string path)
 {
-    // Declaracion variables para cargar PLY
     _file_ply plyObj;
-
-    // Abrir el archivo contenido en 'file'
     plyObj.open(path);
     plyObj.read(plyObjVerts,plyObjTrigs);
-    // Cerrando el archivo PLY
     plyObj.close();
 }
 
+/**
+ * @brief Initializing a full PLY Object
+ * @param size      Scale of the PLY Object
+ * @param plyVert   Vector containing the Vertices from the .ply file.
+ * @param plyTrig   Vector containing the Triangles from the .ply file.
+ */
 void _ply::objectPly(float size, vector<float> plyVert, vector<unsigned int> plyTrig)
 {
-    // Cargando los vectices
+    // Get the vertices and adapt them to current implementation.
     int plySizeVert = plyVert.size() / 3;
     Vertices.resize(plySizeVert);
 
@@ -42,7 +56,7 @@ void _ply::objectPly(float size, vector<float> plyVert, vector<unsigned int> ply
         Vertices[i] = _vertex3f(plyVert[3*i]*size, plyVert[3*i+1]*size, plyVert[3*i+2]*size);
     }
 
-    // Cargando los triangulos
+    // Get the triangles and adapt them to current implementation.
     int plySizeTrig = plyTrig.size() / 3;
     Triangles.resize(plySizeTrig);
 
@@ -51,11 +65,17 @@ void _ply::objectPly(float size, vector<float> plyVert, vector<unsigned int> ply
         Triangles[i] = _vertex3ui(plyTrig[3*i], plyTrig[3*i+1], plyTrig[3*i+2]);
     }
 
-    // Calculating the normals.
+    // [Practice 4] Calculating the normals.
     this->calculateTrigNormals();
     this->calculateVertNormals();
 }
 
+/**
+ * @brief Initializing a Revolution PLY Object
+ * @param size      Scale of the PLY Object
+ * @param plyVert   Vector containing the Vertices from the .ply file.
+ * @param plyTrig   Vector containing the Triangles from the .ply file.
+ */
 void _ply::profilePly(float size, vector<float> plyVert, vector<unsigned int> plyTrig)
 {
 
@@ -81,6 +101,7 @@ void _ply::profilePly(float size, vector<float> plyVert, vector<unsigned int> pl
     // Loading the vertices
     //  Obtaining the size of the generatrix curve, it's divided by 3 because plyObjVerts contains the XYZ points in a single vector.
     int plySizeVert = plyVert.size() / 3;
+
     //  Capturing the points that touch the axis, the 'caps'.
     int numTapas = 0;
     for(auto i=0; i<plySizeVert; i++)
@@ -150,7 +171,7 @@ void _ply::profilePly(float size, vector<float> plyVert, vector<unsigned int> pl
         break;
     }
 
-    // Calculating the normals.
+    // [Practice 4] Calculating the normals.
     this->calculateTrigNormals();
     this->calculateVertNormals();
 

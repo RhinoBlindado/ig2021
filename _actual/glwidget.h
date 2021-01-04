@@ -12,7 +12,6 @@
 
 //#include <GL/gl.h>
 #include <GL/glew.h>
-#include <GL/glut.h>
 #include <QOpenGLWidget>
 #include <QKeyEvent>
 #include <QMouseEvent>
@@ -22,18 +21,26 @@
 #include "colors.h"
 #include "axis.h"
 #include "tetrahedron.h"
-#include "cube.h"
+
+//  P1
+#include "classCube.h"
+
+//  P2
+#include "classCone.h"
+#include "classCylinder.h"
 #include "classObjectPly.h"
 #include "classObjectRevolution.h"
 #include "classProfilePly.h"
-#include "classCone.h"
-#include "classCylinder.h"
 #include "classSphere.h"
 
+//  P3
 #include "classTelescope.h"
-#include "classChessboard.h"
 
+//  P4
+#include "classChessboard.h"
 #include "classLights.h"
+
+//  P5
 #include "classScene.h"
 
 namespace _gl_widget_ne {
@@ -83,31 +90,38 @@ public:
   void draw_objects();
   void constrainAngles();
 
+  //    P4
   void lights();
   void getTexture(QImage _texture);
-  void getScreenSize();
+
+  //    P5
   void pick();
 
 public slots:
+  //    P2
   void slotPoint(int state);
   void slotLine(int state);
   void slotFill(int state);
   void slotChess(int state);
+  void slotModel(int index);
+
+  //    P3
+  void slotAnimationToggle();
+
+  //    P4
   void slotFlat(int state);
   void slotSmooth(int state);
   void slotUnlitText(int state);
   void slotFlatText(int state);
   void slotSmoothText(int state);
 
-  void slotModel(int index);
-
-  void slotAnimationToggle();
-
 protected:
   void resizeGL(int Width1, int Height1) Q_DECL_OVERRIDE;
   void paintGL() Q_DECL_OVERRIDE;
   void initializeGL() Q_DECL_OVERRIDE;
   void keyPressEvent(QKeyEvent *Keyevent) Q_DECL_OVERRIDE;
+
+  //    P5
   void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
   void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
   void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
@@ -117,19 +131,37 @@ private:
   _window *Window;
   _axis Axis;
 
+
   // MODELS
   _tetrahedron Tetrahedron;
+  //    P1
   _cube Cube;
+
+  //    P2
   _cone Cone;
   _cylinder Cylinder;
   _sphere Sphere;
   _ply Ply;
+
+  //    P3
   _telescope Hier;
+
+  //    P4
   _chessBoard Chess;
   _scene Scene;
+
   _gl_widget_ne::_object Object;
 
-  // ANIMATION
+
+  // RENDER MODES
+  bool Draw_point;
+  //    P1
+  bool Draw_line;
+  bool Draw_fill;
+  bool Draw_chess;
+
+
+  // [P3] ANIMATION
   //    Degrees of freedom and modifiers
   float alpha, beta, gamma, delta, modAlpha, modBeta, modGamma;
   //    Toggle ON/OFF the animation
@@ -137,7 +169,8 @@ private:
   bool foward1;
   bool foward2;
 
-  // LIGHTING
+
+  // [P4] LIGHTING
   _lights light;
   //    Toggle Flat Ligting
   bool flatLit;
@@ -149,11 +182,13 @@ private:
   //    Toggle ON/OFF Second Light
   bool secondLight;
 
-  // MATERIALS
+
+  // [P4] MATERIALS
   material __material[4];
   int actMaterial;
 
-  // TEXTURES
+
+  // [P4] TEXTURES
   //    Load the texture
   QImage texture;
 
@@ -164,14 +199,8 @@ private:
   //    Toggle Smooth Lit Texture Mode
   bool litSmoothTextured;
 
-  // RENDER MODES
-  bool Draw_point;
-  bool Draw_line;
-  bool Draw_fill;
-  bool Draw_chess;
 
-
-  // CAMERA
+  // [P5] CAMERA
   bool perspective;
   int lastClickX;
   int lastClickY;
@@ -181,7 +210,7 @@ private:
   float Observer_angle_y;
   float Observer_distance;
 
-  // PICK
+  // [P5] PICK
   int Window_width;
   int Window_height;
   int Selection_position_x;

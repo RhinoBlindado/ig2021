@@ -1,5 +1,9 @@
-#include "cube.h"
+#include "classCube.h"
 
+/**
+ * @brief Initialization of the Cube Class.
+ * @param size      Size of the cube. Default is 1.
+ */
 _cube::_cube(float size)
 {
     // Define the points.
@@ -42,7 +46,7 @@ _cube::_cube(float size)
     Triangles[11]=_vertex3ui(0,5,4);
 
 
-    // Calculate the normals
+    // [P4] Calculate the normals
     this->calculateTrigNormals();
     this->calculateVertNormals();
 }

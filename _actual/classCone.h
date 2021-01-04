@@ -1,6 +1,11 @@
-#ifndef CONE_H
+ #ifndef CONE_H
 #define CONE_H
 #include "classObjectRevolution.h"
+
+/**
+ * [P2]
+ * @brief   The Cone class
+ */
 
 class _cone:public _objRev
 {

@@ -5,9 +5,11 @@
 #include <classTelescope_part_focusTube.h>
 #include <classTelescope_part_eyepiece.h>
 
-class _teleFocusTube;
-class _teleEyePiece;
 
+/**
+ * [P3]
+ * @brief Main tube of the telescope. Connects the focusing tube and the eyepiece.
+ */
 class _teleTube: public _object3D
 {
     private:
@@ -19,11 +21,13 @@ class _teleTube: public _object3D
         float beta;
 
     public:
-        _teleTube(){this->tube.initialize(1,0.5,12,2,10); alpha = 0; beta = 0;};
+        _teleTube();
         void draw(int style);
+        void setLighting(int style);
         void setAlpha(float nAlpha);
         void setBeta(float nBeta);
         void setGamma(float nGamma);
+        void setMaterial();
 };
 
 #endif // TELE_TUBE_H

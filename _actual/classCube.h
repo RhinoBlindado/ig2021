@@ -3,7 +3,10 @@
 
 #include "object3d.h"
 
-
+/**
+ * [P1]
+ * @brief The Cube Class.
+ */
 class _cube:public _object3D
 {
 public:

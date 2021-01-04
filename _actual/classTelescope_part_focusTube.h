@@ -5,18 +5,24 @@
 #include "classCylinder.h"
 #include "classTelescope_part_lens.h"
 
+/**
+ * [P3]
+ * @brief The focusing tube of the Telescope.
+ */
 class _teleFocusTube: public _object3D
 {
    private:
         _teleLens lens;
-        _cylinder  focusTube;
+        _cylinder focusTube;
 
         float gamma;
 
    public:
-        _teleFocusTube(){this->focusTube.initialize(1,0.5,12,2,10,false,false); gamma = 0;};
+        _teleFocusTube();
         void draw(int style);
         void setGamma(float nGamma);
+        void setLighting(int type);
+        void setMaterial();
 };
 
 #endif // TELE_FOCUSTUBE_H

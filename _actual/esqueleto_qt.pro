@@ -1,6 +1,7 @@
 HEADERS += \
   classChessboard.h \
   classCone.h \
+  classCube.h \
   classCylinder.h \
   classLights.h \
   classObjectPly.h \
@@ -16,7 +17,6 @@ HEADERS += \
   classTelescope_part_tube.h \
   colors.h \
   basic_object3d.h \
-  cube.h \
   file_ply_stl.h \
   object3d.h \
   axis.h \
@@ -28,6 +28,7 @@ SOURCES += \
   basic_object3d.cc \
   classChessboard.cpp \
   classCone.cc \
+  classCube.cc \
   classCylinder.cc \
   classLights.cc \
   classObjectPly.cc \
@@ -41,7 +42,6 @@ SOURCES += \
   classTelescope_part_mount.cc \
   classTelescope_part_tripod.cc \
   classTelescope_part_tube.cc \
-  cube.cc \
   file_ply_stl.cc \
   object3d.cc \
   axis.cc \

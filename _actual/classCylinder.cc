@@ -1,5 +1,16 @@
 #include "classCylinder.h"
 
+/**
+ * @brief Initialize the Cylinder Object
+ * @param height    Total height desired for the Cylinder. Default is 1.
+ * @param radius    Desired radius for the Cylinder. Default is 0,5.
+ * @param hCuts     Total number of vertical cuts for the Cylinder. Default is 20.
+ * @param vCuts     Total number of horizontal cuts for the Cylinder. Default is 10.
+ * @param rCuts     Total number of slices of the Cylinder, that is,
+ *                  how many times the radius is cut. Default is 30.
+ * @param bottom    If the Cylinder should have a bottom "cap". Default is TRUE.
+ * @param top       If the Cylinder should have a top "cap". Default is TRUE.
+ */
 void _cylinder::initialize(float height, float radius, int hCuts, int vCuts, int rCuts, bool bottom, bool top)
 {
     // Check for correct inputs
@@ -23,7 +34,10 @@ void _cylinder::initialize(float height, float radius, int hCuts, int vCuts, int
 
     // Bottom of profile, left-most point.
     vector<_vertex3f> auxVer;
-    auxVer.push_back(_vertex3f(0, -height/2, 0));
+
+    // Originally, the top and bottom of the Sphere where in the auxVer so that it could reuse code of the _objRev class
+    //auxVer.push_back(_vertex3f(0, -height/2, 0));
+    Vertices.push_back(_vertex3f(0,-height/2, 0));
 
     // Bottom length of cylinder.
     for(int i=1; i < hCuts; i++)
@@ -50,22 +64,38 @@ void _cylinder::initialize(float height, float radius, int hCuts, int vCuts, int
     }
 
     // Top of profile, left-most point.
-    auxVer.push_back(_vertex3f(0, height/2, 0));
+    //auxVer.push_back(_vertex3f(0, height/2, 0));
+    Vertices.push_back(_vertex3f(0, height/2, 0));
 
     // Circular sweeping.
+    //      [P2] Original function of the superclass.
+    //_objRev::rotation(rCuts);
+    //      [P4] New function that repeats points.
     this->rotation(rCuts);
+    rCuts++;
 
     // Generating triangles.
-    this->genTriangles(rCuts + 1, bottom, top, auxVer);
+    //      [P2] Original function of the superclass.
+    //_objRev::genTriangles(rCuts, bottom, top, auxVer);
+    //      [P4] New function, removed the code to add the last set of triangles. It needs rCuts to be one more in order
+    //      to handle the repeated vertices.
+    this->genTriangles(rCuts);
 
-    // Calculating the normals.
+    // [P4] Calculating the normals.
     this->calculateTrigNormals();
     this->calculateVertNormals();
 
-   this->mapTexture(rCuts + 1);
+    // [P4] Mapping the texture.
+    this->mapTexture(rCuts, hCuts, vCuts);
 
 }
 
+/**
+ * [Practice 4]
+ * @brief Redefinition of the Rotation class from _objRev so that it can map the texture.
+ * @param rCuts    Total number of slices of the Cylinder, that is,
+ *                 how many times the radius is cut
+ */
 void _cylinder::rotation(int rCuts)
 {
     float alpha = 2*PI / rCuts;
@@ -83,7 +113,7 @@ void _cylinder::rotation(int rCuts)
     }
 }
 
-void _cylinder::genTriangles(int rCuts, bool bottomCap, bool topCap, vector<_vertex3f> caps)
+void _cylinder::genTriangles(int rCuts)
 {
     int vertSize = Vertices.size();
     int plySizeVert = vertSize / rCuts;
@@ -96,60 +126,25 @@ void _cylinder::genTriangles(int rCuts, bool bottomCap, bool topCap, vector<_ver
             Triangles.push_back(_vertex3ui(i + j * plySizeVert, ((i+1) + (j+1) * plySizeVert), (i+1) + j * plySizeVert));
         }
     }
-
-    if(bottomCap)
-    {
-        Vertices.push_back(caps[0]);
-        for(int i = 0; i < rCuts; i++)
-        {
-            Triangles.push_back(_vertex3ui(i * plySizeVert, vertSize, ((i+1) * plySizeVert) % (vertSize)));
-        }
-    }
-
-    if(topCap)
-    {
-        Vertices.push_back(caps[1]);
-        for(int i = 0; i < rCuts; i++)
-        {
-            Triangles.push_back(_vertex3ui(Vertices.size()-1, (plySizeVert-1)+ i * plySizeVert, ((plySizeVert-1) + (i+1) * plySizeVert) % (vertSize)));
-        }
-    }
 }
 
-void _cylinder::mapTexture(int rCuts)
+void _cylinder::mapTexture(int rCuts, int hCuts, int vCuts)
 {
 
-    int vertSize = (Vertices.size() - 2);
+    int vertSize = Vertices.size();
     int plySizeVert = vertSize / rCuts;
     textCoords.resize(vertSize);
 
-//    // Top vertex
-//    textCoords[Vertices.size()-4] = _vertex2f(0, 0);
-//    textCoords[Vertices.size()-3] = _vertex2f(1, 0);
-
-
-//    // Bottom vertex
-//    textCoords[Vertices.size()-2] = _vertex2f(0, 1);
-//    textCoords[Vertices.size()-1] = _vertex2f(1, 1);
-
-
-//    for(int i = 0; i < vertSize; i++)
-//    {
-//        cout<<"i="<<i<<" COORDS:"<<Vertices[i].x<<" "<<Vertices[i].y<<" "<<Vertices[i].z<<endl;
-//    }
-    // Main body
-
-  //  cout<<"RCUTS:"<<rCuts<<" PLY:"<<plySizeVert<<" VECT:"<<vertSize<<endl;
+    /*
+     * To map the texture between [0,1] the texture coordinates of each point are calculated based on the number of radius cuts,
+     * that can be thought of as the Longitude line that goes from North to South and the number of vertices in each line of Longitude.
+     */
     for(int j = 0; j < rCuts; j++)
     {
         for(int i = 0; i < plySizeVert; i++)
         {
             textCoords[i + ((plySizeVert) * j)] = _vertex2f( (1.0 / (rCuts - 1.0)) * (j), (1.0 / (plySizeVert - 1.0)) * (i) );
-
-        //    cout<<"["<<i<<" "<<j<<"] VECT: "<<i + ((plySizeVert) * j)<<
-  //                " COORD: "<<(1.0 / (rCuts - 1.0)) * (j)<<" "<<(1.0 / (plySizeVert - 1.0)) * (i)<<endl;
         }
-  //      cout<<"---"<<endl;
     }
 
 }

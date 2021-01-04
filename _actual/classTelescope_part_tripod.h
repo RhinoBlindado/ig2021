@@ -2,11 +2,12 @@
 #define TELE_TRIPOD_H
 
 #include "object3d.h"
-#include "cube.h"
-#include "classTelescope_part_mount.h"
+#include "classCube.h"
 
-class _teleMount;
-
+/**
+ * [P3]
+ * @brief The tripod of the telescope.
+ */
 class _teleTripod: public _object3D
 {
     private:
@@ -15,6 +16,8 @@ class _teleTripod: public _object3D
     public:
         _teleTripod(){};
         void draw(int style);
+        void setLighting(int style);
+        void setMaterial();
 };
 #endif // TELE_TRIPOD_H
 

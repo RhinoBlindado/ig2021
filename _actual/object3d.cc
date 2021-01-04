@@ -6,18 +6,82 @@
  * GPL 3
  */
 
-
 #include "object3d.h"
 #include <cmath>
 using namespace _colors_ne;
 
 /*****************************************************************************//**
- *
- *
+ * [P1]
+ * @brief Draw in wireframe mode.
  *
  *****************************************************************************/
+void _object3D::draw_line()
+{
+    glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+    glBegin(GL_TRIANGLES);
+        for(unsigned int i=0; i<Triangles.size();i++)
+        {
+            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._0]);
+            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._1]);
+            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._2]);
+        }
+    glEnd();
+}
 
-// [P3]
+/*****************************************************************************//**
+ * [P1]
+ * @brief Draw in solid mode.
+ *
+ *****************************************************************************/
+void _object3D::draw_fill()
+{
+    glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+    glBegin(GL_TRIANGLES);
+
+        for(unsigned int i=0; i<Triangles.size();i++)
+        {
+            if(this->trigSelectedNumber == (int)i)
+                    glColor3fv((GLfloat *) &YEllOW);
+
+            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._0]);
+            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._1]);
+            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._2]);
+
+            if(this->trigSelectedNumber == (int)i)
+                    glColor3fv((GLfloat *) &BLUE);
+        }
+    glEnd();
+}
+
+/*****************************************************************************//**
+ * [P1]
+ * @brief Draw in "chess" mode. Alternating colors.
+ * @param color1 First color, default is light pink.
+ * @param color2 Second color, default is light blue.
+ *****************************************************************************/
+void _object3D::draw_chess(vector<float> color1, vector<float> color2)
+{
+    glPolygonMode(GL_FRONT,GL_FILL);
+    glBegin(GL_TRIANGLES);
+        for(unsigned int i=0; i<Triangles.size();i++)
+        {
+            if(i%2 == 0)
+                 glColor3f(color1[0],color1[1],color1[2]);
+            else
+                 glColor3f(color2[0],color2[1],color2[2]);
+
+            glVertex3f(Vertices[Triangles[i]._0].x, Vertices[Triangles[i]._0].y, Vertices[Triangles[i]._0].z);
+            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._1]);
+            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._2]);
+        }
+    glEnd();
+}
+
+/**
+ * [P3]
+ * @brief Wrapper function made to make it easier for the hierarchical model to use all modes of drawing.
+ * @param style     The style of draw to make.
+ */
 void _object3D::draw(int style)
 {
     switch(style)
@@ -56,72 +120,10 @@ void _object3D::draw(int style)
     }
 }
 
-
-void _object3D::draw_line()
-{
-    glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
-    glBegin(GL_TRIANGLES);
-        for(unsigned int i=0; i<Triangles.size();i++)
-        {
-            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._0]);
-            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._1]);
-            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._2]);
-        }
-    glEnd();
-}
-
-
-/*****************************************************************************//**
- *
- *
- *
- *****************************************************************************/
-
-void _object3D::draw_fill()
-{
-    glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
-    glBegin(GL_TRIANGLES);
-
-        for(unsigned int i=0; i<Triangles.size();i++)
-        {
-            if(this->trigSelectedNumber == (int)i)
-                    glColor3fv((GLfloat *) &YEllOW);
-
-            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._0]);
-            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._1]);
-            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._2]);
-
-            if(this->trigSelectedNumber == (int)i)
-                    glColor3fv((GLfloat *) &BLUE);
-        }
-    glEnd();
-}
-
-
-/*****************************************************************************//**
- *
- *
- *
- *****************************************************************************/
-
-void _object3D::draw_chess(vector<float> color1, vector<float> color2)
-{
-    glPolygonMode(GL_FRONT,GL_FILL);
-    glBegin(GL_TRIANGLES);
-        for(unsigned int i=0; i<Triangles.size();i++)
-        {
-            if(i%2 == 0)
-                 glColor3f(color1[0],color1[1],color1[2]);
-            else
-                 glColor3f(color2[0],color2[1],color2[2]);
-
-            glVertex3f(Vertices[Triangles[i]._0].x, Vertices[Triangles[i]._0].y, Vertices[Triangles[i]._0].z);
-            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._1]);
-            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._2]);
-        }
-    glEnd();
-}
-
+/**
+ * [P4]
+ * @brief Draw with ilumination. Flat and Goraund supported.
+ */
 void _object3D::drawIlum()
 {
     glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
@@ -157,6 +159,10 @@ void _object3D::drawIlum()
     glDisable(GL_LIGHTING);
 }
 
+/**
+ * [P4]
+ * @brief Draw with textures. Can be unlit, flat or Goraund lit.
+ */
 void _object3D::drawTex()
 {
 
@@ -209,35 +215,10 @@ void _object3D::drawTex()
         glDisable(GL_LIGHTING);
 }
 
-void _object3D::drawSelection()
-{
-    float R, G, B;
-
-    glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
-    glBegin(GL_TRIANGLES);
-//    cout<<"DIBUJADO SELECCION:"<<endl;
-        for(unsigned int i=0; i<Triangles.size();i++)
-        {
-            R = (i & 0x00FF0000) >> 16;
-            G = (i & 0x0000FF00) >> 8;
-            B = (i & 0x000000FF);
-
-//            cout<<"COLOR: "<<R/255.0<<G/255.0<<B/255.0<<endl;
-            glColor3f(R/255.0, G/255.0, B/255.0);
-
-            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._0]);
-            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._1]);
-            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._2]);
-        }
-    glEnd();
-}
-
-void _object3D::setTrigSelected(int trig)
-{
-    this->trigSelectedNumber = trig;
-}
-
-// Practice 4
+/**
+ * [P4]
+ * @brief Calculate the Triangle Normals.
+ */
 void _object3D::calculateTrigNormals()
 {
     int trigSize = Triangles.size();
@@ -248,6 +229,7 @@ void _object3D::calculateTrigNormals()
 
     for(auto i=0; i<trigSize; i++)
     {
+        // Using the 3 points make 2 vectors and then obtain the vector product to get a perpendicular vector of the other 2.
         // Vector A = p1 - p0
         vectorA.x = Vertices[Triangles[i]._1].x - Vertices[Triangles[i]._0].x;
         vectorA.y = Vertices[Triangles[i]._1].y - Vertices[Triangles[i]._0].y;
@@ -275,37 +257,58 @@ void _object3D::calculateTrigNormals()
             trigNormals[i].z /= denominator;
         }
     }
-
 }
 
+/**
+ * [P4]
+ * @brief Calculate the Vertex Normals.
+ */
 void _object3D::calculateVertNormals()
 {
     int vectSize = Vertices.size();
     int trigSize = Triangles.size();
-    vector<int> pointCount(vectSize,0);
-    _vertex3f summation;
+
+    // How many times a Vertex appears in a Triangle.
+    float trigCount;
+
+    // What Triangles contain a certain Vertex.
     vector<vector<int>> pointFace(vectSize);
 
+
+    /*
+     * In order to obtain a vertex normal, first we need to know what triangles use that vertex.
+     *
+     * "pointFace" saves the Triangles that contain the indexed vertex.
+     *
+     * pointFace[Triangles[i]._0].push_back(i) is saving the ith Triangle in the index of the Vertex that appears on the 0 Component.
+     */
     for(auto i = 0; i < trigSize; i++)
     {
-        pointCount[Triangles[i].x]++;
-        pointFace[Triangles[i].x].push_back(i);
+        pointFace[Triangles[i]._0].push_back(i);
 
-        pointCount[Triangles[i].y]++;
-        pointFace[Triangles[i].y].push_back(i);
+        pointFace[Triangles[i]._1].push_back(i);
 
-        pointCount[Triangles[i].z]++;
-        pointFace[Triangles[i].z].push_back(i);
-
+        pointFace[Triangles[i]._2].push_back(i);
     }
 
+    /*
+     * In order to obtain the Vertex Normal, we need the average of all the Triangles that contain that Vertex, so, the first loop
+     * runs through all the Vertices and for each one, in the while loop it sums the normals of the Triangles that contain the ith Vertex
+     * and then averages the each component with the total number of Triangles.
+     */
     vectNormals.resize(vectSize);
+    _vertex3f summation;
+    double denominator;
+
     for(auto i = 0; i < vectSize; i++)
     {
         summation.x = 0;
         summation.y = 0;
         summation.z = 0;
 
+        trigCount = pointFace[i].size();
+
+        // Adding the values of the normals of the Triangles.
         while(!pointFace[i].empty())
         {
             summation.x += trigNormals[pointFace[i].back()].x;
@@ -314,15 +317,74 @@ void _object3D::calculateVertNormals()
 
             pointFace[i].pop_back();
         }
-        summation.x /= pointCount[i];
-        summation.y /= pointCount[i];
-        summation.z /= pointCount[i];
+
+        // Average of the normals.
+        if(trigCount != 0)
+        {
+            summation.x /= trigCount;
+            summation.y /= trigCount;
+            summation.z /= trigCount;
+        }
 
         vectNormals[i] = summation;
+
+        // Normalization.
+        //  Making the denominator, that is, square root of the vector product.
+        denominator =  sqrt((pow(vectNormals[i].x, 2)) + (pow(vectNormals[i].y, 2)) + (pow(vectNormals[i].z, 2)));
+
+        //  Properly normalizing, do not divide if denominator = 0.
+        if(denominator != 0)
+        {
+            vectNormals[i].x /= denominator;
+            vectNormals[i].y /= denominator;
+            vectNormals[i].z /= denominator;
+        }
     }
 }
 
+/**
+ * [P5]
+ * @brief Draw the objects in a solid mode but each triangle has a different color. Used for selecting a triangle.
+ */
+void _object3D::drawSelection()
+{
+    float R, G, B;
 
+    glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+    glBegin(GL_TRIANGLES);
+
+        for(unsigned int i=0; i<Triangles.size();i++)
+        {
+            // For a given triangle, convert its index into a color using bitmasking.
+            R = (i & 0x00FF0000) >> 16;
+            G = (i & 0x0000FF00) >> 8;
+            B = (i & 0x000000FF);
+
+            //  Use the mask to make a color.
+            glColor3f(R/255.0, G/255.0, B/255.0);
+
+            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._0]);
+            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._1]);
+            glVertex3fv((GLfloat *) &Vertices[Triangles[i]._2]);
+        }
+    glEnd();
+}
+
+/**
+ * [P5]
+ * @brief Select a triangle.
+ * @param trig      The index/ID of the triangle.
+ */
+void _object3D::setTrigSelected(int trig)
+{
+    this->trigSelectedNumber = trig;
+}
+
+
+/**
+ * @brief Set the lighting of the object.
+ * @param type      0 - Unlit | 1 - Flat Lit | 2 - Goraund Lit
+ */
 void _object3D::setLighting(int type)
 {
     switch (type)
