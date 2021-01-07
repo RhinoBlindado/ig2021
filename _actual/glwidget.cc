@@ -92,6 +92,14 @@ void _gl_widget::keyPressEvent(QKeyEvent *Keyevent)
             Window->modelSelectorInteraction(7);
       break;
 
+
+      //    P5
+      //    PLY Scene
+      case Qt::Key_9:
+            Object=OBJECT_SCENE;
+
+      break;
+
       // [P3] ANIMATION
       //    First degree of freedom keys and rate of modification
       case Qt::Key_Q:alpha+=ANGLE_STEP*modAlpha;break;
@@ -281,7 +289,6 @@ void _gl_widget::draw_objects()
     case OBJECT_SPHERE:Sphere.draw_point();break;
     case OBJECT_PLY:Ply.draw_point();break;
     case OBJECT_HIER:Hier.draw(0);break;
-    case OBJECT_CHESS:Chess.draw(0);break;
     default:break;
     }
   }
@@ -313,6 +320,7 @@ void _gl_widget::draw_objects()
     case OBJECT_PLY:Ply.draw_fill();break;
     case OBJECT_HIER:Hier.draw(2);break;
     case OBJECT_CHESS:Chess.draw(2);break;
+    case OBJECT_SCENE:Scene.draw(2);break;
     default:break;
     }
   }
@@ -513,15 +521,15 @@ void _gl_widget::draw_objects()
     switch (Object)
     {
         case OBJECT_CYLINDER:
-            Cylinder.setTexture(texture);
-            Cylinder.setLighting(0);
-            Cylinder.drawTex();
+            CylinderTex.setTexture(texture);
+            CylinderTex.setLighting(0);
+            CylinderTex.drawTex();
         break;
 
         case OBJECT_SPHERE:
-            Sphere.setTexture(texture);
-            Sphere.setLighting(0);
-            Sphere.drawTex();
+            SphereTex.setTexture(texture);
+            SphereTex.setLighting(0);
+            SphereTex.drawTex();
         break;
 
         case OBJECT_CHESS:
@@ -539,25 +547,25 @@ void _gl_widget::draw_objects()
     switch (Object)
     {
         case OBJECT_CYLINDER:
-            Cylinder.setMaterialAmbient(__material[actMaterial].ambient);
-            Cylinder.setMaterialSpecular(__material[actMaterial].specular);
-            Cylinder.setMaterialDiffuse(__material[actMaterial].diffuse);
-            Cylinder.setMaterialShininess(__material[actMaterial].shine);
+            CylinderTex.setMaterialAmbient(__material[actMaterial].ambient);
+            CylinderTex.setMaterialSpecular(__material[actMaterial].specular);
+            CylinderTex.setMaterialDiffuse(__material[actMaterial].diffuse);
+            CylinderTex.setMaterialShininess(__material[actMaterial].shine);
 
-            Cylinder.setTexture(texture);
-            Cylinder.setLighting(1);
-            Cylinder.drawTex();
+            CylinderTex.setTexture(texture);
+            CylinderTex.setLighting(1);
+            CylinderTex.drawTex();
         break;
 
         case OBJECT_SPHERE:
-            Sphere.setMaterialAmbient(__material[actMaterial].ambient);
-            Sphere.setMaterialSpecular(__material[actMaterial].specular);
-            Sphere.setMaterialDiffuse(__material[actMaterial].diffuse);
-            Sphere.setMaterialShininess(__material[actMaterial].shine);
+            SphereTex.setMaterialAmbient(__material[actMaterial].ambient);
+            SphereTex.setMaterialSpecular(__material[actMaterial].specular);
+            SphereTex.setMaterialDiffuse(__material[actMaterial].diffuse);
+            SphereTex.setMaterialShininess(__material[actMaterial].shine);
 
-            Sphere.setTexture(texture);
-            Sphere.setLighting(1);
-            Sphere.drawTex();
+            SphereTex.setTexture(texture);
+            SphereTex.setLighting(1);
+            SphereTex.drawTex();
         break;
 
         case OBJECT_CHESS:
@@ -580,25 +588,25 @@ void _gl_widget::draw_objects()
       switch (Object)
       {
         case OBJECT_CYLINDER:
-            Cylinder.setMaterialAmbient(__material[actMaterial].ambient);
-            Cylinder.setMaterialSpecular(__material[actMaterial].specular);
-            Cylinder.setMaterialDiffuse(__material[actMaterial].diffuse);
-            Cylinder.setMaterialShininess(__material[actMaterial].shine);
+            CylinderTex.setMaterialAmbient(__material[actMaterial].ambient);
+            CylinderTex.setMaterialSpecular(__material[actMaterial].specular);
+            CylinderTex.setMaterialDiffuse(__material[actMaterial].diffuse);
+            CylinderTex.setMaterialShininess(__material[actMaterial].shine);
 
-            Cylinder.setTexture(texture);
-            Cylinder.setLighting(2);
-            Cylinder.drawTex();
+            CylinderTex.setTexture(texture);
+            CylinderTex.setLighting(2);
+            CylinderTex.drawTex();
         break;
 
         case OBJECT_SPHERE:
-            Sphere.setMaterialAmbient(__material[actMaterial].ambient);
-            Sphere.setMaterialSpecular(__material[actMaterial].specular);
-            Sphere.setMaterialDiffuse(__material[actMaterial].diffuse);
-            Sphere.setMaterialShininess(__material[actMaterial].shine);
+            SphereTex.setMaterialAmbient(__material[actMaterial].ambient);
+            SphereTex.setMaterialSpecular(__material[actMaterial].specular);
+            SphereTex.setMaterialDiffuse(__material[actMaterial].diffuse);
+            SphereTex.setMaterialShininess(__material[actMaterial].shine);
 
-            Sphere.setTexture(texture);
-            Sphere.setLighting(2);
-            Sphere.drawTex();
+            SphereTex.setTexture(texture);
+            SphereTex.setLighting(2);
+            SphereTex.drawTex();
         break;
 
         case OBJECT_CHESS:
@@ -646,6 +654,7 @@ void _gl_widget::paintGL()
 void _gl_widget::resizeGL(int Width1, int Height1)
 {
   glViewport(0,0,Width1,Height1);
+
 }
 
 
@@ -695,13 +704,18 @@ void _gl_widget::initializeGL()
   // OBJECTS
   //    Initalizing the objects.
   //    P2
-  Cylinder.initialize(1, 0.5, 4, 4, 20, true, true);
+  Cylinder.initialize(1, 0.5, 20, 10, 30, true, true);
   Sphere.initialize(0.5, 40, 40);
-  Cone.initialize();
-  Ply.initialize(1,"../ply_models/rev_pawn.ply");
+  Cone.initialize(1, 0.5, 20, 10, 30);
+  Ply.initialize(1,"../ply_models/utah.ply");
 
   //    P4
   Chess.initialize(1.777,1);
+  SphereTex.initialize(0.5, 40, 40);
+  CylinderTex.initialize(1, 0.5, 20, 10, 30);
+
+  //    P5
+  Scene.initialize(0.07, 4);
 
   // [P3] ANIMATION
   //    Setting initial angle variables and Modifiers.
@@ -726,24 +740,28 @@ void _gl_widget::initializeGL()
   secondLight = false;
 
   // [P4] MATERIALS
-  __material[MAT_GOLD].ambient  = _vertex3f(0.24725f, 0.2245f, 0.0645f);
-  __material[MAT_GOLD].diffuse  = _vertex3f(0.34615f, 0.3143f, 0.0903f);
-  __material[MAT_GOLD].specular = _vertex3f(0.797357f, 0.723991f, 0.208006f);
+  //    Gold
+  __material[MAT_GOLD].ambient  = _vertex4f(0.24725f, 0.2245f, 0.0645f, 1.0f);
+  __material[MAT_GOLD].diffuse  = _vertex4f(0.34615f, 0.3143f, 0.0903f, 1.0f);
+  __material[MAT_GOLD].specular = _vertex4f(0.797357f, 0.723991f, 0.208006f, 1.0f);
   __material[MAT_GOLD].shine    = 83.2f;
 
-  __material[MAT_PLASTIC].ambient  = _vertex3f(0.0f, 0.1f, 0.06f);
-  __material[MAT_PLASTIC].diffuse  = _vertex3f(0.0f, 0.50980392f, 0.50980392f);
-  __material[MAT_PLASTIC].specular = _vertex3f(0.50196078f, 0.50196078f, 0.50196078f);
+  //    Cyan Plastic
+  __material[MAT_PLASTIC].ambient  = _vertex4f(0.0f, 0.1f, 0.06f, 1.0f);
+  __material[MAT_PLASTIC].diffuse  = _vertex4f(0.0f, 0.50980392f, 0.50980392f, 1.0f);
+  __material[MAT_PLASTIC].specular = _vertex4f(0.50196078f, 0.50196078f, 0.50196078f, 1.0f);
   __material[MAT_PLASTIC].shine    = 32.0f;
 
-  __material[MAT_RUBBER].ambient  = _vertex3f(0.05f, 0.0f, 0.0f);
-  __material[MAT_RUBBER].diffuse = _vertex3f(0.5f, 0.4f, 0.4f);
-  __material[MAT_RUBBER].specular  = _vertex3f(0.7f, 0.04f, 0.04f);
+  //    Red Rubber
+  __material[MAT_RUBBER].ambient  = _vertex4f(0.05f, 0.0f, 0.0f, 1.0f);
+  __material[MAT_RUBBER].diffuse = _vertex4f(0.5f, 0.4f, 0.4f, 1.0f);
+  __material[MAT_RUBBER].specular  = _vertex4f(0.7f, 0.04f, 0.04f, 1.0f);
   __material[MAT_RUBBER].shine    = 10.f;
 
-  __material[MAT_NULL].ambient = _vertex3f(0.2, 0.2, 0.2);
-  __material[MAT_NULL].diffuse = _vertex3f(0.8, 0.8, 0.8);
-  __material[MAT_NULL].specular = _vertex3f(0.0, 0.0, 0.0);
+  //    Default Material
+  __material[MAT_NULL].ambient = _vertex4f(0.2, 0.2, 0.2, 1.0);
+  __material[MAT_NULL].diffuse = _vertex4f(0.8, 0.8, 0.8, 1.0);
+  __material[MAT_NULL].specular = _vertex4f(0.0, 0.0, 0.0, 1.0);
   __material[MAT_NULL].shine    = 0.0f;
 
   actMaterial = 3;
@@ -767,23 +785,50 @@ void _gl_widget::initializeGL()
 
 /**
  * [P3]
- * @brief Constrain the angles of the hierarchical model.
+ * @brief Constrain the angles of the hierarchical model. Also update the UI.
  */
 void _gl_widget::constrainAngles()
 {
-  if(beta > 42)
+    Window->alphaSetText(to_string(modAlpha));
+    Window->alphaSetSlider((int)modAlpha*100);
+
+    Window->betaSetText(to_string(modBeta));
+    Window->betaSetSlider((int)modBeta*100);
+
+    Window->gammaSetText(to_string(modGamma));
+    Window->gammaSetSlider((int)modGamma*100);
+
+    alpha = fmod(alpha,360);
+
+    if(beta > 42)
       beta = 42;
 
-  if(beta < -42)
+    if(beta < -42)
       beta = -42;
 
-  if(gamma > 10)
+    if(gamma > 10)
       gamma = 10;
 
-  if(gamma < -10)
+    if(gamma < -10)
       gamma = -10;
 
-   alpha = fmod(alpha,360);
+    if(modAlpha > 20)
+       modAlpha = 20;
+
+    if(modAlpha < 0)
+       modAlpha = 0;
+
+    if(modBeta > 20)
+       modBeta = 20;
+
+    if(modBeta < 0)
+       modBeta = 0;
+
+    if(modGamma > 20)
+       modGamma = 20;
+
+    if(modGamma < 0)
+       modGamma = 0;
 }
 
 /**
@@ -961,6 +1006,7 @@ void _gl_widget::pick()
       case OBJECT_SPHERE:Sphere.drawSelection();break;
       case OBJECT_PLY:Ply.drawSelection();break;
       case OBJECT_CHESS:Chess.drawSelection();break;
+      case OBJECT_SCENE:Scene.draw(6);break;
       default:break;
   }
   /*************************/
@@ -979,14 +1025,7 @@ void _gl_widget::pick()
   uint R = (uint)(Color & 0x000000FF);
 
   selTriangle = (R << 16) + (G << 8) + B;
-  cout<<"WIN X:"<<Window_width<<" Y:"<<Window_height<<endl;
-  cout<<"MOUSE X:"<<Selection_position_x<<" Y: "<<Selection_position_y<<endl;
-  cout<<"SEL COLOR: "<<Color<<endl;
-  cout<<"SEL TRIANGLE="<<selTriangle<<endl;
-  if(selTriangle == 16777215)
-      selTriangle = -1;
 
-  cout<<"------"<<endl;
   switch (Object)
   {
       case OBJECT_TETRAHEDRON:Tetrahedron.setTrigSelected(selTriangle);break;
@@ -996,15 +1035,16 @@ void _gl_widget::pick()
       case OBJECT_SPHERE:Sphere.setTrigSelected(selTriangle);break;
       case OBJECT_PLY:Ply.setTrigSelected(selTriangle);break;
       case OBJECT_CHESS:Chess.setTrigSelected(selTriangle);break;
+      case OBJECT_SCENE:Scene.setObjSelected(selTriangle);break;
       default:break;
   }
   /*************************/
 
-  glDeleteTextures(1,&Color_texture);
-  glDeleteTextures(1,&Depth_texture);
-  glDeleteFramebuffers(1,&FBO);
+  glDeleteTextures(1, &Color_texture);
+  glDeleteTextures(1, &Depth_texture);
+  glDeleteFramebuffers(1, &FBO);
   // the normal framebuffer takes the control of drawing
-  glBindFramebuffer(GL_DRAW_FRAMEBUFFER,defaultFramebufferObject());
+ glBindFramebuffer(GL_DRAW_FRAMEBUFFER, defaultFramebufferObject());
 
 }
 
@@ -1095,6 +1135,33 @@ void _gl_widget::slotSmoothText(int state)
     update();
 }
 
+void _gl_widget::slotAnimation(int state)
+{
+    if(state == Qt::Checked)
+        animation = true;
+    else
+        animation = false;
+    update();
+}
+
+void _gl_widget::slotFirstLight(int state)
+{
+    if(state == Qt::Checked)
+        firstLight = true;
+    else
+        firstLight = false;
+    update();
+}
+
+void _gl_widget::slotSecondLight(int state)
+{
+    if(state == Qt::Checked)
+        secondLight = true;
+    else
+        secondLight = false;
+    update();
+}
+
 void _gl_widget::slotModel(int index)
 {
     switch(index)
@@ -1107,6 +1174,75 @@ void _gl_widget::slotModel(int index)
         case 5:Object=OBJECT_PLY;break;
         case 6:Object=OBJECT_HIER;break;
         case 7:Object=OBJECT_CHESS;break;
+        case 8:Object=OBJECT_SCENE;break;
     }
     update();
+}
+
+void _gl_widget::slotMaterial(int index)
+{
+    switch(index)
+    {
+        case 0:actMaterial=MAT_NULL;break;
+        case 1:actMaterial=MAT_GOLD;break;
+        case 2:actMaterial=MAT_PLASTIC;break;
+        case 3:actMaterial=MAT_RUBBER;break;
+    }
+    update();
+}
+
+void _gl_widget::slotPerspective(int index)
+{
+    cout<<index<<endl;
+    switch(index)
+    {
+        case 0: perspective = true;break;
+        case 1: perspective = false;break;
+    }
+    update();
+}
+
+void _gl_widget::slotAlphaPlus()
+{
+    alpha += ANGLE_STEP * modAlpha;
+}
+
+void _gl_widget::slotAlphaMinus()
+{
+    alpha -= ANGLE_STEP * modAlpha;
+}
+
+void _gl_widget::slotAlphaSlider(int mod)
+{
+    modAlpha = ( (float)mod ) / 100;
+}
+
+void _gl_widget::slotBetaPlus()
+{
+    beta += ANGLE_STEP * modBeta;
+}
+
+void _gl_widget::slotBetaMinus()
+{
+    beta -= ANGLE_STEP * modBeta;
+}
+
+void _gl_widget::slotBetaSlider(int mod)
+{
+    modBeta = ( (float)mod ) / 100;
+}
+
+void _gl_widget::slotGammaPlus()
+{
+    gamma += ANGLE_STEP * modGamma;
+}
+
+void _gl_widget::slotGammaMinus()
+{
+    gamma -= ANGLE_STEP * modGamma;
+}
+
+void _gl_widget::slotGammaSlider(int mod)
+{
+    modGamma = ( (float)mod ) / 100;
 }

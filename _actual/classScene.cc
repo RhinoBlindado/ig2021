@@ -1,34 +1,78 @@
 #include "classScene.h"
 
-_scene::_scene()
+using namespace _colors_ne;
+
+/**
+ * @brief Initialize the scene
+ * @param scale     Scale of the PLYs
+ * @param initSide  Side of the PLY Matrix
+ */
+void _scene::initialize(float scale, int initSide)
 {
-    _ply a,b,c,d;
-        // e,f,g,h,
-        // i,j,k,l,
-        // m,n,o,p;
+    int mtrxSize = initSide*initSide;
+    this->side = initSide;
 
-    a.initialize(1,"../ply_models/airplane_fixed.ply");
-    b.initialize(1,"../ply_models/ant.ply");
-    c.initialize(1,"../ply_models/bunny.ply");
-    d.initialize(4,"../ply_models/happy.ply");
+    plyMatrix.resize(mtrxSize);
+    for(auto i = 0; i < mtrxSize; i++)
+    {
+        plyMatrix[i].initialize(scale,"../ply_models/big_porsche.ply");
+    }
+}
 
+/**
+ * @brief Draw the PLY matrix
+ * @param style     Used to discern if scene is being picked.
+ */
+void _scene::draw(int style)
+{
     glMatrixMode(GL_MODELVIEW);
-
     glPushMatrix();
-        glPushMatrix();
-            glTranslated(0, 3, 0);
-            c.draw_chess();
-        glPopMatrix();
 
-        glPushMatrix();
-            glTranslated(0,0,-4);
-            b.draw_chess();
-        glPopMatrix();
+    float R,G,B;
 
-        glPushMatrix();
-            glTranslated(2,0,0);
-            a.draw_chess();
-        glPopMatrix();
+    for(auto i = 0; i < side; i++)
+    {
+        for(auto j = 0; j < side; j++)
+        {
+            glPushMatrix();
+
+               glTranslated(i,0,j);
+
+               if(selObj == (j + (i * side)))
+               {
+                    glColor3fv((GLfloat *) &YEllOW);
+               }
+
+               // If Picked
+               if(style == 6)
+               {
+                    // For a given PLY, convert its index into a color using bitmasking.
+                    R = ((j + (i * side)) & 0x00FF0000) >> 16;
+                    G = ((j + (i * side)) & 0x0000FF00) >> 8;
+                    B = ((j + (i * side)) & 0x000000FF);
+                    //  Use the mask to make a color.
+                    glColor3f(R/255.0f, G/255.0f, B/255.0f);
+               }
+
+               plyMatrix[j + (i * side)].draw_fill();
+
+               if(selObj == (j + (i * side)))
+               {
+                   glColor3fv((GLfloat *) &BLUE);
+               }
+
+           glPopMatrix();
+        }
+    }
+
     glPopMatrix();
+}
 
+/**
+ * @brief Select the index of an object
+ * @param sel   Index
+ */
+void _scene::setObjSelected(int sel)
+{
+    this->selObj = sel;
 }

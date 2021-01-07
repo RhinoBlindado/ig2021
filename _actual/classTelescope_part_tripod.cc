@@ -46,14 +46,14 @@ void _teleTripod::setLighting(int type)
 }
 
 /**
- * @brief Set the material for the Tripod. Ruby.
+ * @brief Set the material for the Tripod. Red Plastic.
  */
 void _teleTripod::setMaterial()
 {
-    _vertex3f ambient = _vertex3f(0.1745f, 0.01175f, 0.01175f),
-              diffuse = _vertex3f(0.61424f, 0.04136f, 0.04136f),
-              specular = _vertex3f(0.727811f, 0.626959f, 0.626959f);
-    float shine = 76.8f / 10;
+    _vertex4f ambient = _vertex4f(0.0f, 0.0f, 0.0f, 1),
+              diffuse = _vertex4f(0.5f, 0.0f, 0.0f, 1),
+              specular = _vertex4f(0.7, 0.6, 0.6, 1);
+    float shine = 25.0f;
 
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, (GLfloat *) &diffuse);
     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, (GLfloat *) &specular);

@@ -38,9 +38,9 @@ void _teleLens::setLighting(int type)
  */
 void _teleLens::setMaterial()
 {
-    _vertex3f ambient = _vertex3f(0.1f, 0.18725f, 0.1745f),
-              diffuse = _vertex3f(0.396f, 0.74151f, 0.69102f),
-              specular = _vertex3f(0.297254f, 0.30829f, 0.306678f);
+    _vertex4f ambient = _vertex4f(0.1f, 0.18725f, 0.1745f, 1),
+              diffuse = _vertex4f(0.396f, 0.74151f, 0.69102f, 1),
+              specular = _vertex4f(0.297254f, 0.30829f, 0.306678f, 1);
     float shine = 12.8f / 10;
 
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, (GLfloat *) &diffuse);

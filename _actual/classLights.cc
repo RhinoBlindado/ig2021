@@ -10,7 +10,9 @@ using namespace _colors_ne;
 void _lights::initialize()
 {
     //      Setting up the color.
+    //_vertex3f color = _vertex3f(1,1,1);
     glLightfv(GL_LIGHT1, GL_DIFFUSE, (GLfloat *) &MAGENTA);
+    glLightfv(GL_LIGHT1, GL_SPECULAR, (GLfloat *) &MAGENTA);
 }
 
 /**

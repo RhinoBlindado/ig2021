@@ -16,10 +16,13 @@
 #include <QTimer>
 #include <QComboBox>
 #include <QGroupBox>
+#include <QString>
 #include "window.h"
 #include "glwidget.h"
 #include <QImageReader>
-
+#include <QLineEdit>
+#include <string>
+#include <QPushButton>
 
 // EXTRA: COMMUNICATION WITH OPENGL
 
@@ -100,6 +103,49 @@ void _window::modelSelectorInteraction(int item)
     modelSelector->blockSignals(false);
 }
 
+void _window::alphaSetSlider(int pos)
+{
+    alphaSlider->blockSignals(true);
+
+    alphaSlider->setSliderPosition(pos);
+
+    alphaSlider->blockSignals(false);
+}
+
+void _window::alphaSetText(std::string input)
+{
+    modAlphaText->setText(QString::fromUtf8(input.data(), input.size()));
+}
+
+void _window::betaSetSlider(int pos)
+{
+    betaSlider->blockSignals(true);
+
+    betaSlider->setSliderPosition(pos);
+
+    betaSlider->blockSignals(false);
+}
+
+void _window::betaSetText(std::string input)
+{
+    modBetaText->setText(QString::fromUtf8(input.data(), input.size()));
+}
+
+void _window::gammaSetSlider(int pos)
+{
+    gammaSlider->blockSignals(true);
+
+    gammaSlider->setSliderPosition(pos);
+
+    gammaSlider->blockSignals(false);
+}
+
+void _window::gammaSetText(std::string input)
+{
+    modGammaText->setText(QString::fromUtf8(input.data(), input.size()));
+}
+
+
 /*****************************************************************************//**
  * @brief The initialization of the Window class.
  *
@@ -110,7 +156,7 @@ _window::_window()
  QWidget *mainWidget = new QWidget(this);
  setCentralWidget(mainWidget);
  setWindowTitle(tr("[IG] Práctica de Valentino Lugli"));
- resize(800,600);
+ resize(800,800);
  mainWidget->setMinimumWidth(400);
  mainWidget->setMinimumHeight(400);
 
@@ -131,7 +177,6 @@ _window::_window()
  // Adding the GL_Widget and Sidebar to Main Layout
  mainLayout->addWidget(GL_widget);
  mainLayout->addWidget(sideBar);
-
 
  //     SIDEBAR
  QWidget *generalWidget = new QWidget;
@@ -158,6 +203,7 @@ _window::_window()
  modelSelector->addItem("Objeto PLY");
  modelSelector->addItem("Objeto Jerárquico");
  modelSelector->addItem("Tablero de Ajedrez");
+ modelSelector->addItem("Escena de PLYs");
 
  modelLayout->addWidget(modelSelector);
  connect(modelSelector, SIGNAL(activated(int)), GL_widget, SLOT(slotModel(int)));
@@ -172,7 +218,7 @@ _window::_window()
 
  QLabel *basicTitle = new QLabel("Básicos");
  basicTitle->setStyleSheet("border-bottom-width: 1px; border-bottom-style: solid; border-radius: 0px;");
- modeLayout->addWidget(basicTitle,0,1);
+ modeLayout->addWidget(basicTitle,0,0,1,2);
 
  //     Points
  pointCheckBox = new QCheckBox;
@@ -209,7 +255,7 @@ _window::_window()
 
  QLabel *basicTitle2 = new QLabel("Iluminación");
  basicTitle2->setStyleSheet("border-bottom-width: 1px; border-bottom-style: solid; border-radius: 0px;");
- modeLayout->addWidget(basicTitle2,5,1);
+ modeLayout->addWidget(basicTitle2,5,0,1,2);
  //          Flat Light
   flatLCheckBox = new QCheckBox;
   QLabel *flatLLabel = new QLabel("Plana");
@@ -226,7 +272,7 @@ _window::_window()
 
   QLabel *basicTitle3 = new QLabel("Textura");
   basicTitle3->setStyleSheet("border-bottom-width: 1px; border-bottom-style: solid; border-radius: 0px;");
-  modeLayout->addWidget(basicTitle3,8,1);
+  modeLayout->addWidget(basicTitle3,8,0,1,2);
   //      Unlit Texture
    unlitTCheckBox = new QCheckBox;
    QLabel *unlitLabel = new QLabel("Sin Iluminación");
@@ -260,24 +306,147 @@ _window::_window()
  firstLightBox = new QCheckBox;
  lLBox->addWidget(firstLightBox,0,0);
  lLBox->addWidget(new QLabel("Luz Blanca ∞"),0,1);
+ connect(firstLightBox, SIGNAL(stateChanged(int)), GL_widget, SLOT(slotFirstLight(int)));
 
  //         2nd Light
  secondLightBox = new QCheckBox;
  lLBox->addWidget(secondLightBox,1,0);
  lLBox->addWidget(new QLabel("Luz Magenta"),1,1);
+ connect(secondLightBox, SIGNAL(stateChanged(int)), GL_widget, SLOT(slotSecondLight(int)));
 
- //generalLayout->addStretch();
+ //         Materials
+ QGroupBox *materialBox = new QGroupBox("Materiales");
+ generalLayout->addWidget(materialBox);
 
-// QSlider *mySlider = new QSlider(Qt::Horizontal);
-// generalLayout->addWidget(mySlider);
+ QVBoxLayout *materialLayout = new QVBoxLayout;
+ materialBox->setLayout(materialLayout);
+
+ materialSelector = new QComboBox;
+ materialSelector->addItem("Por Defecto");
+ materialSelector->addItem("Oro");
+ materialSelector->addItem("Plástico Azul");
+ materialSelector->addItem("Goma Roja");
+
+ materialLayout->addWidget(materialSelector);
+ connect(materialSelector, SIGNAL(activated(int)), GL_widget, SLOT(slotMaterial(int)));
+
+ // Camera Perspective Selector
+ QGroupBox *cameraBox = new QGroupBox("Cámara");
+ generalLayout->addWidget(cameraBox);
+
+ QVBoxLayout *cameraLayout = new QVBoxLayout;
+ cameraBox->setLayout(cameraLayout);
+
+ cameraSelector = new QComboBox;
+ cameraSelector->addItem("Perspectiva");
+ cameraSelector->addItem("Ortogonal");
+
+ cameraLayout->addWidget(cameraSelector);
+ connect(cameraSelector, SIGNAL(activated(int)), GL_widget, SLOT(slotPerspective(int)));
+
+ generalLayout->addStretch();
 
  // ADVANCED TAB
- QWidget *advancedWidget = new QWidget;
- sideBar->addTab(advancedWidget,"Animación");
+ QWidget *animWidget = new QWidget;
+ sideBar->addTab(animWidget,"Animación");
+
+ QVBoxLayout *animLayout = new QVBoxLayout;
+ animWidget->setLayout(animLayout);
+
+ QGroupBox *hierBOX = new QGroupBox("Objeto Jerárquico");
+ animLayout->addWidget(hierBOX);
+
+ QGridLayout *hierLAY = new QGridLayout;
+ hierBOX->setLayout(hierLAY);
+
+ //     FIRST DEGREE OF FREEDOM
+ QLabel *alphaTitleText = new QLabel("Primer Grado de Libertad");
+ hierLAY->addWidget(alphaTitleText,0,0,1,-1);
+
+ QPushButton *fDOF_Plus= new QPushButton("+",this);
+ QPushButton *fDOF_Minus = new QPushButton ("-",this);
+ hierLAY->addWidget(fDOF_Plus,1,0);
+ hierLAY->addWidget(fDOF_Minus,1,1);
+
+ connect(fDOF_Plus, SIGNAL(clicked(bool)), GL_widget, SLOT(slotAlphaPlus()));
+ connect(fDOF_Minus, SIGNAL(clicked(bool)), GL_widget, SLOT(slotAlphaMinus()));
+
+ modAlphaText = new QLineEdit;
+ modAlphaText->setAlignment(Qt::AlignCenter);
+ modAlphaText->setMaxLength(4);
+ modAlphaText->setReadOnly(true);
+ hierLAY->addWidget(modAlphaText,2,0);
+
+ alphaSlider = new QSlider(Qt::Horizontal);
+ alphaSlider->setMinimum(0);
+ alphaSlider->setMaximum(2000);
+ hierLAY->addWidget(alphaSlider,2,1);
+ connect(alphaSlider, SIGNAL(valueChanged(int)), GL_widget, SLOT(slotAlphaSlider(int)));
+
+ //     SECOND DEGREE OF FREEDOM
+ QLabel *betaTitleText = new QLabel("Segundo Grado de Libertad");
+ hierLAY->addWidget(betaTitleText,3,0,1,-1);
+
+ QPushButton *betaPlus= new QPushButton("+",this);
+ QPushButton *betaMinus = new QPushButton ("-",this);
+ hierLAY->addWidget(betaPlus,4,0);
+ hierLAY->addWidget(betaMinus,4,1);
+
+ connect(betaPlus, SIGNAL(clicked(bool)), GL_widget, SLOT(slotBetaPlus()));
+ connect(betaMinus, SIGNAL(clicked(bool)), GL_widget, SLOT(slotBetaMinus()));
+
+ modBetaText = new QLineEdit;
+ modBetaText->setAlignment(Qt::AlignCenter);
+ modBetaText->setMaxLength(4);
+ modBetaText->setReadOnly(true);
+ hierLAY->addWidget(modBetaText,5,0);
+
+ betaSlider = new QSlider(Qt::Horizontal);
+ betaSlider->setMinimum(0);
+ betaSlider->setMaximum(2000);
+ hierLAY->addWidget(betaSlider,5,1);
+ connect(betaSlider, SIGNAL(valueChanged(int)), GL_widget, SLOT(slotBetaSlider(int)));
+
+ //     THIRD DEGREE OF FREEDOM
+ QLabel *gammaTitleText = new QLabel("Tercer Grado de Libertad");
+ hierLAY->addWidget(gammaTitleText,6,0,1,-1);
+
+ QPushButton *gammaPlus= new QPushButton("+",this);
+ QPushButton *gammaMinus = new QPushButton ("-",this);
+ hierLAY->addWidget(gammaPlus, 7,0);
+ hierLAY->addWidget(gammaMinus, 7,1);
+
+ connect(gammaPlus, SIGNAL(clicked(bool)), GL_widget, SLOT(slotGammaPlus()));
+ connect(gammaMinus, SIGNAL(clicked(bool)), GL_widget, SLOT(slotGammaMinus()));
+
+ modGammaText = new QLineEdit;
+ modGammaText->setAlignment(Qt::AlignCenter);
+ modGammaText->setMaxLength(4);
+ modGammaText->setReadOnly(true);
+ hierLAY->addWidget(modGammaText,8,0);
+
+ gammaSlider = new QSlider(Qt::Horizontal);
+ gammaSlider->setMinimum(0);
+ gammaSlider->setMaximum(2000);
+ hierLAY->addWidget(gammaSlider,8,1);
+ connect(gammaSlider, SIGNAL(valueChanged(int)), GL_widget, SLOT(slotGammaSlider(int)));
+
+ //     Auto Animation
+ QGroupBox *autoAnimBOX = new QGroupBox();
+ animLayout->addWidget(autoAnimBOX);
+
+ QGridLayout *autoAnimLAY = new QGridLayout();
+ autoAnimBOX->setLayout(autoAnimLAY);
+
+ animationCheckBox = new QCheckBox;
+ QLabel *autoAnimLB = new QLabel("Animación Automática");
+ autoAnimLAY->addWidget(animationCheckBox, 0, 0);
+ autoAnimLAY->addWidget(autoAnimLB, 0, 1);
+ connect(animationCheckBox, SIGNAL(stateChanged(int)), GL_widget, SLOT(slotAnimation(int)));
+
+ animLayout->addStretch();
 
  // PLY settings
-
-
 
 
  // NON UI SETTINGS
@@ -307,7 +476,7 @@ _window::_window()
 
  // MENU BAR
  //     Actions for the Menus.
- QAction *Exit = new QAction(QIcon("./icons/exit.png"), tr("&Exit..."), this);
+ QAction *Exit = new QAction(QIcon("../icons/exit.png"), tr("&Exit..."), this);
  Exit->setShortcut(tr("Ctrl+Q"));
  Exit->setToolTip(tr("Exit the application"));
  connect(Exit, SIGNAL(triggered()), this, SLOT(close()));

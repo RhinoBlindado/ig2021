@@ -3,11 +3,13 @@ HEADERS += \
   classCone.h \
   classCube.h \
   classCylinder.h \
+  classCylinderTexture.h \
   classLights.h \
   classObjectPly.h \
   classObjectRevolution.h \
   classScene.h \
   classSphere.h \
+  classSphereTexture.h \
   classTelescope.h \
   classTelescope_part_eyepiece.h \
   classTelescope_part_focusTube.h \
@@ -30,11 +32,13 @@ SOURCES += \
   classCone.cc \
   classCube.cc \
   classCylinder.cc \
+  classCylinderTexture.cc \
   classLights.cc \
   classObjectPly.cc \
   classObjectRevolution.cc \
   classScene.cc \
   classSphere.cc \
+  classSphereTexture.cc \
   classTelescope.cc \
   classTelescope_part_eyepiece.cc \
   classTelescope_part_focusTube.cc \

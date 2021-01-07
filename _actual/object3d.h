@@ -47,8 +47,6 @@ class _object3D:public _basic_object3D
   void calculateVertNormals();
 
   void setLighting(int type);
-  void setFlatLight();
-  void setSmoothLight();
 
   void setTexture(QImage texture);
 

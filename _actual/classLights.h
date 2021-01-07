@@ -21,7 +21,7 @@ class _lights
 
         /*  Actual position of the 2nd light, so that it can be
          *  rotated relative to the original position.
-        */
+         */
         _vertex4f actPos2 = _vertex4f{0, 0, 5, 1};
 
     public:

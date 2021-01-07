@@ -41,9 +41,9 @@ void _teleEyePiece::setLighting(int type)
  */
 void _teleEyePiece::setMaterial()
 {
-    _vertex3f ambient = _vertex3f(0.25f, 0.25f, 0.25f),
-              diffuse = _vertex3f(0.4f, 0.4f, 0.4f),
-              specular = _vertex3f(0.774597f, 0.774597f, 0.774597f);
+    _vertex4f ambient = _vertex4f(0.25f, 0.25f, 0.25f, 1),
+              diffuse = _vertex4f(0.4f, 0.4f, 0.4f, 1),
+              specular = _vertex4f(0.774597f, 0.774597f, 0.774597f, 1);
     float shine = 76.8f / 10;
 
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, (GLfloat *) &diffuse);

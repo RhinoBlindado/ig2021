@@ -42,9 +42,23 @@ public:
     void lineCheckBoxInteraction(bool Checked);
     void fillCheckBoxInteraction(bool Checked);
     void chessCheckBoxInteraction(bool Checked);
+    void firstLightCheckBoxInteraction(bool Checked);
+    void secondLightCheckBoxInteraction(bool Checked);
+    void animationCheckBoxInteraction(bool Checked);
 
     // Combo box
     void modelSelectorInteraction(int item);
+
+    // Slider
+    void alphaSetSlider(int pos);
+    void betaSetSlider(int pos);
+    void gammaSetSlider(int pos);
+
+    // Text Display
+    void alphaSetText(std::string input);
+    void betaSetText(std::string input);
+    void gammaSetText(std::string input);
+
 private:
   _gl_widget *GL_widget;
 
@@ -60,10 +74,23 @@ private:
             *flatTextCheckBox,
             *smoothTextCheckBox,
             *firstLightBox,
-            *secondLightBox;
+            *secondLightBox,
+            *animationCheckBox;
 
   // Combo Box
-  QComboBox *modelSelector;
+  QComboBox *modelSelector,
+            *cameraSelector,
+            *materialSelector;
+
+  // Line Edit
+  QLineEdit *modAlphaText,
+            *modBetaText,
+            *modGammaText;
+
+  // Sliders
+  QSlider *alphaSlider,
+          *betaSlider,
+          *gammaSlider;
 };
 
 #endif

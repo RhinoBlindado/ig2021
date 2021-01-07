@@ -135,13 +135,24 @@ void _ply::profilePly(float size, vector<float> plyVert, vector<unsigned int> pl
         }
 
     }
-
     // Checking the direction of the vertices
-    if(auxVer[0].y > auxVer[1].y)
+    if(auxVer[0].y != auxVer[1].y)
     {
-        reverse(Vertices.begin(),Vertices.end());
-        reverse(auxVer.begin(),auxVer.end());
-        swap(hasTopCap,hasBottomCap);
+        if(auxVer[0].y > auxVer[1].y)
+        {
+            reverse(Vertices.begin(),Vertices.end());
+            reverse(auxVer.begin(),auxVer.end());
+            swap(hasTopCap,hasBottomCap);
+        }
+    }
+    else
+    {
+        if(Vertices[0].y > Vertices[Vertices.size()-1].y)
+        {
+            reverse(Vertices.begin(),Vertices.end());
+            reverse(auxVer.begin(),auxVer.end());
+            swap(hasTopCap,hasBottomCap);
+        }
     }
 
     // Circular sweeping.

@@ -57,9 +57,9 @@ void _teleFocusTube::setLighting(int type)
  */
 void _teleFocusTube::setMaterial()
 {
-    _vertex3f ambient = _vertex3f(0.329412f, 0.223529f, 0.027451f),
-              diffuse = _vertex3f(0.780392f, 0.568627f, 0.113725f),
-              specular = _vertex3f(0.992157f, 0.941176f, 0.807843f);
+    _vertex4f ambient = _vertex4f(0.329412f, 0.223529f, 0.027451f, 1.0f),
+              diffuse = _vertex4f(0.780392f, 0.568627f, 0.113725f, 1.0f),
+              specular = _vertex4f(0.992157f, 0.941176f, 0.807843f, 1.0f);
     float shine = 27.8974f / 10;
 
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, (GLfloat *) &diffuse);

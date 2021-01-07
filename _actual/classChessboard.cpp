@@ -89,6 +89,7 @@ void _chessBoard::mapTexture()
 
     textCoords.resize(Vertices.size());
 
+
     /*
      * For each vertex, divide it by the total lenght of the chessboard,
      * that way the max value is 1, and add 0.5 so that the min possible

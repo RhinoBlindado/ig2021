@@ -38,6 +38,8 @@
 
 //  P4
 #include "classChessboard.h"
+#include "classSphereTexture.h"
+#include "classCylinderTexture.h"
 #include "classLights.h"
 
 //  P5
@@ -63,9 +65,9 @@ class _window;
 
 struct  material
 {
-    _vertex3f diffuse;
-    _vertex3f specular;
-    _vertex3f ambient;
+    _vertex4f diffuse;
+    _vertex4f specular;
+    _vertex4f ambient;
     float shine;
 };
 
@@ -107,6 +109,16 @@ public slots:
 
   //    P3
   void slotAnimationToggle();
+  void slotAlphaPlus();
+  void slotAlphaMinus();
+  void slotAlphaSlider(int mod);
+  void slotBetaPlus();
+  void slotBetaMinus();
+  void slotBetaSlider(int mod);
+  void slotGammaPlus();
+  void slotGammaMinus();
+  void slotGammaSlider(int mod);
+  void slotAnimation(int state);
 
   //    P4
   void slotFlat(int state);
@@ -114,6 +126,13 @@ public slots:
   void slotUnlitText(int state);
   void slotFlatText(int state);
   void slotSmoothText(int state);
+  void slotFirstLight(int state);
+  void slotSecondLight(int state);
+  void slotMaterial(int index);
+
+  //    P5
+  void slotPerspective(int index);
+
 
 protected:
   void resizeGL(int Width1, int Height1) Q_DECL_OVERRIDE;
@@ -148,6 +167,10 @@ private:
 
   //    P4
   _chessBoard Chess;
+  _sphereTex SphereTex;
+  _cylinderTex CylinderTex;
+
+  //    P5
   _scene Scene;
 
   _gl_widget_ne::_object Object;

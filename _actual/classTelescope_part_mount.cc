@@ -49,9 +49,9 @@ void _teleMount::setLighting(int type)
  */
 void _teleMount::setMaterial()
 {
-    _vertex3f ambient = _vertex3f(0.24725f, 0.1995f, 0.0745f),
-              diffuse = _vertex3f(0.75164f, 0.60648f, 0.22648f),
-              specular = _vertex3f(0.628281f, 0.555802f, 0.366065f);
+    _vertex4f ambient = _vertex4f(0.24725f, 0.1995f, 0.0745f, 1),
+              diffuse = _vertex4f(0.75164f, 0.60648f, 0.22648f, 1),
+              specular = _vertex4f(0.628281f, 0.555802f, 0.366065f, 1);
     float shine = 51.2f / 10;
 
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, (GLfloat *) &diffuse);

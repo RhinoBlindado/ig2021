@@ -85,9 +85,9 @@ void _teleTube::setLighting(int type)
  */
 void _teleTube::setMaterial()
 {
-    _vertex3f ambient = _vertex3f(0.2295f, 0.08825f, 0.0275f),
-              diffuse = _vertex3f(0.5508f, 0.2118f, 0.066f),
-              specular = _vertex3f(0.580594f, 0.223257f, 0.0695701f);
+    _vertex4f ambient = _vertex4f(0.2295f, 0.08825f, 0.0275f, 1),
+              diffuse = _vertex4f(0.5508f, 0.2118f, 0.066f, 1),
+              specular = _vertex4f(0.580594f, 0.223257f, 0.0695701f, 1);
     float shine = 51.2f / 10;
 
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, (GLfloat *) &diffuse);

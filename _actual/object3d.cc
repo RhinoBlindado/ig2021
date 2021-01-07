@@ -361,7 +361,7 @@ void _object3D::drawSelection()
             B = (i & 0x000000FF);
 
             //  Use the mask to make a color.
-            glColor3f(R/255.0, G/255.0, B/255.0);
+            glColor3f(R/255.0f, G/255.0f, B/255.0f);
 
             glVertex3fv((GLfloat *) &Vertices[Triangles[i]._0]);
             glVertex3fv((GLfloat *) &Vertices[Triangles[i]._1]);
@@ -407,20 +407,6 @@ void _object3D::setLighting(int type)
     }
 }
 
-void _object3D::setFlatLight()
-{
-    flatLight = true;
-    smoothLight = false;
-
-}
-
-void _object3D::setSmoothLight()
-{
-    flatLight = false;
-    smoothLight = true;
-}
-
-
 void _object3D::setMaterialDiffuse(_vertex3f color)
 {
     glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE,(GLfloat *) &color);
@@ -450,7 +436,6 @@ void _object3D::setTexture(QImage Image)
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
-    glTexImage2D(GL_TEXTURE_2D,0,3,Image.width(),Image.height(),0,GL_RGB,GL_UNSIGNED_BYTE,Image.bits());
+    glTexImage2D(GL_TEXTURE_2D, 0, 3, Image.width(), Image.height(), 0, GL_RGB,GL_UNSIGNED_BYTE, Image.bits());
 
 }
-// http://www.it.hiof.no/~borres/j3d/explain/light/p-materials.html
