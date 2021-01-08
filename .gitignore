@@ -1,5 +1,4 @@
  # Ignore C++ build files
 *.o
-_actual/.qmake.stash
-_actual/build/*
-to-do.txt
+practicas/.qmake.stash
+practicas/build/*

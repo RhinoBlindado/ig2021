@@ -1,0 +1,16 @@
+#ifndef CUBE_H
+#define CUBE_H
+
+#include "object3d.h"
+
+/**
+ * [P1]
+ * @brief The Cube Class.
+ */
+class _cube:public _object3D
+{
+public:
+    _cube(float size = 1.0);
+};
+
+#endif // CUBE_H
