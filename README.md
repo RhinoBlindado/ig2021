@@ -1,20 +1,20 @@
-Language: [Español](#informática-gráfica) | [English](#computer-graphics)
+[:es: Español](#informática-gráfica) | [:gb: English](#computer-graphics)
 
 ---
 # Informática Gráfica #
-## Curso 2020-2021, Grado en Ingeniería Informática, ETSIIT UGR.
+##  :books: Curso 2020-2021, Grado en Ingeniería Informática, ETSIIT UGR.
 
-### Introducción
+### :pushpin: Introducción
 
-### Compilación
+### :gear: Compilación
 
-### Contenido
+### :link: Contenido
 ---
 # Computer Graphics #
-## 2020-2021 Course, Computer Science Engineering Degree, ETSIIT UGR.
-### Introduction
+## :books: 2020-2021 Course, Computer Science Engineering Degree, ETSIIT UGR.
+### :pushpin: Introduction
 
 
-### Compilation
+### :gear: Compilation
 
-### Contents
+### :link: Contents
