@@ -13,17 +13,11 @@
 #include "basic_object3d.h"
 #include <QImage>
 
-/*****************************************************************************//**
- *
- *
- *
- *****************************************************************************/
-
 class _object3D:public _basic_object3D
 {
   public:
   vector<_vertex3ui> Triangles;
-  //    [P4]
+  // [P4]
   vector<_vertex3f>  trigNormals;
   vector<_vertex3f>  vectNormals;
   vector<_vertex2f>  textCoords;
@@ -33,7 +27,8 @@ class _object3D:public _basic_object3D
   void draw_fill();
   void draw_chess(vector<float> color1 = {1,0.4451,0.8078}, vector<float> color2 = {0.0039,0.8039,0.9961});
   void draw(int style = 0);
-  //    [P5]
+
+  // [P5]
   void drawSelection();
 
   // [P4] LIGHTING
@@ -59,6 +54,22 @@ class _object3D:public _basic_object3D
   int trigSelectedNumber = -1;
   void setTrigSelected(int trig);
 
+  // [EXTRA]
+  //    Exercise 2
+  int minTriangle = -1, maxTriangle = -1;
+  void getMinMaxTriangle();
+
+  //    Exercise 3
+  void fillEdges();
+
+  //    Exercise 4
+  float getVolume();
+
+  //    Exercise 5
+  void deleteTriangle(int _trig);
+
+  //    Exam, 2b.
+  bool isEuler();
 };
 
 #endif // OBJECT3D_H

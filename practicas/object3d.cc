@@ -8,6 +8,9 @@
 
 #include "object3d.h"
 #include <cmath>
+#include <cfloat>
+#include <map>
+#include <utility>
 using namespace _colors_ne;
 
 /*****************************************************************************//**
@@ -43,11 +46,17 @@ void _object3D::draw_fill()
             if(this->trigSelectedNumber == (int)i)
                     glColor3fv((GLfloat *) &YEllOW);
 
+            if(this->maxTriangle == (int)i)
+                    glColor3fv((GLfloat *) &RED);
+
+            if(this->minTriangle == (int)i)
+                    glColor3fv((GLfloat *) &CYAN);
+
             glVertex3fv((GLfloat *) &Vertices[Triangles[i]._0]);
             glVertex3fv((GLfloat *) &Vertices[Triangles[i]._1]);
             glVertex3fv((GLfloat *) &Vertices[Triangles[i]._2]);
 
-            if(this->trigSelectedNumber == (int)i)
+            if(this->trigSelectedNumber == (int)i || this->maxTriangle == (int)i || this->minTriangle == (int)i)
                     glColor3fv((GLfloat *) &BLUE);
         }
     glEnd();
@@ -382,6 +391,7 @@ void _object3D::setTrigSelected(int trig)
 
 
 /**
+ * [P4]
  * @brief Set the lighting of the object.
  * @param type      0 - Unlit | 1 - Flat Lit | 2 - Goraund Lit
  */
@@ -431,8 +441,6 @@ void _object3D::setMaterialShininess(float color)
 
 void _object3D::setTexture(QImage Image)
 {
-    Image=Image.mirrored();
-    Image=Image.convertToFormat(QImage::Format_RGB888);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -440,4 +448,190 @@ void _object3D::setTexture(QImage Image)
 
     glTexImage2D(GL_TEXTURE_2D, 0, 3, Image.width(), Image.height(), 0, GL_RGB,GL_UNSIGNED_BYTE, Image.bits());
 
+}
+
+/** [EXTRA]
+ * @brief Gets the minimum and maximum sized triangles of a given object.
+ * @details See 'docs/Problema 2 - Triangulo Mayor y Menor.pdf'
+ */
+void _object3D::getMinMaxTriangle()
+{
+    float area, minTrig = FLT_MAX, maxTrig = -1.0;
+    _vertex3f  vectorA, vectorB, vectorC;
+    for(int i=0; i<(int)Triangles.size(); i++)
+    {
+        // Using the 3 points make 2 vectors and then obtain the vector product to get a perpendicular vector of the other 2.
+        // Vector A = p1 - p0
+        vectorA.x = Vertices[Triangles[i]._1].x - Vertices[Triangles[i]._0].x;
+        vectorA.y = Vertices[Triangles[i]._1].y - Vertices[Triangles[i]._0].y;
+        vectorA.z = Vertices[Triangles[i]._1].z - Vertices[Triangles[i]._0].z;
+
+        // Vector B = p2 - p0
+        vectorB.x = Vertices[Triangles[i]._2].x - Vertices[Triangles[i]._0].x;
+        vectorB.y = Vertices[Triangles[i]._2].y - Vertices[Triangles[i]._0].y;
+        vectorB.z = Vertices[Triangles[i]._2].z - Vertices[Triangles[i]._0].z;
+
+        // Vector Product = A x B
+        vectorC.x = (vectorA.y * vectorB.z) - (vectorA.z * vectorB.y);
+        vectorC.y = (vectorA.z * vectorB.x) - (vectorA.x * vectorB.z);
+        vectorC.z = (vectorA.x * vectorB.y) - (vectorA.y * vectorB.x);
+
+        // Normalization
+        // The area of a triangle is half the length of the normal vector
+        area =  0.5 * sqrt((pow(vectorC.x, 2)) + (pow(vectorC.y, 2)) + (pow(vectorC.z, 2)));
+
+        if(area > maxTrig)
+        {
+            maxTrig = area;
+            this->maxTriangle = i;
+        }
+
+        if(area < minTrig)
+        {
+            minTrig = area;
+            this->minTriangle = i;
+        }
+    }
+}
+
+/** [EXTRA]
+ * @brief Auxiliar function to obtain the absolute value of a float number.
+ * @param _number   Input float number
+ * @return  Absolute value of number
+ */
+float absolute(float _number)
+{
+    return (_number < 0) ? -_number : _number;
+}
+
+
+/** [EXTRA]
+ * @brief   Aproximates the volume of an object.
+ * @return  Aproximate volume of given object.
+ * @details See 'docs/Problema 4 - Volumen de un Modelo.pdf'
+ */
+float _object3D::getVolume()
+{
+    /* In order to aproximate the volume of an object, it is safe to think of an object as a bunch of triangles.
+     *
+     * These triangles can be then made into tetrahedrons, three points from the triangle and the fourth from the origin (0, 0, 0) point.
+     *
+     * Then the volume of the given tetrahedron is calculated, the formula is V = (1/6) * |a . (b x c)| with '.' being the dot product and 'x' the
+     * cross product, a, b and c are each of the points of the triangle.
+     *
+     * Iterate over all the triangles and sum the volumes.
+     */
+
+    float volume = 0.0;
+    _vertex3f a, b, c, vecProd;
+
+    for(uint i = 0; i < Triangles.size(); i++)
+    {
+        a = Vertices[Triangles[i]._0];
+        b = Vertices[Triangles[i]._1];
+        c = Vertices[Triangles[i]._2];
+
+        // Vector Product = b x c
+        vecProd.x = (b.y * c.z) - (b.z * c.y);
+        vecProd.y = (b.z * c.x) - (b.x * c.z);
+        vecProd.z = (b.x * c.y) - (b.y * c.x);
+
+        // V = (1/6 = 0.1666...) * |a . (b x c) |
+        volume = volume + ( (0.1666667) * absolute((a.x * vecProd.x) + (a.y * vecProd.y) + (a.z * vecProd.z)) );
+    }
+
+    return volume;
+}
+
+
+/** [EXTRA]
+ * @brief Deletes a triangle while preserving topology.
+ * @param _trig     The triangle to delete.
+ * @details See 'docs/Problema 5 - Eliminación de Triángulo.pdf'
+ * @note This function produces degenerate triangles.
+ */
+void _object3D::deleteTriangle(int _trig)
+{
+    vector<_vertex3f> trigVertices;
+    _vertex3f nPoint;
+    int vertexNumber;
+
+    trigVertices.resize(3);
+
+    // Save the vertices of the triangle to be deleted.
+    trigVertices[0] = Vertices[Triangles[_trig]._0];
+    trigVertices[1] = Vertices[Triangles[_trig]._1];
+    trigVertices[2] = Vertices[Triangles[_trig]._2];
+
+    // nPoint defines the new point where the remaining triangles will converge, it is the middle of the triangle to be removed.
+    nPoint.x = (trigVertices[0].x + trigVertices[1].x + trigVertices[2].x) / 3;
+    nPoint.y = (trigVertices[0].y + trigVertices[1].y + trigVertices[2].y) / 3;
+    nPoint.z = (trigVertices[0].z + trigVertices[1].z + trigVertices[2].z) / 3;
+
+    // Add the point to the list of vertices.
+    Vertices.push_back(nPoint);
+    vertexNumber = Vertices.size() - 1;
+
+    // Delete the triangle
+    Triangles.erase(Triangles.begin() + _trig);
+
+    /* Iterate over all triangles, if any points of the ith triangle formed the deleted triangle, then change that point to
+     * the new point (nPoint).
+     *
+     * It has to be checked for all three points and for each of the 3 points of the deleted triangles.
+     */
+
+
+    for(uint i = 0; i < Triangles.size(); i++)
+    {
+        for(int j = 0; j < 3; j++)
+        {
+            if(Vertices[Triangles[i]._0] == trigVertices[j])
+                Triangles[i]._0 = vertexNumber;
+
+            if(Vertices[Triangles[i]._1] == trigVertices[j])
+                Triangles[i]._1 = vertexNumber;
+
+            if(Vertices[Triangles[i]._2] == trigVertices[j])
+                Triangles[i]._2 = vertexNumber;
+        }
+    }
+}
+
+
+/** [EXTRA]
+ * @brief Checks that the object complies with Euler's polyhedron formula, ( V - E + F = 2 ).
+ * @return  Boolean value indicating if the object complies with Euler's polyhedron formula.
+ * @details See 'docs/Prado - Examen Ordinaria Teoria 1819.pdf', 2b.
+ */
+bool _object3D::isEuler()
+{
+    int sizeVertex = Vertices.size(), sizeTriangles = Triangles.size();
+    map <std::pair<int, int>, int> side;
+
+    /* In order to know if there are the correct number of sides, the map container is used to save a pair of points as a key, if the contents
+     * are 1, then it means that that side already has been acounted for, the function checks for (p0, p1) and (p1, p0) since it's the same side.
+     * If 0, then it hasn't been acounted and maps it.
+     */
+
+    for(uint i=0; i<Triangles.size(); i++)
+    {
+        if(side.count(std::make_pair(Triangles[i]._0, Triangles[i]._1)) == 0 && side.count(std::make_pair(Triangles[i]._1, Triangles[i]._0)) == 0)
+        {
+            side.emplace(std::make_pair(Triangles[i]._0, Triangles[i]._1), 1);
+        }
+
+        if(side.count(std::make_pair(Triangles[i]._0, Triangles[i]._2)) == 0 && side.count(std::make_pair(Triangles[i]._2, Triangles[i]._0)) == 0)
+        {
+            side.emplace(std::make_pair(Triangles[i]._0, Triangles[i]._2), 1);
+        }
+
+        if(side.count(std::make_pair(Triangles[i]._1, Triangles[i]._2)) == 0 && side.count(std::make_pair(Triangles[i]._2, Triangles[i]._1)) == 0)
+        {
+            side.emplace(std::make_pair(Triangles[i]._1, Triangles[i]._2), 1);
+        }
+    }
+
+    // If the size of the map container checks the formula, then it complies with Euler's formula.
+    return sizeVertex+sizeTriangles-2 == (int)side.size();
 }
