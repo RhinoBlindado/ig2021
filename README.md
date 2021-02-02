@@ -29,4 +29,4 @@
 #### :mechanical_arm: Practice 3: Hierarchical models
 #### :bulb: Practice 4: Lighting and texturing
 #### :camera_flash: Practice 5: Interaction and camera
-#### :heavy_plus_sign: Aditional Exercises
+#### :heavy_plus_sign: Additional Exercises
