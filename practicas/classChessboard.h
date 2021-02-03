@@ -11,8 +11,8 @@ class _chessBoard:public _object3D
 {
     public:
         _chessBoard(){};
-        void initialize(float row=1, float col=1);
-        void mapTexture();
+        void initialize(float height=1, float width=1, int hCuts=1, int wCuts=1);
+        void mapTexture(float xSize, float ySize);
 };
 
 #endif // CLASSCHESSBOARD_H

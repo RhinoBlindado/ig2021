@@ -30,7 +30,6 @@
 #include "classCylinder.h"
 #include "classObjectPly.h"
 #include "classObjectRevolution.h"
-#include "classProfilePly.h"
 #include "classSphere.h"
 
 //  P3
@@ -44,6 +43,9 @@
 
 //  P5
 #include "classScene.h"
+
+//  EXTRA
+#include "tvcamera.h"
 
 namespace _gl_widget_ne {
 
@@ -173,6 +175,8 @@ private:
   //    P5
   _scene Scene;
 
+  //    EXTRA
+  tvCamera cam;
   _gl_widget_ne::_object Object;
 
 

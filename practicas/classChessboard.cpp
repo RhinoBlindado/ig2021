@@ -4,70 +4,53 @@
  * @brief Initializing the Chessboard.
  * @param xScale    Scale of Chessboard in the X Axis.
  * @param yScale    Scale of Chessboard in the Y Axis.
+ * @param xCuts     Number of cuts along the X Axis (Minimum 1).
+ * @param yCuts     Number of cuts along the Y Axis (Minimum 1).
  */
-void _chessBoard::initialize(float xScale, float yScale)
+void _chessBoard::initialize(float xScale, float yScale, int xCuts, int yCuts)
 {
-    // Define the points.
-    Vertices.resize(4);
+    // Bottom Left of Board
+    Vertices.push_back(_vertex3f(-xScale/2, -yScale/2, 0));
 
-    Vertices[0] = _vertex3f(-xScale/2, -yScale/2, 0);
-    Vertices[1] = _vertex3f(-xScale/2, yScale/2, 0);
-    Vertices[2] = _vertex3f(xScale/2, -yScale/2, 0);
-    Vertices[3] = _vertex3f(xScale/2, yScale/2, 0);
+    // Height Subdivisions
+    for(int i = 1; i < xCuts; i++)
+    {
+        Vertices.push_back(_vertex3f(-xScale/2, -(yScale/2) + ((yScale/xCuts) * i), 0));
+    }
 
-    // Defining the triangles of the chessboard.
-    Triangles.resize(2);
+    // Top Left of Board
+    Vertices.push_back(_vertex3f(-xScale/2, yScale/2, 0));
 
-    //      Front face.
-    Triangles[0]=_vertex3ui(0,2,3);
-    Triangles[1]=_vertex3ui(0,3,1);
+    int rowSize = Vertices.size();
 
-//    //  Row Generation
-//    //      Bottom-Most Point
-//    Vertices.push_back(_vertex3f(-0.5*xScale,-0.5*yScale,0));
+    // Moving the profile along the witdh
+    for(int i = 1; i <= yCuts; i++)
+    {
+        for(int j = 0; j < rowSize; j++)
+        {
+            Vertices.push_back(_vertex3f( -(xScale/2) + ((xScale/yCuts) * i), Vertices[j].y, 0));
+        }
+    }
 
-//    //      Middle Points
-//    for(auto i=1; i < xScale; i++)
-//    {
-//        Vertices.push_back(_vertex3f(-0.5*xScale, -(0.5*yScale) + i, 0));
-//    }
+    // Generate triangles
+    for(int j = 0; j < yCuts; j++)
+    {
+        for(int i = 0; i < rowSize - 1; i++)
+        {
+            // Odd Triangles: Current Vertex - Vertex to the right (j+1) - Vertex Diagonal to the right (i+1), (j+1)
+            Triangles.push_back(_vertex3ui(i + j * rowSize, (i + (j+1) * rowSize), ((i+1) + (j+1) * rowSize)));
 
-//    //      Top-Most Point
-//    Vertices.push_back(_vertex3f(-0.5*xScale, 0.5*yScale,0));
-
-
-//    // Column Generation
-//    int numVert = Vertices.size();
-//    float newX;
-
-//    for(auto i=1; i <= yScale; i++)
-//    {
-//        for(auto j=0; j < numVert; j++)
-//        {
-//           newX = Vertices[j].x + i;
-//           Vertices.push_back(_vertex3f(newX, Vertices[j].y, 0));
-//        }
-//    }
-
-
-//    // Triangle Generation
-//    int vertSize = Vertices.size();
-//    int plySizeVert = vertSize / numVert;
-//    for(int j = 0; j < numVert - 1; j++)
-//    {
-//        for(int i = 0; i < plySizeVert - 1; i++)
-//        {
-//            Triangles.push_back(_vertex3ui(i + j * plySizeVert, (i + (j+1) * plySizeVert), ((i+1) + (j+1) * plySizeVert)));
-//            Triangles.push_back(_vertex3ui(i + j * plySizeVert, ((i+1) + (j+1) * plySizeVert), (i+1) + j * plySizeVert));
-//        }
-//    }
+            // Even Triangles: Current Vertex - Vertex Diagonal to the right (i+1), (j+1) - Vertex on top (i+1)
+            Triangles.push_back(_vertex3ui(i + j * rowSize, ((i+1) + (j+1) * rowSize), (i+1) + j * rowSize));
+        }
+    }
 
     // Calculate Normals
     this->calculateTrigNormals();
     this->calculateVertNormals();
 
     // Map the texture
-    this->mapTexture();
+    this->mapTexture(xScale, yScale);
 }
 
 /**
@@ -75,30 +58,23 @@ void _chessBoard::initialize(float xScale, float yScale)
  * @details The method can handle, if needed, a chessboard that
  *          has multiple triangles and map each triangle correctly
  *          to the texture.
+ *
+ * @param xScale    Scale of Chessboard in the X Axis.
+ * @param yScale    Scale of Chessboard in the Y Axis.
  */
-void _chessBoard::mapTexture()
+void _chessBoard::mapTexture(float xScale, float yScale)
 {
-    /*
-     * In order to map the texture to a coordinate space
-     * between [0,1]; get the upper right point of the chessboard, that
-     * would be the last vertex, multiply by 2 since it's centered in 0 to
-     * obtain the lenght of the chessboard in X and Y.
-     */
-    float MAX_X = (Vertices[Vertices.size()-1].x) * 2;
-    float MAX_Y = (Vertices[Vertices.size()-1].y) * 2;
-
     textCoords.resize(Vertices.size());
 
-
     /*
-     * For each vertex, divide it by the total lenght of the chessboard,
+     * For each vertex, divide it by the total length of the chessboard,
      * that way the max value is 1, and add 0.5 so that the min possible
      * value is 0. Every number maps between 0 and 1.
      */
 
     for(unsigned int i=0; i<Vertices.size();i++)
     {
-        textCoords[i] = _vertex2f( 0.5 + (Vertices[i].x) / MAX_X,  0.5 + (Vertices[i].y) / MAX_Y);
+        textCoords[i] = _vertex2f( 0.5 + (Vertices[i].x) / xScale,  0.5 + (Vertices[i].y) / yScale);
     }
 
 }

@@ -289,6 +289,7 @@ void _gl_widget::draw_objects()
     case OBJECT_SPHERE:Sphere.draw_point();break;
     case OBJECT_PLY:Ply.draw_point();break;
     case OBJECT_HIER:Hier.draw(0);break;
+    case OBJECT_CHESS:Chess.draw(0);break;
     default:break;
     }
   }
@@ -305,6 +306,7 @@ void _gl_widget::draw_objects()
     case OBJECT_PLY:Ply.draw_line();break;
     case OBJECT_HIER:Hier.draw(1);break;
     case OBJECT_CHESS:Chess.draw(1);break;
+    case OBJECT_SCENE:Scene.draw(1);break;
     default:break;
     }
   }
@@ -710,7 +712,7 @@ void _gl_widget::initializeGL()
   Ply.initialize(1,"../ply_models/utah.ply");
 
   //    P4
-  Chess.initialize(1.777,1);
+  Chess.initialize(2, 2, 2, 2);
   SphereTex.initialize(0.5, 40, 40);
   CylinderTex.initialize(1, 0.5, 20, 10, 30);
 
@@ -1026,6 +1028,8 @@ void _gl_widget::pick()
 
   selTriangle = (R << 16) + (G << 8) + B;
 
+  cout<<"Selected: "<<selTriangle<<endl;
+
   switch (Object)
   {
       case OBJECT_TETRAHEDRON:Tetrahedron.setTrigSelected(selTriangle);break;
@@ -1193,7 +1197,6 @@ void _gl_widget::slotMaterial(int index)
 
 void _gl_widget::slotPerspective(int index)
 {
-    cout<<index<<endl;
     switch(index)
     {
         case 0: perspective = true;break;
