@@ -7,12 +7,12 @@
 ### :pushpin: Introducción
 Las prácticas de la asignatura se dividieron en 5 distintas partes, las cuales eran acumulativas, era necesario tener una práctica anterior para poder realizar correctamente la siguiente. 
 
-Consistieron en una introducción propiamente a los gráficos por computadora, haciendo uso de OpenGL y la integración con el IDE Qt, desde realizar objetos básicos, objetos más complejos por medio de un perfil de puntos hasta iluminación, materiales e interacción con la cámara. 
+Consistieron en una introducción propiamente a los gráficos por computadora, haciendo uso de OpenGL y la integración con Qt, desde realizar objetos básicos, objetos más complejos por medio de un perfil de puntos hasta iluminación, materiales e interacción con la cámara. 
 
 Para mayor detalles de las prácticas y los objetivos a cumplir, ver `guionPractica.pdf`.
 
 ### :gear: Compilación
-  * Las prácticas fueron realizadas con el IDE Qt, es posible cargar el proyecto en el IDE por medio del archivo `esqueleto_qt.pro`. De ser así, para mantener el funcionamiento correcto, se debe configurar Qt para que el proyecto se compile dentro de la carpeta `/practicas/build/`.
+  * Las prácticas fueron realizadas con el Qt Creator IDE, es posible cargar el proyecto en el IDE por medio del archivo `esqueleto_qt.pro`. De ser así, para mantener el funcionamiento correcto, se debe configurar Qt para que el proyecto se compile dentro de la carpeta `/practicas/build/`.
   * El proyecto finalizado se puede compilar por medio del `Makefile` ubicado en `/practicas/build/`.
        * `make` para compilar.
        * `make clean` para borrar todos los archivos menos el ejecutable.
