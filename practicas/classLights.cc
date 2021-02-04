@@ -1,5 +1,4 @@
 #include "classLights.h"
-#include <qwidget.h>
 
 using namespace _colors_ne;
 

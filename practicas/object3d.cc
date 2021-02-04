@@ -152,18 +152,22 @@ void _object3D::drawIlum()
 
             if(smoothLight)
                 glNormal3f(vectNormals[Triangles[i]._0].x, vectNormals[Triangles[i]._0].y, vectNormals[Triangles[i]._0].z);
+
             glVertex3fv((GLfloat *) &Vertices[Triangles[i]._0]);
 
             if(smoothLight)
                 glNormal3f(vectNormals[Triangles[i]._1].x, vectNormals[Triangles[i]._1].y, vectNormals[Triangles[i]._1].z);
+
             glVertex3fv((GLfloat *) &Vertices[Triangles[i]._1]);
 
             if(smoothLight)
                 glNormal3f(vectNormals[Triangles[i]._2].x, vectNormals[Triangles[i]._2].y, vectNormals[Triangles[i]._2].z);
+
             glVertex3fv((GLfloat *) &Vertices[Triangles[i]._2]);
 
 
         }
+
     glEnd();
     glDisable(GL_LIGHTING);
 }
@@ -216,6 +220,7 @@ void _object3D::drawTex()
 
         glTexCoord2f(textCoords[Triangles[i]._2].x, textCoords[Triangles[i]._2].y);
         glVertex3fv((GLfloat *) &Vertices[Triangles[i]._2]);
+
     }
     glEnd();
     glDisable(GL_TEXTURE_2D);
@@ -441,6 +446,7 @@ void _object3D::setMaterialShininess(float color)
 
 void _object3D::setTexture(QImage Image)
 {
+
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

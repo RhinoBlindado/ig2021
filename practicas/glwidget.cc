@@ -1028,8 +1028,6 @@ void _gl_widget::pick()
 
   selTriangle = (R << 16) + (G << 8) + B;
 
-  cout<<"Selected: "<<selTriangle<<endl;
-
   switch (Object)
   {
       case OBJECT_TETRAHEDRON:Tetrahedron.setTrigSelected(selTriangle);break;

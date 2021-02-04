@@ -19,11 +19,13 @@ HEADERS += \
   classTelescope_part_tube.h \
   colors.h \
   basic_object3d.h \
+  ejercicio1.h \
   file_ply_stl.h \
   object3d.h \
   axis.h \
   tetrahedron.h \
   glwidget.h \
+  tvcamera.h \
   window.h
 
 SOURCES += \
@@ -46,12 +48,14 @@ SOURCES += \
   classTelescope_part_mount.cc \
   classTelescope_part_tripod.cc \
   classTelescope_part_tube.cc \
+  ejercicio1.cc \
   file_ply_stl.cc \
   object3d.cc \
   axis.cc \
   tetrahedron.cc \
   main.cc \
   glwidget.cc \
+  tvcamera.cpp \
   window.cc
 
 

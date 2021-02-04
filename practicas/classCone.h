@@ -1,4 +1,4 @@
- #ifndef CONE_H
+#ifndef CONE_H
 #define CONE_H
 #include "classObjectRevolution.h"
 
