@@ -12,8 +12,10 @@ Consistieron en una introducción propiamente a los gráficos por computadora, h
 Para mayor detalles de las prácticas y los objetivos a cumplir, ver `guionPractica.pdf`.
 
 ### :gear: Compilación
-  * Las prácticas fueron realizadas con el IDE Qt, es posible cargar el proyecto en el IDE por medio del archivo `esqueleto_qt.pro`. De ser así, para mantener el funcionamiento correcto, se debe configurar Qt para que el proyecto se compile dentro de una carpeta en `/practicas/`, por ejemplo, dentro de la ruta `/practicas/build/`.
-  * La compilación por medio de `makefile` está en WIP.
+  * Las prácticas fueron realizadas con el IDE Qt, es posible cargar el proyecto en el IDE por medio del archivo `esqueleto_qt.pro`. De ser así, para mantener el funcionamiento correcto, se debe configurar Qt para que el proyecto se compile dentro de la carpeta `/practicas/build/`.
+  * El proyecto finalizado se puede compilar por medio del `Makefile` ubicado en `/practicas/build/`.
+       * `make` para compilar.
+       * `make clean` para borrar todos los archivos menos el ejecutable.
 
 ### :link: Contenido
 #### :triangular_ruler: Práctica 1: Modelado y Dibujado de Objetos 3D Simples
